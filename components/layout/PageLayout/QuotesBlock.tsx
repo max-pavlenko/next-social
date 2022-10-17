@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { auth, firestore } from '../../../libs/firebase';
 import { IQuoteData } from '../../../store/User';
@@ -18,7 +18,8 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
       if (!shouldFetchQuote.current) return;
       (async function () {
          await axios.get(`https://api.quotable.io/${quoteId ? 'quotes/' + quoteId : 'random'}`).then((r) => {
-            console.log(r.data._id)
+            console.log(r.data._id);
+            setAddedQuoteAsFavorite(false);
             setQuote({text: r.data.content, author: r.data.author, _id: r.data._id});
             setIsLoading(false);
          });
@@ -32,9 +33,8 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
       let curState;
       setAddedQuoteAsFavorite((prevState) => {
          curState = !prevState;
-         return curState
+         return !prevState;
       });
-      console.log(curState)
       await toastNotify({successText: 'updated favorite quote data'}, {
          tryFn: async () => {
             await userRef.current.update({

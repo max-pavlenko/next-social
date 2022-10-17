@@ -6,7 +6,8 @@ import { toastNotify } from '../utils/helpers';
 import toast from 'react-hot-toast';
 import {
    PRODIVER_IDS,
-   RESET_PASSWORD_TOAST_DURATION, SITE_URL,
+   RESET_PASSWORD_TOAST_DURATION,
+   SITE_URL,
    toastStyleConfig,
    UPDATE_PASSWORD_TOAST_DURATION_SUCCESS
 } from '../utils/constants';
@@ -38,6 +39,10 @@ if (!firebase.apps.length) {
 export const auth = firebase.auth(app);
 export const firestore = firebase.firestore(app);
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+export const githubAuthProvider = new firebase.auth.GithubAuthProvider();
+export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
+facebookAuthProvider.addScope('user_birthday');
+facebookAuthProvider.addScope('user_friends');
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 export const storage = firebase.storage(app);
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;

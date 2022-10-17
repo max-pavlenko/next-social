@@ -1,7 +1,6 @@
 import { IPost } from "../../../models/Post";
-import { Box, Button, Container, IconButton } from "@mui/material";
-import Link from "next/link";
-import toast, { CheckmarkIcon } from "react-hot-toast";
+import { Box, Container, IconButton } from "@mui/material";
+import { CheckmarkIcon } from "react-hot-toast";
 import SvgIcon from "@mui/icons-material/DeleteOutlineSharp";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { auth, firestore } from "../../../libs/firebase";
@@ -9,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toastNotify } from '../../../utils/helpers';
 import { toastModal } from '../../../utils/toastModal';
+import LinkWithoutScroll from '../../utils/LinkWithoutScroll';
 
 function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolean; }) {
    const router = useRouter();
@@ -28,7 +28,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
       toastModal('Do you really want to delete the post?', handlePostDelete)
    }
 
-   async function handlePostDelete(e) {
+   async function handlePostDelete() {
       const postRef = firestore
           .collection("users")
           .doc(auth.currentUser.uid)
@@ -47,12 +47,12 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    return (
        <Container className = "card" sx = {{position: "relative"}}>
           <Box style = {{display: "flex", gap: "8px", alignItems: "center"}}>
-             <Link href = {username}>
+             <LinkWithoutScroll href = {username}>
                 <a style = {{display: "flex", gap: "8px", alignItems: "center"}}>
                    <CheckmarkIcon style = {{display: 'inline-block'}}/>
                    <b>By @{username}</b>
                 </a>
-             </Link>
+             </LinkWithoutScroll>
              {isConfigurable && (
                  <span style = {{marginLeft: "auto"}}>
                  <IconButton onClick = {handleEdit}>
@@ -66,11 +66,11 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
              )}
           </Box>
 
-          <Link href = {`${username}/${post.slug}`}>
+          <LinkWithoutScroll href = {`${username}/${post.slug}`}>
              <h2 style = {{cursor: "pointer"}}>
                 <b>{post.title}</b>
              </h2>
-          </Link>
+          </LinkWithoutScroll>
 
           <footer>
         <span style = {{pointerEvents: "none"}}>

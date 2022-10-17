@@ -6,7 +6,7 @@ import { FirebaseError } from '@firebase/util';
 import User from '../store/User';
 import { NextRouter } from 'next/router';
 import { SetStateAction } from 'react';
-import { DEFAULT_ERROR_TEXT, toastStyleConfig } from './constants';
+import { DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig } from './constants';
 import * as Yup from 'yup';
 
 /**
@@ -41,8 +41,14 @@ export const toastNotify = async ({successText, errorText}: { successText: strin
       toast.success(`Successfully ${successText}!`, config)
    } catch (e: any) {
       const error = e as FirebaseError;
-      errorFn ? errorFn(error) : toast.error(errorText || `${DEFAULT_ERROR_TEXT}\n${error.message}`, config);
-      console.warn(error)
+      if(errorFn){
+         errorFn(error);
+      }
+      else {
+         if(error.code === FIREBASE_ERRORS.POPUP_CLOSED) return;
+         toast.error(errorText || `${DEFAULT_ERROR_TEXT}\n${error.message}`, config);
+      }
+      console.warn(error);
    }
 }
 
@@ -58,10 +64,17 @@ export const encodeStr = (str: string, filler: string = '*') =>{
    return str.split('').map((char, i, arr) => i >= 1 && i < arr.length - 1 ? filler : char).join('')
 }
 
-export const validationSchemaPassword = (passwordName: string) =>{
+export const validateSchemaPassword = (passwordName: string) =>{
    return Yup.string()
        .min(6, `${passwordName} password should be of minimum 6 characters length`)
        .max(30, `${passwordName} password should be of maximum 30 characters length`)
        .required(`${passwordName} password is required`)
 }
 
+export const isActiveLink = (href: string, currentPathname: string): boolean => {
+   if (href === '/') {
+      return href === currentPathname
+   }
+
+   return currentPathname.startsWith(href)
+}

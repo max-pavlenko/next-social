@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AuthCheck from '../../components/utils/AuthCheck';
 import { useRouter } from 'next/router';
-import { auth, firestore } from '../../libs/firebase';
+import { auth, firestore, serverTimestamp } from '../../libs/firebase';
 import styles from '../../styles/Admin.module.scss';
 import { useDocumentDataOnce, } from 'react-firebase-hooks/firestore';
 import PostFormEdit from '../../components/Forms/PostFormEdit';
@@ -9,6 +9,7 @@ import { IPost } from '../../models/Post';
 import { Button, Typography } from '@mui/material';
 import { toastModal } from '../../utils/toastModal';
 import { invertBool } from '../../utils/helpers';
+import AnimatePage from '../../components/utils/AnimatePage';
 
 function PostManager() {
    const [ isPreview, setIsPreview ] = useState(false);
@@ -17,29 +18,40 @@ function PostManager() {
    const postRef = firestore.collection('users').doc(auth.currentUser.uid).collection('posts').doc(slug as string);
    const [ postData ] = useDocumentDataOnce(postRef);
    const post = postData as IPost;
-   let user;
+   const user = useRef(null);
    console.log(post, postRef);
 
    useEffect(() => {
-     post && firestore.doc(post.userPath).get().then(snap=> {
-         user = snap.data();
+      post && firestore.doc(post.userPath).get().then(snap => {
+         user.current = snap.data();
       })
-   }, [post]);
+   }, [ post ]);
 
-   function onLinkClick(e: any) {
+   function onLinkClick() {
       toastModal('Did you saved the post and wish to continue?', async () => {
-             await router.push(`/${user.username}/${post.slug}`);
+             await router.push(`/${user.current.username}/${post.slug}`);
           },
       );
    }
 
+   async function handleEditFormSubmit(title: string, content: string, isPublished: string) {
+      await postRef.update({
+         title,
+         content,
+         published: isPublished,
+         updatedAt: serverTimestamp(),
+      });
+   }
+
    return (
+
        <main className = {styles.container}>
-          {!postRef && <Typography color='rebeccapurple'>You dont have permission to proceed.</Typography>}
+          {!postRef && <Typography color = 'rebeccapurple'>You dont have permission to proceed.</Typography>}
           {post && (
               <>
                  <section>
-                    <PostFormEdit postRef = {postRef} defaultValue = {post} isPreview = {isPreview}/>
+                    <PostFormEdit onSubmitEdit = {handleEditFormSubmit} defaultValue = {post}
+                                  isPreview = {isPreview}/>
                  </section>
 
                  <aside>
@@ -51,7 +63,6 @@ function PostManager() {
                  </aside>
               </>
           )}
-
        </main>
    );
 }
@@ -59,9 +70,11 @@ function PostManager() {
 const AdminPostEdit = () => {
 
    return (
-       <AuthCheck>
-          <PostManager/>
-       </AuthCheck>
+       <AnimatePage>
+          <AuthCheck>
+             <PostManager/>
+          </AuthCheck>
+       </AnimatePage>
    );
 };
 

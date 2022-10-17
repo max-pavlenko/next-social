@@ -36,3 +36,13 @@ export enum PRODIVER_IDS {
    GOOGLE = 'google.com',
    PASSWORD = 'password'
 }
+
+export enum PROVIDERS_IMAGES {
+   GOOGLE = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png',
+   GITHUB = 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
+   FACEBOOK = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/800px-Facebook_logo_%28square%29.png'
+}
+
+export enum FIREBASE_ERRORS{
+   POPUP_CLOSED = 'auth/popup-closed-by-user'
+}

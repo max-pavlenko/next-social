@@ -1,17 +1,18 @@
-import Link from 'next/link';
 import User from '../../store/User';
-import { Avatar, Divider, ListItemIcon, MenuItem } from '@mui/material';
+import { Divider, ListItemIcon, MenuItem } from '@mui/material';
 import { DeleteForeverOutlined, Logout, MenuBookSharp, Settings, UpdateOutlined } from '@mui/icons-material';
+import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import { handleLogOut } from '../../utils/helpers';
 import { observer } from 'mobx-react-lite';
 import { toastModal } from '../../utils/toastModal';
 import { deleteAccount } from '../../libs/firebase';
 import { useRouter } from 'next/router';
+import LinkWithoutScroll from '../utils/LinkWithoutScroll';
 
 const DefaultMenuItems = observer(() => {
    const router = useRouter();
 
-   function handleDeleteAccount(event: any) {
+   function handleDeleteAccount() {
       console.log("deleting the account");
       toastModal(
           "Do you want to delete your account? Yes, forever!",
@@ -23,36 +24,39 @@ const DefaultMenuItems = observer(() => {
 
    return (
        <>
-          <Link href={`/${User.user.username}`}>
+          <LinkWithoutScroll href={`/${User.user.username}`}>
              <MenuItem>
-                <Avatar /> Profile
+                <ListItemIcon>
+                   <RecentActorsIcon fontSize="medium" />
+                </ListItemIcon>
+                 Profile
              </MenuItem>
-          </Link>
-          <Link href={`/`}>
+          </LinkWithoutScroll>
+          <LinkWithoutScroll href={`/`}>
              <MenuItem>
                 <ListItemIcon>
                    <MenuBookSharp />
                 </ListItemIcon>
                 All Posts
              </MenuItem>
-          </Link>
-          <Link href={`/admin`}>
+          </LinkWithoutScroll>
+          <LinkWithoutScroll href={`/admin`}>
              <MenuItem>
                 <ListItemIcon>
                    <Settings fontSize="small" />
                 </ListItemIcon>
                 Manage posts
              </MenuItem>
-          </Link>
+          </LinkWithoutScroll>
           <Divider />
-          <Link href={`/update-password`}>
+          <LinkWithoutScroll href={`/update-password`}>
              <MenuItem>
                 <ListItemIcon>
                    <UpdateOutlined fontSize="small" />
                 </ListItemIcon>
                 Update password
              </MenuItem>
-          </Link>
+          </LinkWithoutScroll>
           <MenuItem onClick={handleDeleteAccount}>
              <ListItemIcon>
                 <DeleteForeverOutlined fontSize="small" />

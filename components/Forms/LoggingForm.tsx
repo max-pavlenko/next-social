@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Grid, IconButton, InputAdornment, Stack, Typography } from "@mui/material";
-import GoogleButton from "../utils/GoogleButton";
+import ProviderAuthButton from "../utils/ProviderAuthButton";
 import * as Yup from "yup";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import FormikInput from "../utils/FormikInput";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { invertBool } from '../../utils/helpers';
-import { logInWithEmail, resetPassword, signUpWithEmail } from '../../libs/firebase';
+import {
+   facebookAuthProvider,
+   githubAuthProvider,
+   googleAuthProvider,
+   logInWithEmail,
+   resetPassword,
+   signUpWithEmail
+} from '../../libs/firebase';
 import { toastModal } from '../../utils/toastModal';
 import toast from 'react-hot-toast';
-import { RESET_PASSWORD_COOLDOWN_S } from '../../utils/constants';
+import { PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S } from '../../utils/constants';
 
 export interface ILoggingForm {
    email: string;
@@ -22,7 +29,8 @@ const LoggingForm = () => {
    const [ resetPasswordCountDown, setResetPasswordCountDown ] = useState(0);
 
    useEffect(() => {
-      const timeOutId = resetPasswordCountDown && setTimeout(() => {
+      if (resetPasswordCountDown<=0) return;
+      const timeOutId = setTimeout(() => {
          console.log('resetPasswordCountDown',resetPasswordCountDown);
          setResetPasswordCountDown((prevState) => --prevState)
       }, 1000);
@@ -188,8 +196,10 @@ const LoggingForm = () => {
                        </Grid>
                     </Grid>
 
-                    <Grid container justifyContent = "center" item xs = {12}>
-                       <GoogleButton/>
+                    <Grid container justifyContent = "center" gap={2} item xs = {12}>
+                       <ProviderAuthButton btnTitle='Google' imgSrc={PROVIDERS_IMAGES.GOOGLE} provider={googleAuthProvider}/>
+                       <ProviderAuthButton btnTitle='GitHub' imgSrc={PROVIDERS_IMAGES.GITHUB} provider={githubAuthProvider}/>
+                       <ProviderAuthButton btnTitle='Facebook' imgSrc={PROVIDERS_IMAGES.FACEBOOK} provider={facebookAuthProvider}/>
                     </Grid>
                  </Grid>
               </Form>

@@ -95,7 +95,6 @@ const UsernameForm = observer(({
    return <form onSubmit = {handleUsernameSubmit}>
       <Grid container spacing = {3}>
          <Grid mx = 'auto' style = {{
-            paddingLeft: '0',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -108,12 +107,12 @@ const UsernameForm = observer(({
             {mode === UsernameFormModes.CREATE && <Entered/>}
          </Grid>
       </Grid>
-      <ImageUploader shouldShowText = {false}/>
+      <ImageUploader shouldShowImgURL = {false}/>
       {photoURL &&
           <>
-              <img height = {250} style = {{margin: '0 auto', height: '250px', display: 'block'}} src = {photoURL}
+              <img height = {250} style = {{margin: '0 auto', height: '250px', display: 'block', objectFit: 'cover'}} src = {photoURL}
                    alt = 'Preview user avatar'/>
-              <Button onClick = {() => handleDownloadImage(photoURL, 'name')} variant = 'outlined'>
+              <Button sx={{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name')} variant = 'outlined'>
                   Download image
               </Button>
           </>

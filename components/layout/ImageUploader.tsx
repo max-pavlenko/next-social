@@ -7,7 +7,7 @@ import { toastNotify } from '../../utils/helpers';
 import User from '../../store/User';
 import { observer } from 'mobx-react-lite';
 
-const ImageUploader = observer(({shouldShowText = true}: { shouldShowText?: boolean }) => {
+const ImageUploader = observer(({shouldShowImgURL = true}: { shouldShowImgURL?: boolean }) => {
    const uploading = useRef(false);
    const [ progress, setProgress ] = useState(0);
    const [ downloadURL, setDownloadURL ] = useState(null);
@@ -56,10 +56,10 @@ const ImageUploader = observer(({shouldShowText = true}: { shouldShowText?: bool
                  </label>
               </>
           )}
-          {!shouldShowText &&
+          {!shouldShowImgURL &&
               <Typography textAlign = 'center'>Profile image preview</Typography>
           }
-          {downloadURL && shouldShowText && (
+          {downloadURL && shouldShowImgURL && (
               <>
                  <code style = {{whiteSpace: 'nowrap', alignSelf: 'center'}} className = 'upload-snippet'>
                     {`![alt](${downloadURL})`}

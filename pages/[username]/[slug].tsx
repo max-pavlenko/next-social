@@ -6,10 +6,9 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import AuthCheck from '../../components/utils/AuthCheck';
 import HeartButton from '../../components/layout/HeartButton';
 import { IPost } from '../../models/Post';
-import { useEffect, useState } from 'react';
-import Loader from '../../components/layout/Loader';
-import User from '../../store/User';
 import MetaTags from '../../components/utils/MetaTags';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import AnimatePage from '../../components/utils/AnimatePage';
 
 const UserPost = ({post, path, username}) => {
    const postRef = firestore.doc(path);
@@ -19,49 +18,52 @@ const UserPost = ({post, path, username}) => {
    const usedPost = realtimePost as IPost;
 
    return (
-
-       <Container>
-          <MetaTags title= {`Post ${usedPost?.title || ''}`} desc={`Post ${usedPost?.title || ''} by ${username}`} imagePath='public/vercel.svg'/>
-          <main style = {{display: 'flex', gap: '10px'}}>
-             {usedPost as IPost && (
+       <AnimatePage>
+          <Container>
+             {usedPost && (
                  <>
-                    <section style = {{flexGrow: 1}}>
-                       <PostContent post = {usedPost as IPost}/>
-                    </section>
+                    <MetaTags title = {`Post ${usedPost.title}`}
+                              desc = {`Post ${usedPost.title} by ${username}`}
+                              imagePath = 'https://media.tenor.com/qu8mD3ClKagAAAAM/billy-herrington.gif'/>
+                    <main style = {{display: 'flex', gap: '10px'}}>
+                       <section style = {{flexGrow: 1}}>
+                          <PostContent post = {usedPost}/>
+                       </section>
 
-                    <aside className = 'card' style = {{
-                       alignSelf: 'start',
-                       display: 'flex',
-                       minWidth: '19%',
-                       gap: '10px',
-                       flexDirection: 'column',
-                       alignItems: 'center',
-                       margin: 0
-                    }}>
-                       <Typography variant = 'caption'>
-                          <b style = {{fontSize: '14px'}}>{usedPost.heartsCount || 0} 💕</b>
-                       </Typography>
-                       <AuthCheck shouldShowAccessText = {false}>
-                          <HeartButton postRef = {postRef}/>
-                       </AuthCheck>
-                    </aside>
+                       <aside className = 'card' style = {{
+                          alignSelf: 'start',
+                          display: 'flex',
+                          minWidth: '19%',
+                          gap: '10px',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          margin: 0
+                       }}>
+                          <Typography variant = 'caption'>
+                             <b style = {{fontSize: '14px'}}>{usedPost.heartsCount || 0} 💕</b>
+                          </Typography>
+                          <AuthCheck shouldShowAccessText = {false}>
+                             <HeartButton postRef = {postRef}/>
+                          </AuthCheck>
+                       </aside>
+                    </main>
                  </>
              )}
-          </main>
-       </Container>
+          </Container>
+       </AnimatePage>
    );
 };
 
 export default UserPost;
 
-export async function getStaticProps({params}) {
+export const getStaticProps: GetStaticProps = async ({params}) => {
    const {username, slug: postSlug} = params;
    console.log({username, postSlug})
-   const userDoc = await getUserWithUsername(username);
+   const userDoc = await getUserWithUsername(username as string);
 
    let path, post;
    if (userDoc) {
-      const postRef = userDoc.ref.collection('posts').doc(postSlug);
+      const postRef = userDoc.ref.collection('posts').doc(postSlug as string);
 
       post = convertToJSON(await postRef.get());
       path = postRef.path;
@@ -82,7 +84,7 @@ export async function getStaticProps({params}) {
    }
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
    const snapshot = await firestore.collectionGroup('posts').get()
    const postsPaths = snapshot.docs.map(doc => {
       const {slug, username} = doc.data()

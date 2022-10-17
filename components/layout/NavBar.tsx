@@ -1,126 +1,176 @@
-import Link from "next/link";
-import { Avatar, Button, Container, Divider, ListItemIcon, MenuItem } from "@mui/material";
+import { Button } from "@mui/material";
 import User from "../../store/User";
 import { observer } from "mobx-react-lite";
 import Image from "next/future/image";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
 import MenuAccount from "./MenuAccount";
 import { handleLogOut } from "../../utils/helpers";
 import { FALLBACK_IMAGE } from "../../utils/constants";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { auth, deleteAccount, firestore } from "../../libs/firebase";
-import {
-  DeleteForeverOutlined,
-  Logout,
-  MenuBookSharp,
-  Settings,
-  UpdateOutlined,
-} from "@mui/icons-material";
-import { toastModal } from "../../utils/toastModal";
+import { auth, firestore } from "../../libs/firebase";
 import { useMenu } from "../../libs/hooks/useMenu";
 import DefaultMenuItems from './DefaultMenuItems';
+import LinkWithoutScroll from '../utils/LinkWithoutScroll';
 
 const NavBar = observer(() => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { photoURL, user } = User;
-  const router = useRouter();
-  const [userRealtime] = useDocumentData(firestore.doc("users/" + auth.currentUser?.uid));
-  const [userState, setUserState] = useState(null);
-  const {menuElement, handleClick} = useMenu(<DefaultMenuItems/>);
+   const [ isLoading, setIsLoading ] = useState(false);
+   const {photoURL, user} = User;
+   const router = useRouter();
+   const [ userRealtime ] = useDocumentData(firestore.doc("users/" + auth.currentUser?.uid));
+   const [ userState, setUserState ] = useState(null);
+   const {menuElement, handleClick} = useMenu(<DefaultMenuItems/>);
 
-  function handleLoadComplete() {
-    setIsLoading(false);
-  }
+   function handleLoadComplete() {
+      setIsLoading(false);
+   }
 
-  useEffect(() => {
-    if (!userRealtime) return;
-    setUserState(userRealtime);
-    console.log("userRealtime", userRealtime);
-  }, [userRealtime]);
+   useEffect(() => {
+      if (!userRealtime) return;
+      setUserState(userRealtime);
+      console.log("userRealtime", userRealtime);
+   }, [ userRealtime ]);
 
-  function handleLoadStart() {
-    setIsLoading(false);
-  }
+   function handleLoadStart() {
+      setIsLoading(false);
+   }
 
-  return (
-    <nav className="navbar">
-      <ul className="navbar-list">
-        <li>
-          <Link href="/">
-            <button className="btn-logo">NXT</button>
-          </Link>
-        </li>
+   // const navigationItems: { element: JSX.Element, path: string }[] = [
+   //    {
+   //       element: <Button
+   //           sx = {{
+   //              size: {
+   //                 xs: "small",
+   //                 md: "medium",
+   //              },
+   //           }}
+   //           onClick = {() => handleLogOut(router)}
+   //           color = "error"
+   //           variant = "outlined"
+   //           className = "btn-blue"
+   //       >
+   //          Log out
+   //       </Button>,
+   //       path: '/enter'
+   //    },
+   //    {
+   //       element: <Button variant = "text" className = "btn-blue">
+   //          Manage posts
+   //       </Button>,
+   //       path: '/admin'
+   //    },
+   //    {
+   //       element: <Button variant = "text" className = "btn-blue">
+   //          enter
+   //       </Button>,
+   //       path: '/enter'
+   //    },
+   // ]
 
-        <Loader shouldShow={isLoading && !user?.username} />
+   const variants = {
+      hidden: {opacity: 0, x: -100, y: 0, transition: {duration: 0.5, bounce: 1}},
+      enter: {opacity: 1, x: 0, y: 0, transition: {duration: 0.5, bounce: 1}},
+      exit: {opacity: 1, x: 100, y: 0, transition: {duration: 0.5, bounce: 1}},
+   }
 
-        {user.username && (
-          <>
-            <li className="push-left">
-              <Link href="/enter">
-                <Button
-                  sx={{
-                    size: {
-                      xs: "small",
-                      md: "medium",
-                    },
-                  }}
-                  onClick={() => handleLogOut(router)}
-                  color="error"
-                  variant="outlined"
-                  className="btn-blue"
-                >
-                  Log out
-                </Button>
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin">
-                <Button variant="contained" className="btn-blue">
-                  Manage posts
-                </Button>
-              </Link>
-            </li>
+   return (
+       <nav className = "navbar">
+          <ul>
+             <li>
+                <LinkWithoutScroll href = "/">
+                   <button className = "btn-logo">NXT</button>
+                </LinkWithoutScroll>
+             </li>
 
-            {user.username && (
-              <li>
-                <a tabIndex={0} onClick={handleClick}>
-                  <Image
-                    quality={90}
-                    onLoadingComplete={handleLoadComplete}
-                    onLoadStart={handleLoadStart}
-                    width={30}
-                    height={30}
-                    src={userState?.photoURL || photoURL || FALLBACK_IMAGE}
-                    alt="User avatar"
-                  />
-                </a>
-                {menuElement}
-              </li>
-            )}
-          </>
-        )}
+             <Loader shouldShow = {isLoading && !user?.username}/>
 
-        {!user.username && !isLoading && (
-          <>
-            <li>
-              <Link href="/enter">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className="btn-blue"
-                >
-                  Log in
-                </Button>
-              </Link>
-            </li>
-          </>
-        )}
-      </ul>
-      <MenuAccount />
-    </nav>
-  );
+             {user.username && (
+                 <div className = 'main-options push-left'>
+                    {/* <LayoutGroup> */}
+                    {/*    {navigationItems.map(({path, element}) => ( */}
+                    {/*        <li> */}
+                    {/*           <LinkWithoutScroll href = {path}> */}
+                    {/*              {element} */}
+                    {/*           </LinkWithoutScroll> */}
+                    {/*           {isActiveLink(path, router.pathname) && ( */}
+                    {/*               <motion.div */}
+                    {/*                   layoutId = "navigation-underline" */}
+                    {/*                   className = "navigation-underline" */}
+                    {/*                   variants={variants} */}
+                    {/*                   initial = "hidden" */}
+                    {/*                   animate = "enter" */}
+                    {/*                   exit = "exit" */}
+                    {/*                   transition = {{type: 'spring'}} */}
+                    {/*               /> */}
+                    {/*           )} */}
+                    {/*        </li> */}
+                    {/*    ))} */}
+                    {/* </LayoutGroup> */}
+                    <li>
+                       <LinkWithoutScroll href = "/enter">
+                          <Button
+                              sx = {{
+                                 size: {
+                                    xs: "small",
+                                    md: "medium",
+                                 },
+                              }}
+                              onClick = {() => handleLogOut(router)}
+                              color = "error"
+                              variant = "outlined"
+                              className = "btn-blue"
+                          >
+                             Log out
+                          </Button>
+                       </LinkWithoutScroll>
+                    </li>
+                    <li>
+                       <LinkWithoutScroll href = "/admin">
+                          <Button variant = "contained" className = "btn-blue">
+                             Manage posts
+                          </Button>
+                       </LinkWithoutScroll>
+                    </li>
+
+                    {user.username && (
+                        <li>
+                           <a tabIndex = {0} onClick = {handleClick}>
+                              <Image
+                                  quality = {90}
+                                  onLoadingComplete = {handleLoadComplete}
+                                  onLoadStart = {handleLoadStart}
+                                  width = {30}
+                                  height = {30}
+                                  src = {userState?.photoURL || photoURL || FALLBACK_IMAGE}
+                                  alt = "User avatar"
+                              />
+                           </a>
+                           {menuElement}
+                        </li>
+                    )}
+                 </div>
+             )}
+
+             {!user.username && !isLoading && (
+                 <>
+                    <li className = 'login-btn'>
+                       <LinkWithoutScroll href = "/enter">
+                          <Button
+                              variant = "contained"
+                              color = "secondary"
+                              className = "btn-blue"
+                          >
+                             Log in
+                          </Button>
+                       </LinkWithoutScroll>
+                    </li>
+                 </>
+             )}
+             {user.username && !isLoading && <MenuAccount/>}
+          </ul>
+       </nav>
+   );
 });
 
 export default NavBar;

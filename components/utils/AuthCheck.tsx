@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import User from "../../store/User";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
 import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { auth } from '../../libs/firebase';
+import LinkWithoutScroll from './LinkWithoutScroll';
 
 // @ts-ignore
 const AuthCheck = observer(({
@@ -23,13 +23,13 @@ const AuthCheck = observer(({
 
        if (!shouldShowAccessText && userIsNotLoggedIn)
           return (
-              <Link href = "/enter">
+              <LinkWithoutScroll href = "/enter">
                  <a onClick = {handleLogInClick}>
                     <Button size = "large" variant = "outlined">
                        Log in 🎀
                     </Button>
                  </a>
-              </Link>
+              </LinkWithoutScroll>
           );
 
        if (userIsNotLoggedIn) return <RestrictedText/>;
@@ -44,9 +44,9 @@ function RestrictedText({additionalText = ""}: { additionalText?: string }) {
    return (
        <Typography variant = "h5" textAlign = "center">
           You must be logged in{additionalText || ""} to have an access.&nbsp;
-          <Link href = "/enter">
+          <LinkWithoutScroll href = "/enter">
              <a style = {{color: "peru"}}>Log In</a>
-          </Link>
+          </LinkWithoutScroll>
        </Typography>
    );
 }

@@ -9,6 +9,7 @@ import Loader from '../../components/layout/Loader';
 import { IPost } from '../../models/Post';
 import { FirebaseUser } from '../../models/User';
 import { observer } from 'mobx-react-lite';
+import AnimatePage from '../../components/utils/AnimatePage';
 
 export interface UpdatePasswordForm {
    newPassword: string,
@@ -20,11 +21,12 @@ const UserProfilePage = observer(({
                                      posts,
                                      realtimePosts
                                   }: { user: FirebaseUser, posts: IPost[], realtimePosts: IPost[] }) => {
-   console.log('----', user, posts, realtimePosts);
+  // console.log('----', user, posts, realtimePosts);
 
    const quoteIdExists = !!user?.favoriteQuoteData?._id;
 
    return (
+       <AnimatePage>
        <main>
           {user && <>
               <MetaTags title = {`User Posts`} desc = {`Posts - ${(realtimePosts || posts)?.join(', ')}`}
@@ -46,6 +48,7 @@ const UserProfilePage = observer(({
              {realtimePosts && <PostFeed posts = {realtimePosts}/>}
           </>}
        </main>
+          </AnimatePage>
    );
 });
 
@@ -53,7 +56,7 @@ export async function getServerSideProps({query}) {
    const {username} = query;
 
    const userDoc = await getUserWithUsername(username);
-   let user = null, posts = null, postsQuery = null, realtimePosts = null;
+   let user = null, posts = null, realtimePosts = null;
 
    if (userDoc) {
       //user = userDoc.data();

@@ -11,6 +11,7 @@
 
 html,
 body {
+    overflow-x: hidden;
     padding: 0;
     font-family: 'Noto Sans', sans-serif;
     background-color: var(--color-bg);
@@ -18,6 +19,9 @@ body {
     margin: 50px 0 0;
     }
 
+* {
+    transition: all 0.15s ease-in-out;
+    }
 
 main {
     padding: 1rem 10vw;
@@ -295,13 +299,45 @@ input[type="file"] {
     }
 
 @media only screen and (max-width: 550px) {
-    .navbar-list {
+    .main-options {
         display: none !important;
+        }
+
+    .login-btn {
+        margin: 0 auto;
         }
     }
 
-.navbar-list {
-    display: block;
+.main-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+
+.donate-popup{
+    padding: 10px 15px;
+    width: min-content;
+    height: max-content;
+    z-index: 98;
+    color: #333;
+    border-radius: 7px;
+    box-shadow: 0 0 0 1px #444;
+    position: absolute;
+    top: 10%;
+    right: 0;
+    transform: translateX(77%);
+    transition: all 0.3s ease-in-out;
+    background-image: linear-gradient(45deg, #fff 40%, mistyrose);
+    }
+
+.donate-popup:hover {
+    transform: translateX(5%);
+    }
+
+.navigation-underline {
+    border-bottom: 2px solid darkviolet;
+    margin-top: 2px;
+    filter: blur(3px);
     }
 
 .menu-account {
@@ -317,12 +353,12 @@ input[type="file"] {
         }
     }
 
-.delimeter{
+.delimeter {
     width: 100%;
     height: 3px;
     background-color: darkviolet;
     }
 
-.no-padding{
+.no-padding {
     padding: 0 !important;
     }

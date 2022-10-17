@@ -8,6 +8,8 @@ import { convertPostDateToFBCompatible } from '../utils/helpers';
 import MetaTags from '../components/utils/MetaTags';
 import { INTERSECTION_MARGIN, POSTS_PER_PAGE } from '../utils/constants';
 import { useInView } from 'react-intersection-observer';
+import AnimatePage from '../components/utils/AnimatePage';
+import DonatePopup from '../components/DonatePopup';
 
 export default function Home({initialPosts}: { initialPosts: IPost[] }) {
    const [ posts, setPosts ] = useState(initialPosts);
@@ -16,10 +18,6 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
    const {ref, inView, entry} = useInView({
       rootMargin: `${INTERSECTION_MARGIN}px`
    });
-
-   useEffect(() => {
-      window.scroll(0, 0);
-   }, []);
 
    useEffect(() => { // if in field of vision (so triggers once even when scrolling up)
       if (!entry?.isIntersecting || isLoadingNewPosts) return;
@@ -49,18 +47,21 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
    }
 
    return (
-       <main style = {{position: 'relative'}}>
-          <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit 2)</Typography>
-          <MetaTags title = 'Main Page' desc = 'All posts available' imagePath = 'public/vercel.svg'/>
-          {posts && <PostFeed posts = {posts}/>}
+       <AnimatePage>
+          <DonatePopup/>
+          <main style = {{position: 'relative'}}>
+             <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit 2)</Typography>
+             <MetaTags title = 'Main Page' desc = 'All posts available' imagePath = 'public/vercel.svg'/>
+             {posts && <PostFeed posts = {posts}/>}
 
-          {isLoadingNewPosts && <Container>
-              <Loader style = {{position: 'absolute', bottom: '5%', left: '50%', translate: '-50%'}}/>
-          </Container>}
-          <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {ref}/>
-          {postsDidEnd.current && !isLoadingNewPosts &&
-              <Typography variant = 'h3' textAlign = 'center'>That's all for now!</Typography>}
-       </main>
+             {isLoadingNewPosts && <Container>
+                 <Loader style = {{position: 'absolute', bottom: '5%', left: '50%', translate: '-50%'}}/>
+             </Container>}
+             <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {ref}/>
+             {postsDidEnd.current && !isLoadingNewPosts &&
+                 <Typography variant = 'h3' textAlign = 'center'>That's all for now!</Typography>}
+          </main>
+       </AnimatePage>
    )
 }
 
