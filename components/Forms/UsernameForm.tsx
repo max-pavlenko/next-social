@@ -9,6 +9,7 @@ import ImageUploader from '../layout/ImageUploader';
 import { UsernameFormModes } from '../../models/Form';
 import toast from 'react-hot-toast';
 import Entered from '../utils/Entered';
+import Image from 'next/image';
 
 const debounce = require('lodash.debounce');
 
@@ -110,8 +111,9 @@ const UsernameForm = observer(({
       <ImageUploader shouldShowImgURL = {false}/>
       {photoURL &&
           <>
-              <img height = {250} style = {{margin: '0 auto', height: '250px', display: 'block', objectFit: 'cover'}} src = {photoURL}
-                   alt = 'Preview user avatar'/>
+              <div><Image height = {250} width = {250} objectFit = 'cover' style = {{margin: '0 auto'}} src = {photoURL}
+                          alt = 'Preview user avatar'/>
+              </div>
               <Button sx={{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name')} variant = 'outlined'>
                   Download image
               </Button>

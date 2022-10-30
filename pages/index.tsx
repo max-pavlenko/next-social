@@ -59,7 +59,7 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
              </Container>}
              <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {ref}/>
              {postsDidEnd.current && !isLoadingNewPosts &&
-                 <Typography variant = 'h3' textAlign = 'center'>That's all for now!</Typography>}
+                 <Typography variant = 'h3' textAlign = 'center'>That&apos;s all for now!</Typography>}
           </main>
        </AnimatePage>
    )

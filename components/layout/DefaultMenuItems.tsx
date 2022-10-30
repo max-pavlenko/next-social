@@ -8,9 +8,11 @@ import { toastModal } from '../../utils/toastModal';
 import { deleteAccount } from '../../libs/firebase';
 import { useRouter } from 'next/router';
 import LinkWithoutScroll from '../utils/LinkWithoutScroll';
+import { useLocale } from '../../translations/useLocale';
 
 const DefaultMenuItems = observer(() => {
    const router = useRouter();
+   const l = useLocale();
 
    function handleDeleteAccount() {
       console.log("deleting the account");
@@ -29,7 +31,7 @@ const DefaultMenuItems = observer(() => {
                 <ListItemIcon>
                    <RecentActorsIcon fontSize="medium" />
                 </ListItemIcon>
-                 Profile
+                {l.profile}
              </MenuItem>
           </LinkWithoutScroll>
           <LinkWithoutScroll href={`/`}>
@@ -37,7 +39,7 @@ const DefaultMenuItems = observer(() => {
                 <ListItemIcon>
                    <MenuBookSharp />
                 </ListItemIcon>
-                All Posts
+                {l.allPosts}
              </MenuItem>
           </LinkWithoutScroll>
           <LinkWithoutScroll href={`/admin`}>
@@ -45,7 +47,7 @@ const DefaultMenuItems = observer(() => {
                 <ListItemIcon>
                    <Settings fontSize="small" />
                 </ListItemIcon>
-                Manage posts
+                {l.managePosts}
              </MenuItem>
           </LinkWithoutScroll>
           <Divider />
@@ -54,20 +56,20 @@ const DefaultMenuItems = observer(() => {
                 <ListItemIcon>
                    <UpdateOutlined fontSize="small" />
                 </ListItemIcon>
-                Update password
+                {l.updatePassword}
              </MenuItem>
           </LinkWithoutScroll>
           <MenuItem onClick={handleDeleteAccount}>
              <ListItemIcon>
                 <DeleteForeverOutlined fontSize="small" />
              </ListItemIcon>
-             Delete account
+             {l.deleteAccount}
           </MenuItem>
           <MenuItem onClick={() => handleLogOut(router)}>
              <ListItemIcon>
                 <Logout fontSize="small" />
              </ListItemIcon>
-             Logout
+             {l.logOut}
           </MenuItem>
        </>
    );

@@ -10,6 +10,7 @@ import { Router, useRouter } from 'next/router';
 import { ContextMenu } from '../components/utils/contextMenu';
 import Loader from '../components/layout/Loader';
 import { AnimatePresence } from 'framer-motion';
+import "../node_modules/flag-icons/css/flag-icons.min.css";
 
 NProgress.configure({showSpinner: true});
 Router.events.on('routeChangeStart', NProgress.start);
@@ -33,9 +34,9 @@ function MyApp({Component, pageProps}) {
               onExitComplete = {() => window.scrollTo(0, 0)}
           >
              <Component key = {route} {...pageProps} />
+             <ContextMenu/>
           </AnimatePresence>
           <Toaster/>
-          <ContextMenu/>
        </ThemeProvider>
    )
 }

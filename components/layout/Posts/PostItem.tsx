@@ -9,12 +9,14 @@ import { useEffect, useState } from 'react';
 import { toastNotify } from '../../../utils/helpers';
 import { toastModal } from '../../../utils/toastModal';
 import LinkWithoutScroll from '../../utils/LinkWithoutScroll';
+import { useLocale } from '../../../translations/useLocale';
 
 function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolean; }) {
    const router = useRouter();
    const postWordCount = post?.content.trim().split(/[\s#*&^]|![alt]\(.*\)+/g).filter(str => str.length > 0).length;
    const minutesToRead = (postWordCount / 100 + 1).toFixed(0);
    const [ username, setUsername ] = useState(post.username);
+   const l = useLocale();
 
    useEffect(() => {
       firestore.doc(post.userPath).get().then((snapshot) => {
@@ -50,7 +52,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
              <LinkWithoutScroll href = {username}>
                 <a style = {{display: "flex", gap: "8px", alignItems: "center"}}>
                    <CheckmarkIcon style = {{display: 'inline-block'}}/>
-                   <b>By @{username}</b>
+                   <b>{l.postBy} @{username}</b>
                 </a>
              </LinkWithoutScroll>
              {isConfigurable && (
@@ -67,15 +69,15 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
           </Box>
 
           <LinkWithoutScroll href = {`${username}/${post.slug}`}>
-             <h2 style = {{cursor: "pointer"}}>
+             <a><h2 style = {{cursor: "pointer", display: 'inline-block'}}>
                 <b>{post.title}</b>
-             </h2>
+             </h2></a>
           </LinkWithoutScroll>
 
           <footer>
         <span style = {{pointerEvents: "none"}}>
-          {postWordCount} words. That's {minutesToRead} min
-           {+minutesToRead === 1 ? "" : "s"} to read
+          {postWordCount} {l.words}. {l.thats} {minutesToRead} min
+           {+minutesToRead === 1 ? "" : "s"}{l.to} {l.read}
         </span>
              <span style={{whiteSpace: 'nowrap'}} className = "push-left">💕 {post.heartsCount}</span>
           </footer>

@@ -6,6 +6,7 @@ import { IQuoteData } from '../../../store/User';
 import { toastNotify } from '../../../utils/helpers';
 import { CheckmarkIcon } from 'react-hot-toast';
 import styles from '../../../styles/Blockquote.module.scss'
+import { useLocale } from '../../../translations/useLocale';
 
 const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quoteId?: string }) => {
    const [ quote, setQuote ] = useState<IQuoteData>({text: "...", author: "...", _id: ''});
@@ -13,6 +14,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
    const shouldFetchQuote = useRef(true);
    const [ addedQuoteAsFavorite, setAddedQuoteAsFavorite ] = useState(false);
    const userRef = useRef(firestore.collection('users').doc(auth?.currentUser?.uid));
+   const l = useLocale();
 
    const fetchQuote = useCallback(() => {
       if (!shouldFetchQuote.current) return;
@@ -60,7 +62,8 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
                  variant = "outlined"
                  color = "secondary"
              >
-                 <span>{addedQuoteAsFavorite && <CheckmarkIcon/>}</span>Add as favorite quote
+                 <span>{addedQuoteAsFavorite && <CheckmarkIcon/>}</span>
+                {l.addFavoriteQuote}
              </Button>
                  <Button
                      size = 'small'
@@ -72,7 +75,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
                      variant = "outlined"
                      color = "secondary"
                  >
-                     More...
+                    {l.more}...
                  </Button>
              </>
              }

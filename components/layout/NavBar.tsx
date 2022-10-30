@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import User from "../../store/User";
 import { observer } from "mobx-react-lite";
 import Image from "next/future/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
 import MenuAccount from "./MenuAccount";
@@ -13,6 +13,8 @@ import { auth, firestore } from "../../libs/firebase";
 import { useMenu } from "../../libs/hooks/useMenu";
 import DefaultMenuItems from './DefaultMenuItems';
 import LinkWithoutScroll from '../utils/LinkWithoutScroll';
+import LocalesNames from '../../translations/localesNames';
+import { useLocale } from '../../translations/useLocale';
 
 const NavBar = observer(() => {
    const [ isLoading, setIsLoading ] = useState(false);
@@ -21,6 +23,12 @@ const NavBar = observer(() => {
    const [ userRealtime ] = useDocumentData(firestore.doc("users/" + auth.currentUser?.uid));
    const [ userState, setUserState ] = useState(null);
    const {menuElement, handleClick} = useMenu(<DefaultMenuItems/>);
+   const l = useLocale();
+   const languages = router.locales.map(locale => {
+      return {locale, langName: LocalesNames[locale] || 'unknown'}
+   })
+   const flagCode = router.locale === 'en' ? 'us' : router.locale;
+   const langOptionRef = useRef<HTMLOptionElement>(null);
 
    function handleLoadComplete() {
       setIsLoading(false);
@@ -74,13 +82,29 @@ const NavBar = observer(() => {
       exit: {opacity: 1, x: 100, y: 0, transition: {duration: 0.5, bounce: 1}},
    }
 
+   async function handleLanguageChange(e) {
+      const locale = e.target.value;
+      await router.push(router.pathname, router.asPath, {locale});
+   }
+
    return (
        <nav className = "navbar">
           <ul>
-             <li>
+             <li style={{display: "flex", alignItems: "center", gap: '15px'}}>
                 <LinkWithoutScroll href = "/">
-                   <button className = "btn-logo">NXT</button>
+                   <button style={{margin: 0}} className = "btn-logo">NXT</button>
                 </LinkWithoutScroll>
+                <div style={{display: "flex", alignItems: "center"}}>
+                   <span className = {`fi fi-${flagCode}`}/>
+                   <select value = {router.locale} className = 'language-select' onChange = {handleLanguageChange}
+                           name = 'language'>
+                      {languages.map((language) => (
+                          <option data-lang={language.locale} ref={langOptionRef} key = {language.locale} className = 'language-option' value = {language.locale}>
+                             {language.langName}
+                          </option>
+                      ))}
+                   </select>
+                </div>
              </li>
 
              <Loader shouldShow = {isLoading && !user?.username}/>
@@ -121,14 +145,14 @@ const NavBar = observer(() => {
                               variant = "outlined"
                               className = "btn-blue"
                           >
-                             Log out
+                             {l.logOut}
                           </Button>
                        </LinkWithoutScroll>
                     </li>
                     <li>
                        <LinkWithoutScroll href = "/admin">
                           <Button variant = "contained" className = "btn-blue">
-                             Manage posts
+                             {l.managePosts}
                           </Button>
                        </LinkWithoutScroll>
                     </li>
@@ -161,7 +185,7 @@ const NavBar = observer(() => {
                               color = "secondary"
                               className = "btn-blue"
                           >
-                             Log in
+                             {l.logIn}
                           </Button>
                        </LinkWithoutScroll>
                     </li>

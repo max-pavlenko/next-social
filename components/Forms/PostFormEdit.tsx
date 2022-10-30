@@ -7,6 +7,7 @@ import { CheckmarkIcon } from "react-hot-toast";
 import { useState } from "react";
 import { invertBool, toastNotify } from "../../utils/helpers";
 import ImageUploader from "../layout/ImageUploader";
+import { useLocale } from '../../translations/useLocale';
 
 export interface EditForm {
    content: string;
@@ -30,6 +31,7 @@ function PostFormEdit({
    const [ isEditingTitle, setIsEditingTitle ] = useState(false);
    const [ title, setTitle ] = useState(defaultValue.title);
    const {isDirty, isValid} = formState;
+   const l = useLocale();
 
    const onFormSubmit: SubmitHandler<EditForm> = async ({
                                                            content,
@@ -51,7 +53,7 @@ function PostFormEdit({
    return (
        <form onSubmit = {handleSubmit(onFormSubmit)}>
           <Typography mb = "6px" component = "div" variant = "caption">
-             Right click to edit title
+             {l.rightClickToEditTitle}
           </Typography>
           <h1 style = {{margin: 0}} onContextMenu = {handleContextTitle}>
              {!isEditingTitle ? (
@@ -112,7 +114,7 @@ function PostFormEdit({
                            defaultChecked
                        />
                     }
-                    label = "Mark as public?"
+                    label = {`${l.markAsPublic}?`}
                 />
              </FormGroup>
 
@@ -122,7 +124,7 @@ function PostFormEdit({
                  type = "submit"
                  variant = "contained"
              >
-                Save Changes
+                {l.saveChanges}
              </Button>
           </Container>
 

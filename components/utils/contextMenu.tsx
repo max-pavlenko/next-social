@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toastNotify } from '../../utils/helpers';
 import { ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
 import { ContentCopy, ContentPasteSearchOutlined } from '@mui/icons-material';
+import { useLocale } from '../../translations/useLocale';
 
 export const ContextMenu = () => {
    const [ contextMenu, setContextMenu ] = useState<{
@@ -9,6 +10,7 @@ export const ContextMenu = () => {
       mouseY: number;
    } | null>(null);
    const exactText = useRef('');
+   const l = useLocale();
 
    useEffect(() => {
       document.addEventListener('mouseup', (event: any) => {
@@ -52,6 +54,7 @@ export const ContextMenu = () => {
 
    return (
        <Menu
+
            open = {contextMenu !== null}
            onClose = {handleClose}
            anchorReference = "anchorPosition"
@@ -61,21 +64,21 @@ export const ContextMenu = () => {
                   : undefined
            }
        >
-          <MenuItem onClick = {handleCopy} sx = {{width: '175px'}}>
+          <MenuItem onClick = {handleCopy}>
              <ListItemIcon>
                 <ContentCopy fontSize = "small"/>
              </ListItemIcon>
-             <ListItemText>Copy</ListItemText>
-             <Typography variant = "body2" color = "text.secondary">
-                Ctrl + C
-             </Typography>
+             <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}><ListItemText>{l.copy}</ListItemText>
+                <Typography variant = "body2" color = "text.secondary">
+                   Ctrl + C
+                </Typography></div>
           </MenuItem>
 
           <MenuItem onClick = {handleSearch} sx = {{width: '175px'}}>
              <ListItemIcon>
                 <ContentPasteSearchOutlined fontSize = "small"/>
              </ListItemIcon>
-             <ListItemText>Search</ListItemText>
+             <ListItemText>{l.search}</ListItemText>
           </MenuItem>
        </Menu>
    )

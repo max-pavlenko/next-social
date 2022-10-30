@@ -29,7 +29,7 @@ const UserProfilePage = observer(({
        <AnimatePage>
        <main>
           {user && <>
-              <MetaTags title = {`User Posts`} desc = {`Posts - ${(realtimePosts || posts)?.join(', ')}`}
+              <MetaTags title = {`${user?.username || 'User Posts'}`} desc = {`Posts - ${(realtimePosts || posts)?.join(', ')}`}
                         imagePath = 'public/vercel.svg'/>
               <UserProfile user = {user}/>
               <div style = {{

@@ -23,6 +23,11 @@ body {
     transition: all 0.15s ease-in-out;
     }
 
+*::selection{
+    background-color: var(--color-blue);
+    color: var(--color-bg);
+    }
+
 main {
     padding: 1rem 10vw;
     }
@@ -200,8 +205,6 @@ button.btn-logo {
 .card-img-center {
     margin: auto;
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
     object-fit: cover;
     background-color: lightgray;
     }
@@ -298,7 +301,7 @@ input[type="file"] {
     padding: 0;
     }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 700px) {
     .main-options {
         display: none !important;
         }
@@ -321,8 +324,8 @@ input[type="file"] {
     z-index: 98;
     color: #333;
     border-radius: 7px;
-    box-shadow: 0 0 0 1px #444;
-    position: absolute;
+    border: 2px solid var(--color-gray);
+    position: fixed;
     top: 10%;
     right: 0;
     transform: translateX(77%);
@@ -345,7 +348,7 @@ input[type="file"] {
     height: 100%;
     }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 700px) {
     .menu-account {
         display: flex;
         align-items: center;
@@ -361,4 +364,35 @@ input[type="file"] {
 
 .no-padding {
     padding: 0 !important;
+    }
+
+.language-select {
+    padding: 7px 10px;
+    font-family: 'Noto Sans', sans-serif;
+    border: none;
+    border-radius: 3px;
+    }
+
+.language-select:focus {
+    outline: none;
+    }
+
+.language-option{
+    font-family: inherit;
+    padding: 3px 6px;
+    border: none;
+    color: darkviolet;
+    }
+
+.rainbow {
+    animation: color-rotate 7s ease-in-out both infinite;
+    }
+
+@keyframes color-rotate {
+    0% {
+        filter: hue-rotate(0deg);
+        }
+    100% {
+        filter: hue-rotate(360deg);
+        }
     }

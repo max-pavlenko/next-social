@@ -6,11 +6,13 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { toastNotify } from '../../utils/helpers';
 import User from '../../store/User';
 import { observer } from 'mobx-react-lite';
+import { useLocale } from '../../translations/useLocale';
 
 const ImageUploader = observer(({shouldShowImgURL = true}: { shouldShowImgURL?: boolean }) => {
    const uploading = useRef(false);
    const [ progress, setProgress ] = useState(0);
    const [ downloadURL, setDownloadURL ] = useState(null);
+   const l = useLocale();
 
    function uploadFile(e) {
       const file = e.target.files[0];
@@ -51,7 +53,7 @@ const ImageUploader = observer(({shouldShowImgURL = true}: { shouldShowImgURL?: 
           {!uploading.current && (
               <>
                  <label className = 'btn'>
-                    Upload Image
+                    {l.uploadImage}
                     <input type = 'file' onChange = {uploadFile} accept = 'image/png,image/gif,image/jpeg'/>
                  </label>
               </>

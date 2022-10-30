@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
 import { ToastOptions } from 'react-hot-toast';
 
 export const theme = createTheme({
@@ -18,9 +17,8 @@ export const theme = createTheme({
 
 export const INTERSECTION_MARGIN = 100;
 export const POSTS_PER_PAGE = 2;
-export type SetterFor<T> = Dispatch<SetStateAction<T>>;
 export const FALLBACK_IMAGE = 'https://i.stack.imgur.com/l60Hf.png';
-export const SITE_URL = 'http://localhost:3000';
+export const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 export const DEFAULT_ERROR_TEXT = 'An error occurred...';
 export const RESET_PASSWORD_COOLDOWN_S = 30;
 export const RESET_PASSWORD_TOAST_DURATION = 10 * 1000;

@@ -7,6 +7,7 @@ import { UsernameFormModes } from '../../../models/Form';
 import { FirebaseUser } from '../../../models/User';
 import { auth, firestore } from '../../../libs/firebase';
 import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import Image from 'next/image';
 
 const UserProfile = ({user}: { user: FirebaseUser }) => {
    const [ isEditingUsername, setIsEditingUsername ] = useState(false);
@@ -20,7 +21,10 @@ const UserProfile = ({user}: { user: FirebaseUser }) => {
 
    return (
        <Container className = 'box-center'>
-          <img className = 'card-img-center' src = {user.photoURL} alt = {`Photo of ${user.displayName}`}/>
+          <div style={{overflow: 'hidden'}}>
+             <Image objectFit = 'cover' width={'150px'} placeholder='blur' blurDataURL={user.photoURL} height={'150px'} className = 'card-img-center' src ={user.photoURL}
+                          alt = {`Photo of ${user.displayName}`}/>
+          </div>
           <p>
              <i>
                 {!isEditingUsername && <>@{user.username}</>}

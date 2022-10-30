@@ -33,9 +33,7 @@ function ProviderAuthButton({
        <>
           {isLoading && <Loader style = {{position: 'absolute', top: '45%'}}/>}
           <Button variant = 'outlined' className = 'btn-google' onClick = {signInWithProvider}>
-             <img width = '100%' height = '100%'
-                  src = {imgSrc}
-                  alt = {`${btnTitle} logo`}/>
+                <img src = {imgSrc} alt = {`${btnTitle} logo`}/>
              {btnTitle}
           </Button>
        </>)

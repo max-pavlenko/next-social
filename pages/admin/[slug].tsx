@@ -10,6 +10,7 @@ import { Button, Typography } from '@mui/material';
 import { toastModal } from '../../utils/toastModal';
 import { invertBool } from '../../utils/helpers';
 import AnimatePage from '../../components/utils/AnimatePage';
+import { useLocale } from '../../translations/useLocale';
 
 function PostManager() {
    const [ isPreview, setIsPreview ] = useState(false);
@@ -19,6 +20,7 @@ function PostManager() {
    const [ postData ] = useDocumentDataOnce(postRef);
    const post = postData as IPost;
    const user = useRef(null);
+   const l = useLocale();
    console.log(post, postRef);
 
    useEffect(() => {
@@ -46,7 +48,7 @@ function PostManager() {
    return (
 
        <main className = {styles.container}>
-          {!postRef && <Typography color = 'rebeccapurple'>You dont have permission to proceed.</Typography>}
+          {!postRef && <Typography color = 'rebeccapurple'>{l.noPermission}.</Typography>}
           {post && (
               <>
                  <section>
@@ -55,11 +57,11 @@ function PostManager() {
                  </section>
 
                  <aside>
-                    <h3>Tools</h3>
+                    <h3>{l.tools}</h3>
                     <Button variant = 'contained' color = 'primary'
                             onClick = {() => setIsPreview(invertBool)}>{isPreview ? 'Edit' : 'Preview'}
                     </Button>
-                    <Button onClick = {onLinkClick} color = 'success' variant = 'outlined'>Live View</Button>
+                    <Button onClick = {onLinkClick} color = 'success' variant = 'outlined'>{l.liveView}</Button>
                  </aside>
               </>
           )}
