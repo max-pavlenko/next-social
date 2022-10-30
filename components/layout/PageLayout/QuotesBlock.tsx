@@ -55,7 +55,8 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
              <cite  title = "Source title">
                 -- <b>{quote.author}</b>
              </cite>
-             {!quoteId && <><Button
+             {!quoteId && <>
+                 <Button
                  size = 'small'
                  className={styles.blockquote__firstBtn}
                  onClick = {() => markQuoteAsFavorite(quote)}

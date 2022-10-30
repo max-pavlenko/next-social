@@ -92,6 +92,7 @@ function PostFormEdit({
                          color = "success"
                          autoFocus
                          {...obj}
+                         fullWidth
                          inputRef = {obj.ref}
                          error = {!!errors.content}
                          placeholder = "Your content"

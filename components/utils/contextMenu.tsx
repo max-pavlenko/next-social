@@ -40,7 +40,7 @@ export const ContextMenu = () => {
 
    async function handleCopy() {
       handleClose();
-      await toastNotify({successText: 'copied text: ' + exactText.current}, {
+      await toastNotify({successText: 'copied text'}, {
          tryFn: async () => {
             await navigator.clipboard.writeText(exactText.current);
          }
