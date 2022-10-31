@@ -54,7 +54,6 @@ export const ContextMenu = () => {
 
    return (
        <Menu
-
            open = {contextMenu !== null}
            onClose = {handleClose}
            anchorReference = "anchorPosition"
@@ -74,7 +73,7 @@ export const ContextMenu = () => {
                 </Typography></div>
           </MenuItem>
 
-          <MenuItem onClick = {handleSearch} sx = {{width: '175px'}}>
+          <MenuItem onClick = {handleSearch} sx = {{width: '100%'}}>
              <ListItemIcon>
                 <ContentPasteSearchOutlined fontSize = "small"/>
              </ListItemIcon>

@@ -77,7 +77,7 @@ function PostFormEdit({
 
           <ImageUploader/>
 
-          <Container className = {isPreview ? styles.hidden : styles.controls}>
+          {!isPreview && <Container className = {styles.controls}>
              <p>{defaultValue.slug}</p>
              <Controller
                  name = "content"
@@ -127,7 +127,7 @@ function PostFormEdit({
              >
                 {l.saveChanges}
              </Button>
-          </Container>
+          </Container>}
 
           {isPreview && (
               <div className = "card">

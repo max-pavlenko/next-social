@@ -63,7 +63,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
                  variant = "outlined"
                  color = "secondary"
              >
-                 <span>{addedQuoteAsFavorite && <CheckmarkIcon/>}</span>
+                 <div style={{marginRight: '5px'}}>{addedQuoteAsFavorite && <CheckmarkIcon/>}</div>
                 {l.addFavoriteQuote}
              </Button>
                  <Button
