@@ -12,7 +12,7 @@ const NotFound = () => {
        <AnimatePage>
           <main>
              <MetaTags title = 'Page Not Found' desc = 'Requested page couldn`t be found or it doesnt exist!'
-                       imagePath = 'public/vercel.svg'/>
+                       imagePath = '/vercel.svg'/>
              <Typography textAlign = 'center' variant = 'h3'>{l.notFound}...◾
              </Typography>
              <LinkWithoutScroll href = '/'>

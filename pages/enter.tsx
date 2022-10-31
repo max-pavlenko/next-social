@@ -14,7 +14,7 @@ const EnterPage = observer(() => {
    return (
        <AnimatePage>
           <main>
-             <MetaTags title = 'Logging' desc = 'Log in or sign up' imagePath = 'public/vercel.svg'/>
+             <MetaTags title = 'Logging' desc = 'Log in or sign up' imagePath = '/vercel.svg'/>
              {
                 auth.currentUser ?
                     !auth.currentUser.emailVerified ? <ConfirmEmail/>

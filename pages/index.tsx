@@ -51,7 +51,7 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
           <DonatePopup/>
           <main style = {{position: 'relative'}}>
              <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit 2)</Typography>
-             <MetaTags title = 'Main Page' desc = 'All posts available' imagePath = 'public/vercel.svg'/>
+             <MetaTags title = 'Main Page' desc = 'All posts available' imagePath = '/vercel.svg'/>
              {posts && <PostFeed posts = {posts}/>}
 
              {isLoadingNewPosts && <Container>

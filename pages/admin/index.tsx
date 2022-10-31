@@ -15,7 +15,7 @@ const l = useLocale();
        <AnimatePage>
           <AuthCheck>
              <>
-                <MetaTags title={l.managePosts} desc='Manage, create and edit your posts' imagePath='' />
+                <MetaTags title={l.managePosts} desc='Manage, create and edit your posts' imagePath='/vercel.svg' />
                 <QuotesBlock Loader = {<Loader/>}/>
                 <CreateNewPostForm/>
                 <Typography sx = {{mb: '16px'}} variant = 'h3' fontWeight = 'lighter' textAlign = 'center'>
