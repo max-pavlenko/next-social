@@ -13,12 +13,13 @@ const storeItems = [
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    console.log(req.method.toUpperCase())
+   const serverURL = process.env[process.env.NODE_ENV === 'development' ? 'NEXT_PUBLIC_SERVER_URL' : 'NEXT_PUBLIC_SERVER_URL_PROD']
    try {
       const {donation, items} = req.body
       const session = await stripe.checkout.sessions.create({
          payment_method_types: [ 'card' ],
-         cancel_url: process.env.NEXT_PUBLIC_SERVER_URL + '/donate',
-         success_url: process.env.NEXT_PUBLIC_SERVER_URL + '/success',
+         cancel_url: serverURL + '/donate',
+         success_url: serverURL + '/success',
          mode: 'payment',
          line_items: [{
                price_data: {

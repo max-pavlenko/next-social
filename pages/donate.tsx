@@ -43,7 +43,7 @@ const DonatePage = ({prices}: IProps) => {
                 </Grid>
                 <Grid alignItems = 'center' textAlign = 'center' item xs = {4}>
                    <Button fullWidth size = 'large' variant = 'contained' onClick = {handleDonate}>
-                      Donate
+                      {l.donate}
                    </Button>
                 </Grid>
              </Grid>

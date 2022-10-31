@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import LinkWithoutScroll from "../components/utils/LinkWithoutScroll";
+import ReactConfetti from 'react-confetti';
 
 const SuccessDonationPage = () => {
    const [ showConfetti, setShowConfetti ] = useState(true);
-   const confettiOptions = {
-      force: 0.4,
-      duration: 5000,
-      particleCount: 200,
-      height: 1100,
-      width: 1400,
-   };
+   const width = useRef(0);
+   const height = useRef(0);
+
+   useEffect(() => {
+   width.current = window.innerWidth;
+   height.current = window.innerHeight;
+   }, []);
 
    return (
        <Container>
@@ -21,32 +22,22 @@ const SuccessDonationPage = () => {
              <LinkWithoutScroll href = "/">
                 <Button variant = "outlined">Home</Button>
              </LinkWithoutScroll>
-            <Button color='secondary' variant='outlined' onClick={()=>setShowConfetti(prevState => !prevState)}>🎉</Button>
+             <Button color = 'secondary' variant = 'outlined'
+                     onClick = {() => setShowConfetti(prevState => !prevState)}>{showConfetti ? '❌' : '🎉'}</Button>
           </Stack>
-              {/* <Container */}
-              {/*     style = {{ */}
-              {/*        overflow: "hidden", */}
-              {/*        pointerEvents: "none", */}
-              {/*        position: "absolute", */}
-              {/*        top: 0, */}
-              {/*        left: 0, */}
-              {/*        right: 0, */}
-              {/*        bottom: 0, */}
-              {/*     }} */}
-              {/* > */}
-              {/*    <div style = {{position: "absolute", left: "50%", top: "10%"}}> */}
-              {/*       <ConfettiExplosion */}
-              {/*           colors={["#FF0080", "#00FF00", "#F917FF", '#26EBFF', '#FF9000', '#071DFF', '#F9B18F', '#FA8CFF']} */}
-              {/*           force = {0.6} */}
-              {/*           duration = {5000} */}
-              {/*           particleCount = {230} */}
-              {/*           height = {1600} */}
-              {/*           width = {1000} */}
-              {/*           // floorHeight = {1600} */}
-              {/*           // floorWidth = {1600} */}
-              {/*       /> */}
-              {/*    </div> */}
-              {/* </Container> */}
+
+          <div
+              style={{
+                 position: "absolute",
+                 top: 0,
+                 left: 0,
+                 width: "100%",
+                 height: "100%",
+                  pointerEvents: 'none'
+              }}
+          >
+             {showConfetti && <ReactConfetti width={width.current} height={height.current} tweenDuration={7000} numberOfPieces={500} recycle={false} onConfettiComplete = {() => setShowConfetti(false)}/>}
+          </div>
        </Container>
    );
 };
