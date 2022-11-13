@@ -22,7 +22,7 @@ const UserProfile = ({user}: { user: FirebaseUser }) => {
    return (
        <Container className = 'box-center'>
           <div style={{overflow: 'hidden'}}>
-             <Image objectFit = 'cover' width={'150px'} placeholder='blur' blurDataURL={user.photoURL} height={'150px'} className = 'card-img-center' src ={user.photoURL}
+             <Image width={150} placeholder='blur' blurDataURL={user.photoURL} height={150} className = 'card-img-center' src ={user.photoURL}
                           alt = {`Photo of ${user.displayName}`}/>
           </div>
           <p>

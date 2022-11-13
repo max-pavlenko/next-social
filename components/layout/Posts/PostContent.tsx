@@ -22,10 +22,10 @@ const PostContent = ({post}: { post: IPost }) => {
           <h1 style = {{margin: 0, borderLeft: '4px solid var(--color-blue)', paddingLeft: '13px'}}>{post.title}</h1>
           <Typography variant = 'caption' className = 'text-sm'>
              Written by&nbsp;
-             <LinkWithoutScroll href = {`/${username}`}>
-                <a className = 'text-info'>
+             <LinkWithoutScroll className = 'text-info' href = {`/${username}`}>
+                
                    @{username}
-                </a>
+
              </LinkWithoutScroll>
              &nbsp;on {displayDate || 0}
           </Typography>

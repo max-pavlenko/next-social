@@ -3,6 +3,7 @@ import * as env from 'dotenv'
 
 env.config();
 const stripe = require('stripe')(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
+console.log('process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY', process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
 const storeItems = [
    {priceInCents: 10000, name: '10$'},
    {priceInCents: 1000, name: '1$'},
@@ -12,7 +13,6 @@ const storeItems = [
 ]
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   console.log(req.method.toUpperCase())
    const serverURL = process.env[process.env.NODE_ENV === 'development' ? 'NEXT_PUBLIC_SERVER_URL' : 'NEXT_PUBLIC_SERVER_URL_PROD']
    try {
       const {donation, items} = req.body

@@ -111,8 +111,7 @@ const UsernameForm = observer(({
       <ImageUploader shouldShowImgURL = {false}/>
       {photoURL &&
           <>
-              <div><Image height = {250} width = {250} objectFit = 'cover' style = {{margin: '0 auto'}} src = {photoURL}
-                          alt = 'Preview user avatar'/>
+              <div><Image height = {250} width = {250} style = {{margin: '0 auto', objectFit: 'cover'}} src = {photoURL} alt = 'Preview user avatar'/>
               </div>
               <Button sx={{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name')} variant = 'outlined'>
                   Download image

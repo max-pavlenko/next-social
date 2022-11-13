@@ -12,11 +12,13 @@ export const ContextMenu = () => {
    const exactText = useRef('');
    const l = useLocale();
 
+   const elementsToSkip = ['input', 'textarea']
+
    useEffect(() => {
       document.addEventListener('mouseup', (event: any) => {
          const selectedText = window.getSelection().toString().trim();
          const target = event.target.localName;
-         if (!selectedText.length || target==='input') {
+         if (!selectedText.length || elementsToSkip.includes(target)) {
             setContextMenu(null);
             return;
          }

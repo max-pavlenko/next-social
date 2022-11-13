@@ -10,11 +10,14 @@ import { invertBool, validateSchemaPassword } from '../utils/helpers';
 import toast from 'react-hot-toast';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AnimatePage from '../components/utils/AnimatePage';
+import MetaTags from '../components/utils/MetaTags';
+import vercel from '../public/vercel.svg';
 
 const UpdatePasswordPage = () => {
    const [ isPasswordShown, setIsPasswordShown ] = useState(false);
    return (
        <AnimatePage>
+          <MetaTags  desc='Update your password' title='Password change' imagePath={vercel}/>
           <AuthCheck>
              <Container>
                 <Formik

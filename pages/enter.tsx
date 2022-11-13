@@ -8,11 +8,13 @@ import MetaTags from '../components/utils/MetaTags';
 import React from 'react';
 import { auth } from '../libs/firebase';
 import AnimatePage from '../components/utils/AnimatePage';
+import vercel from '../public/vercel.svg';
 
 const EnterPage = observer(() => {
    const {username} = User.user;
    return (
        <AnimatePage>
+          <MetaTags title='Here we go...' desc='Here we go...' imagePath={vercel} />
           <main>
              <MetaTags title = 'Logging' desc = 'Log in or sign up' imagePath = '/vercel.svg'/>
              {

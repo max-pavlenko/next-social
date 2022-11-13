@@ -9,6 +9,11 @@ const nextConfig = {
   i18n: {
     locales: ['en', 'ua', 'ru'],
     defaultLocale: 'en'
+  },
+  experimental: {
+    fontLoaders: [
+      { loader: '@next/font/google', options: { subsets: ['latin'] } }
+    ]
   }
 }
 

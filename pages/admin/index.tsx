@@ -7,6 +7,7 @@ import QuotesBlock from '../../components/layout/PageLayout/QuotesBlock';
 import AnimatePage from '../../components/utils/AnimatePage';
 import MetaTags from '../../components/utils/MetaTags';
 import { useLocale } from '../../translations/useLocale';
+import vercel from '../../public/vercel.svg';
 
 const AdminPostsPage = () => {
 const l = useLocale();
@@ -15,7 +16,7 @@ const l = useLocale();
        <AnimatePage>
           <AuthCheck>
              <>
-                <MetaTags title={l.managePosts} desc='Manage, create and edit your posts' imagePath='/vercel.svg' />
+                <MetaTags title={l.managePosts} desc='Manage, create and edit your posts' imagePath={vercel} />
                 <QuotesBlock Loader = {<Loader/>}/>
                 <CreateNewPostForm/>
                 <Typography sx = {{mb: '16px'}} variant = 'h3' fontWeight = 'lighter' textAlign = 'center'>

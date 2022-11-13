@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import User from "../../store/User";
 import { observer } from "mobx-react-lite";
-import Image from "next/future/image";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ import DefaultMenuItems from './DefaultMenuItems';
 import LinkWithoutScroll from '../utils/LinkWithoutScroll';
 import LocalesNames from '../../translations/localesNames';
 import { useLocale } from '../../translations/useLocale';
+import useLessThenMediaQuery from '../../libs/hooks/useLessThenMediaQuery';
 
 const NavBar = observer(() => {
    const [ isLoading, setIsLoading ] = useState(false);
@@ -27,8 +28,10 @@ const NavBar = observer(() => {
    const languages = router.locales.map(locale => {
       return {locale, langName: LocalesNames[locale] || 'unknown'}
    })
+   const selectRef = useRef<HTMLSelectElement>(null);
    const flagCode = router.locale === 'en' ? 'us' : router.locale;
    const langOptionRef = useRef<HTMLOptionElement>(null);
+   const {isScreenWidthLessThen400, setIsScreenWidthLessThen400} = useLessThenMediaQuery(400);
 
    function handleLoadComplete() {
       setIsLoading(false);
@@ -91,15 +94,17 @@ const NavBar = observer(() => {
        <nav className = "navbar">
           <ul>
              <li style={{display: "flex", alignItems: "center", gap: '15px'}}>
-                <LinkWithoutScroll href = "/">
-                   <button style={{margin: 0}} className = "btn-logo">NXT</button>
-                </LinkWithoutScroll>
+                {!isScreenWidthLessThen400 && <LinkWithoutScroll href = "/">
+                   <button style = {{margin: 0}} className = "btn-logo">NXT</button>
+                </LinkWithoutScroll>}
                 <div style={{display: "flex", alignItems: "center"}}>
                    <span className = {`fi fi-${flagCode}`}/>
-                   <select value = {router.locale} className = 'language-select' onChange = {handleLanguageChange}
-                           name = 'language'>
+                      <select ref={selectRef} value = {router.locale} className = 'language-select'
+                                   onChange = {handleLanguageChange}
+                                   name = 'language'>
                       {languages.map((language) => (
-                          <option data-lang={language.locale} ref={langOptionRef} key = {language.locale} className = 'language-option' value = {language.locale}>
+                          <option data-lang = {language.locale} ref = {langOptionRef} key = {language.locale}
+                                  className = 'language-option' value = {language.locale}>
                              {language.langName}
                           </option>
                       ))}
@@ -159,9 +164,9 @@ const NavBar = observer(() => {
 
                     {user.username && (
                         <li>
-                           <a tabIndex = {0} onClick = {handleClick}>
+                           <a onClick = {handleClick}>
                               <Image
-                                  quality = {90}
+                                  quality = {95}
                                   onLoadingComplete = {handleLoadComplete}
                                   onLoadStart = {handleLoadStart}
                                   width = {30}

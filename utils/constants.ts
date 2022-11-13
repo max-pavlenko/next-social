@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material';
 import { ToastOptions } from 'react-hot-toast';
+import { onEmailClick, onTelegramClick } from '../pages/development';
 
 export const theme = createTheme({
    palette: {
@@ -23,6 +24,8 @@ export const DEFAULT_ERROR_TEXT = 'An error occurred...';
 export const RESET_PASSWORD_COOLDOWN_S = 30;
 export const RESET_PASSWORD_TOAST_DURATION = 10 * 1000;
 export const UPDATE_PASSWORD_TOAST_DURATION_SUCCESS = 5 * 1000;
+export const TELEGRAM_NAME = 'billyherrin';
+export const EMAIL = 'pavlienko1112@gmail.com'
 
 export const toastStyleConfig: ToastOptions = {
    style: {
@@ -44,3 +47,13 @@ export enum PROVIDERS_IMAGES {
 export enum FIREBASE_ERRORS{
    POPUP_CLOSED = 'auth/popup-closed-by-user'
 }
+
+export const FEATURES_TO_DO = [
+   {name: 'Customization', desc: 'You can choose the colors you like to enhance site\'s look',},
+   {name: 'Audio integration', desc: 'You will be able to play some music or video right here',}
+]
+export const FEEDBACK_MEANS = [
+   {type: 'Telegram', color: 'blue', content: `@${TELEGRAM_NAME}`, clickHandler: onTelegramClick},
+   {type: 'Email', color: 'red', content: EMAIL, clickHandler: onEmailClick},
+
+]

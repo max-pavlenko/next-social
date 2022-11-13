@@ -1,7 +1,7 @@
 import { MouseEvent, ReactElement, ReactNode, useState } from 'react';
-import { Menu } from '@mui/material';
+import { Menu, PopoverOrigin } from '@mui/material';
 
-export function useMenu(children: ReactNode | ReactElement[]) {
+export function useMenu(children: ReactNode | ReactElement[], anchorOrigin: PopoverOrigin = {horizontal: 'center', vertical: 'bottom'}) {
    const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
    const open = Boolean(anchorEl);
 
@@ -55,7 +55,7 @@ export function useMenu(children: ReactNode | ReactElement[]) {
                  // },
               }}
               transformOrigin = {{horizontal: 'center', vertical: 'top'}}
-              anchorOrigin = {{horizontal: 'center', vertical: 'bottom'}}
+              anchorOrigin = {anchorOrigin}
           >
              <div>
                 {children}

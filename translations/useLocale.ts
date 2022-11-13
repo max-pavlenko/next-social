@@ -14,7 +14,7 @@ export function useLocale () {
 export function getLangFile(lang: string){
    switch (lang){
       case 'en': return en;
-      case 'uk': return ua;
+      case 'uk': return en;
       case 'ua': return ua;
       case 'ru': return ru;
    }

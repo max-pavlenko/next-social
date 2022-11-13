@@ -10,6 +10,7 @@ import { INTERSECTION_MARGIN, POSTS_PER_PAGE } from '../utils/constants';
 import { useInView } from 'react-intersection-observer';
 import AnimatePage from '../components/utils/AnimatePage';
 import DonatePopup from '../components/DonatePopup';
+import vercel from '../public/vercel.svg';
 
 export default function Home({initialPosts}: { initialPosts: IPost[] }) {
    const [ posts, setPosts ] = useState(initialPosts);
@@ -51,7 +52,7 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
           <DonatePopup/>
           <main style = {{position: 'relative'}}>
              <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit 2)</Typography>
-             <MetaTags title = 'Main Page' desc = 'All posts available' imagePath = '/vercel.svg'/>
+             <MetaTags title = 'Home' desc = 'Posts & Experience Universe' imagePath = {vercel}/>
              {posts && <PostFeed posts = {posts}/>}
 
              {isLoadingNewPosts && <Container>
@@ -59,7 +60,7 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
              </Container>}
              <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {ref}/>
              {postsDidEnd.current && !isLoadingNewPosts &&
-                 <Typography variant = 'h3' textAlign = 'center'>That&apos;s all for now!</Typography>}
+                 <Typography variant = 'h3' textAlign = 'center'>You&apos;re up to date now!</Typography>}
           </main>
        </AnimatePage>
    )

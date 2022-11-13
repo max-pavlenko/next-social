@@ -24,11 +24,11 @@ const AuthCheck = observer(({
        if (!shouldShowAccessText && userIsNotLoggedIn)
           return (
               <LinkWithoutScroll href = "/enter">
-                 <a onClick = {handleLogInClick}>
+
                     <Button size = "large" variant = "outlined">
                        Log in 🎀
                     </Button>
-                 </a>
+
               </LinkWithoutScroll>
           );
 
@@ -44,8 +44,8 @@ function RestrictedText({additionalText = ""}: { additionalText?: string }) {
    return (
        <Typography variant = "h5" textAlign = "center">
           You must be logged in{additionalText || ""} to have an access.&nbsp;
-          <LinkWithoutScroll href = "/enter">
-             <a style = {{color: "peru"}}>Log In</a>
+          <LinkWithoutScroll style = {{color: "peru"}} href = "/enter">
+             Log In
           </LinkWithoutScroll>
        </Typography>
    );

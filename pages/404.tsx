@@ -4,6 +4,7 @@ import MetaTags from '../components/utils/MetaTags';
 import LinkWithoutScroll from '../components/utils/LinkWithoutScroll';
 import AnimatePage from '../components/utils/AnimatePage';
 import { useLocale } from '../translations/useLocale';
+import vercel from '../public/vercel.svg';
 
 const NotFound = () => {
    const l = useLocale();
@@ -11,9 +12,9 @@ const NotFound = () => {
    return (
        <AnimatePage>
           <main>
-             <MetaTags title = 'Page Not Found' desc = 'Requested page couldn`t be found or it doesnt exist!'
-                       imagePath = '/vercel.svg'/>
-             <Typography textAlign = 'center' variant = 'h3'>{l.notFound}...◾
+             <MetaTags title = 'Not Found' desc = 'Requested page couldn`t be found or it doesnt exist!'
+                       imagePath = {vercel}/>
+             <Typography fontWeight={700} fontFamily='Cabin Sketch, sans-serif' textAlign = 'center' variant = 'h3'>{l.notFound}...◾
              </Typography>
              <LinkWithoutScroll href = '/'>
                 <div style = {{display: 'flex', justifyContent: 'center'}}>

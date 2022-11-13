@@ -11,6 +11,8 @@ import { ContextMenu } from '../components/utils/contextMenu';
 import Loader from '../components/layout/Loader';
 import { AnimatePresence } from 'framer-motion';
 import "../node_modules/flag-icons/css/flag-icons.min.css";
+import { Poppins } from '@next/font/google'
+
 
 NProgress.configure({showSpinner: true});
 Router.events.on('routeChangeStart', NProgress.start);
@@ -19,8 +21,15 @@ Router.events.on('routeChangeError', NProgress.done);
 
 Router.events.on('routeChangeComplete', NProgress.done)
 
+const poppins = Poppins({
+   style: ['normal', 'italic'],
+   weight: ['400', '600'],
+   preload: true,
+   fallback: ['Roboto', 'Arial', 'sans'],
+});
+
 function MyApp({Component, pageProps}) {
-   const {route} = useRouter();
+   const {pathname} = useRouter();
 
    const {isAuthenticating, user} = useUserData();
 
@@ -30,10 +39,8 @@ function MyApp({Component, pageProps}) {
    return (
        <ThemeProvider theme = {theme}>
           <NavBar/>
-          <AnimatePresence
-              onExitComplete = {() => window.scrollTo(0, 0)}
-          >
-             <Component key = {route} {...pageProps} />
+          <AnimatePresence onExitComplete = {() => window.scrollTo(0, 0)}>
+             <Component key = {pathname} {...pageProps} />
              <ContextMenu/>
           </AnimatePresence>
           <Toaster/>
@@ -42,3 +49,8 @@ function MyApp({Component, pageProps}) {
 }
 
 export default MyApp
+//<style jsx global>{`
+//                   html, body {
+//                    // font-family: ${poppins.style.fontFamily};
+//                   }
+//                 `}</style>

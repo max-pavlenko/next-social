@@ -45,8 +45,8 @@ export const toastNotify = async ({successText, errorText}: { successText: strin
          errorFn(error);
       }
       else {
-         if(error.code === FIREBASE_ERRORS.POPUP_CLOSED) return;
-         toast.error(errorText || `${DEFAULT_ERROR_TEXT}\n${error.message}`, config);
+         if(error?.code === FIREBASE_ERRORS.POPUP_CLOSED) return;
+         toast.error(errorText || `${DEFAULT_ERROR_TEXT}\n${error?.message || '...'}`, config);
       }
       console.warn(error);
    }
@@ -71,10 +71,47 @@ export const validateSchemaPassword = (passwordName: string) =>{
        .required(`${passwordName} password is required`)
 }
 
-export const isActiveLink = (href: string, currentPathname: string): boolean => {
-   if (href === '/') {
-      return href === currentPathname
+export function hanlePasteImage(setter) {
+   return function (event) {
+      const {files} = (event.clipboardData);
+      iterateOverFiles(files, ({file, url})=>{
+            console.log('result', url, file);
+         setter(prev => [ ...prev, {img: url, id: Date.now()} ]);
+      })
+      // const file = files[0];
+      // if(!file) return;
+      // const fileType = file.type.split('/')[0];
+      // //const blob = file.getAsFile();
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file);
+      // setter(prev => [ ...prev, {img: window.URL.createObjectURL(file), id: Date.now()} ]);
+      // reader.onload = async function (event) { // @ts-ignore
+      //    const {currentTarget: {result}} = event
+      //    console.log('result', result);
+      //    return null;
+      // };
    }
+}
 
-   return currentPathname.startsWith(href)
+export function downloadFile(fileExtension, blob: File){
+   const url = window.URL.createObjectURL(blob);
+   const a = document.createElement('a');
+   a.href = url;
+   a.download = fileExtension + '_' + Math.random().toFixed(6).slice(2);
+   document.body.appendChild(a);
+   a.click();
+   document.body.removeChild(a)
+}
+
+export function iterateOverFiles(files: FileList, resultCallback: ({file, url}: {file: File, url: string})=>void ){
+   if (files.length > 0) {
+      const keys = Object.keys(files)
+      keys.forEach((key) => {
+         let file = files[key]
+         let reader = new FileReader();
+         reader.onload = (e) => resultCallback({file, url: e.target.result as string})
+
+         reader.readAsDataURL(files[key])
+      })
+   }
 }

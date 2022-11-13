@@ -3,14 +3,13 @@ import { Divider, ListItemIcon, MenuItem } from '@mui/material';
 import { DeleteForeverOutlined, Logout, MenuBookSharp, Settings, UpdateOutlined } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import { handleLogOut } from '../../utils/helpers';
-import { observer } from 'mobx-react-lite';
 import { toastModal } from '../../utils/toastModal';
 import { deleteAccount } from '../../libs/firebase';
 import { useRouter } from 'next/router';
 import LinkWithoutScroll from '../utils/LinkWithoutScroll';
 import { useLocale } from '../../translations/useLocale';
 
-const DefaultMenuItems = observer(() => {
+const DefaultMenuItems = () => {
    const router = useRouter();
    const l = useLocale();
 
@@ -73,6 +72,6 @@ const DefaultMenuItems = observer(() => {
           </MenuItem>
        </>
    );
-});
+};
 
 export default DefaultMenuItems;
