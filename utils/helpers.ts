@@ -93,7 +93,7 @@ export function hanlePasteImage(setter) {
    }
 }
 
-export function downloadFile(fileExtension, blob: File){
+export function downloadFile(fileExtension: string, blob: File){
    const url = window.URL.createObjectURL(blob);
    const a = document.createElement('a');
    a.href = url;

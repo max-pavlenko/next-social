@@ -33,7 +33,7 @@ export function useUploadFileToFB(
 
       // make reference in firebase bucket
       const fileRef = storage.ref(
-          `uploads/${auth.currentUser.uid}/${Date.now()}.${extension}`
+          `uploads/${auth.currentUser?.uid}/${Date.now()}.${extension}`
       );
       uploading.current = true;
       // start the upload

@@ -1,11 +1,12 @@
 import Head from 'next/head';
 
 const MetaTags = ({desc, imagePath, title}: {title: string, desc: string, imagePath: string}) => {
-    const img = imagePath
+    const img = imagePath;
+    const computedTitle = title || ' ';
     return (
         <>
             <Head>
-                <title>{title} | NXT</title>
+                <title>{computedTitle} | NXT</title>
                 <meta name = 'twitter:card' content = 'summary'/>
                 <meta name = 'twitter:site' content = {process.env.NEXT_PUBLIC_SERVER_URL_PROD}/>
                 <meta name = 'twitter:title' content = {title}/>

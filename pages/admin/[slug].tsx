@@ -13,6 +13,9 @@ import AnimatePage from '../../components/utils/AnimatePage';
 import { useLocale } from '../../translations/useLocale';
 import vercel from '../../public/vercel.svg';
 import MetaTags from '../../components/utils/MetaTags';
+import firebase from 'firebase/compat';
+import Loader from '../../components/layout/Loader';
+import DocumentData = firebase.firestore.DocumentData;
 
 const AdminPostEdit = () => {
 
@@ -29,10 +32,10 @@ function PostManager() {
    const [ isPreview, setIsPreview ] = useState(false);
    const router = useRouter();
    const {slug} = router.query;
-   const postRef = firestore.collection('users').doc(auth.currentUser.uid).collection('posts').doc(slug as string);
+   const postRef = firestore.collection('users').doc(auth.currentUser?.uid).collection('posts').doc(slug as string);
    const [ postData ] = useDocumentDataOnce(postRef);
    const post = postData as IPost;
-   const user = useRef(null);
+   const user = useRef<DocumentData | undefined>(undefined);
    const l = useLocale();
    console.log(post, postRef);
 
@@ -44,18 +47,21 @@ function PostManager() {
 
    function onLinkClick() {
       toastModal('Did you saved the post and wish to continue?', async () => {
-             await router.push(`/${user.current.username}/${post.slug}`);
+             await router.push(`/${user.current?.username}/${post.slug}`);
           },
       );
    }
 
    async function handleEditFormSubmit(title: string, content: string, isPublished: string, additionalImages: AdditionalImageData[]) {
+      const imagesWithoutFiles = additionalImages.map(({img, id}) => {return {img, id}});
+      console.log('add', imagesWithoutFiles, additionalImages);
+
       await postRef.update({
          title,
          content,
          published: isPublished,
          updatedAt: serverTimestamp(),
-         additionalImages,
+         additionalImages: imagesWithoutFiles,
       });
    }
 
@@ -63,10 +69,10 @@ function PostManager() {
        <main className = {styles.container}>
           <MetaTags title= {`${post && `Editing ${post.title}`}`} desc='' imagePath={vercel} />
           {!postRef && <Typography color = 'rebeccapurple'>{l.noPermission}.</Typography>}
-          {post && (
+          {post ? (
               <>
                  <section>
-                    <PostFormEdit onSubmitEdit = {handleEditFormSubmit} defaultValue = {post}
+                    <PostFormEdit onSubmitEdit = {handleEditFormSubmit} defaultValuePost = {post}
                                   isPreview = {isPreview}/>
                  </section>
 
@@ -78,7 +84,7 @@ function PostManager() {
                     <Button onClick = {onLinkClick} color = 'secondary' variant = 'outlined'>{l.liveView}</Button>
                  </aside>
               </>
-          )}
+          ) : <Loader />}
        </main>
    );
 }

@@ -10,7 +10,7 @@ import MetaTags from '../../components/utils/MetaTags';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import AnimatePage from '../../components/utils/AnimatePage';
 
-const UserPost = ({post, path, username}) => {
+const UserPost = ({post, path, username}: {post: IPost, path: string, username: string}) => {
    const postRef = firestore.doc(path);
    const [ realtimePost ] = useDocumentData(postRef);
    console.log('realtimePost', realtimePost)
@@ -26,9 +26,10 @@ const UserPost = ({post, path, username}) => {
                               desc = {`Post ${usedPost.title} by ${username}`}
                               imagePath = 'https://media.tenor.com/qu8mD3ClKagAAAAM/billy-herrington.gif'/>
                     <main style = {{display: 'flex', gap: '10px'}}>
-                       <section style = {{flexGrow: 1}}>
-                          <PostContent post = {usedPost}/>
-                       </section>
+                          <section style = {{flexGrow: 1}}>
+                             <PostContent post = {usedPost}/>
+                          </section>
+
 
                        <aside className = 'card' style = {{
                           alignSelf: 'start',
@@ -40,7 +41,7 @@ const UserPost = ({post, path, username}) => {
                           margin: 0
                        }}>
                           <Typography variant = 'caption'>
-                             <b style = {{fontSize: '14px'}}>{usedPost.heartsCount || 0} 💕</b>
+                             <b style = {{fontSize: '14px', whiteSpace: 'nowrap'}}>{usedPost.heartsCount || 0} 💕</b>
                           </Typography>
                           <AuthCheck shouldShowAccessText = {false}>
                              <HeartButton postRef = {postRef}/>

@@ -1,16 +1,19 @@
 import { INTERSECTION_MARGIN } from '../../utils/constants';
 
-export const useIntersection = (element: HTMLElement, additionalReturnPredicate = false,  fnAfterIntersection: () => void,) => {
+export const useIntersection = (element: HTMLElement | null, additionalReturnPredicate = false,  fnAfterIntersection: () => void, fnElse: () => void, intersectMargin = INTERSECTION_MARGIN) => {
     let observer;
-    const intersectCb = function (entries) {
+    const intersectCb: IntersectionObserverCallback = function (entries) {
         const [ entry ] = entries;
-        if (!entry.isIntersecting || additionalReturnPredicate || entry.intersectionRatio!==1) return;
+        if (!entry.isIntersecting || additionalReturnPredicate || entry.intersectionRatio!==1) {
+            fnAfterIntersection();
+            return;
+        }
         console.log('intersect')
-        fnAfterIntersection();
+        fnElse();
     };
     observer = new IntersectionObserver(intersectCb, {
-        rootMargin: `${INTERSECTION_MARGIN}px`
+        rootMargin: `${intersectMargin}px`
     });
-    observer.observe(element);
+    element && observer.observe(element);
     return observer;
 }

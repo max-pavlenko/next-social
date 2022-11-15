@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { AdditionalImageData } from '../components/Forms/PostFormEdit';
 
 export interface IPost {
     content: string
@@ -11,4 +12,5 @@ export interface IPost {
     updatedAt: Date | Timestamp
     username: string,
     userPath: string,
+    additionalImages: AdditionalImageData[],
 }

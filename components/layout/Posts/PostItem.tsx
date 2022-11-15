@@ -5,7 +5,7 @@ import SvgIcon from "@mui/icons-material/DeleteOutlineSharp";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { auth, firestore } from "../../../libs/firebase";
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { toastNotify } from '../../../utils/helpers';
 import { toastModal } from '../../../utils/toastModal';
 import LinkWithoutScroll from '../../utils/LinkWithoutScroll';
@@ -20,7 +20,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    const minutesToRead = (postWordCount / 100 + 1).toFixed(0);
    const [ username, setUsername ] = useState(post.username);
    const l = useLocale();
-   const {isScreenWidthLessThen370, setIsScreenWidthLessThen370} = useLessThenMediaQuery(370);
+   const {isScreenWidthLessThen370} = useLessThenMediaQuery(370);
    const {menuElement, handleClick} = useMenu(<div style={{display: 'flex', paddingInline: '0.2rem'}}>
       <IconButton onClick = {handleEdit}>
          <ModeEditOutlineOutlinedIcon/>
@@ -33,8 +33,8 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
 
    useEffect(() => {
       firestore.doc(post.userPath).get().then((snapshot) => {
-         setUsername(snapshot.data().username);
-         console.log('username', snapshot.data().username);
+         setUsername(snapshot.data()?.username);
+         console.log('username', snapshot.data()?.username);
       })
    }, [post]);
 
@@ -46,7 +46,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    async function handlePostDelete() {
       const postRef = firestore
           .collection("users")
-          .doc(auth.currentUser.uid)
+          .doc(auth.currentUser?.uid)
           .collection("posts")
           .doc(post.slug);
       await toastNotify(
@@ -54,15 +54,12 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
           {tryFn: async () => await postRef.delete()})
    }
 
-   async function handleEdit(e) {
+   async function handleEdit(ev: MouseEventHandler<HTMLAnchorElement>) {
+      const e = ev as unknown as MouseEvent;
       e.preventDefault();
       await router.push(`admin/${post.slug}`)
    }
 
-   async function handleMenuCliked(e) {
-      e.preventDefault();
-
-   }
 
    return (
        <Container style={isScreenWidthLessThen370 ? {padding: '1rem'} : {}} className = "card" sx = {{position: "relative"}}>

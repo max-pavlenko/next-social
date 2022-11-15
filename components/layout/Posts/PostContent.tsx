@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import LinkWithoutScroll from '../../utils/LinkWithoutScroll';
+import ImageSlider from '../ImageSlider';
 
 const PostContent = ({post}: { post: IPost }) => {
    console.log(post.createdAt);
@@ -18,20 +19,26 @@ const PostContent = ({post}: { post: IPost }) => {
    }, []);
 
    return (
-       <div style = {{margin: '0 auto', maxWidth: '93vw'}} className = 'card'>
-          <h1 style = {{margin: 0, borderLeft: '4px solid var(--color-blue)', paddingLeft: '13px'}}>{post.title}</h1>
-          <Typography variant = 'caption' className = 'text-sm'>
-             Written by&nbsp;
-             <LinkWithoutScroll className = 'text-info' href = {`/${username}`}>
-                
-                   @{username}
+       <>
+          <div style = {{margin: '0 auto', maxWidth: '93vw'}} className = 'card'>
+             <h1 style = {{margin: 0, borderLeft: '4px solid var(--color-blue)', paddingLeft: '13px'}}>{post.title}</h1>
+             <Typography variant = 'caption' className = 'text-sm'>
+                Written by&nbsp;
+                <LinkWithoutScroll className = 'text-info' href = {`/${username}`}>
 
-             </LinkWithoutScroll>
-             &nbsp;on {displayDate || 0}
-          </Typography>
+                   @{username as string}
 
-          <ReactMarkdown>{post?.content}</ReactMarkdown>
-       </div>
+                </LinkWithoutScroll>
+                &nbsp;on {displayDate || 0}
+             </Typography>
+
+             <ReactMarkdown>{post?.content}</ReactMarkdown>
+          </div>
+          {post.additionalImages?.length > 0 && (
+              <ImageSlider
+                  images = {Array(8).fill(0).map(_ => post.additionalImages[0])}/>
+          )}
+       </>
    );
 };
 

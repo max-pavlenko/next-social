@@ -12,6 +12,7 @@ import Loader from '../components/layout/Loader';
 import { AnimatePresence } from 'framer-motion';
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { Poppins } from '@next/font/google'
+import { Analytics } from '@vercel/analytics/react';
 
 
 NProgress.configure({showSpinner: true});
@@ -42,6 +43,7 @@ function MyApp({Component, pageProps}) {
           <AnimatePresence onExitComplete = {() => window.scrollTo(0, 0)}>
              <Component key = {pathname} {...pageProps} />
              <ContextMenu/>
+             <Analytics />
           </AnimatePresence>
           <Toaster/>
        </ThemeProvider>

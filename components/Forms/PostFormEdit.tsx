@@ -12,55 +12,84 @@ import {
    Typography,
 } from "@mui/material";
 import styles from "../../styles/Admin.module.scss";
-import { useEffect, useRef, useState } from "react";
-import { hanlePasteImage, invertBool, iterateOverFiles, toastNotify } from "../../utils/helpers";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { hanlePasteImage, invertBool, iterateOverFiles, toastNotify, } from "../../utils/helpers";
 import ImageUploader from "../layout/ImageUploader";
-import { useLocale } from '../../translations/useLocale';
-import useLessThenMediaQuery from '../../libs/hooks/useLessThenMediaQuery';
-import CloseIcon from '@mui/icons-material/Close';
-import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
-import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowDownRounded';
-import UseDnD from '../../libs/hooks/useDnD';
+import { useLocale } from "../../translations/useLocale";
+import useLessThenMediaQuery from "../../libs/hooks/useLessThenMediaQuery";
+import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
+import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
+import UseDnD from "../../libs/hooks/useDnD";
+import ImageSlider from "../layout/ImageSlider";
+import { useIntersection } from "../../libs/hooks/useIntersection";
 
 export interface EditForm {
    content: string;
    isPublished: string;
 }
 
-export interface AdditionalImageData { img: string, id: number, file?: File }
+export interface AdditionalImageData {
+   img: string;
+   id: number;
+   file?: File;
+}
 
 function PostFormEdit({
                          isPreview,
-                         defaultValue,
+                         defaultValuePost,
                          onSubmitEdit,
                       }: {
    isPreview: boolean;
-   defaultValue: IPost;
-   onSubmitEdit: (title: string, content: string, isPublished: string, additionalImages: AdditionalImageData[]) => void;
+   defaultValuePost: IPost;
+   onSubmitEdit: (
+       title: string,
+       content: string,
+       isPublished: string,
+       additionalImages: AdditionalImageData[]
+   ) => void;
 }) {
-   const {register, handleSubmit, reset, watch, formState, errors, control} = useForm<EditForm>({
+   const {register, handleSubmit, reset, watch, formState, errors, control} =
+       useForm<EditForm>({
           mode: "onChange",
-          defaultValues: defaultValue,
+          defaultValues: defaultValuePost,
        });
-   const [ additionalImages, setAdditionalImages ] = useState<AdditionalImageData[]>([]);
+   const {isScreenWidthLessThen1000} = useLessThenMediaQuery(1000);
+   const [ additionalImages, setAdditionalImages ] = useState<AdditionalImageData[]>(defaultValuePost.additionalImages || []);
    const [ isEditingTitle, setIsEditingTitle ] = useState(false);
    const {isScreenWidthLessThen900} = useLessThenMediaQuery(900);
-   const [ content, setContent ] = useState<string>(defaultValue.content);
-   const [ title, setTitle ] = useState(defaultValue.title);
+   const [ content, setContent ] = useState(defaultValuePost.content);
+   const [ title, setTitle ] = useState(defaultValuePost.title);
    const l = useLocale();
    const {isDirty, isValid} = formState;
    const textFieldRef = useRef<HTMLTextAreaElement>(null);
    const fileUploadInputRef = useRef<HTMLInputElement>(null);
-   const {isDragEntered} = UseDnD(textFieldRef.current, 'draggedOver', setAdditionalImages);
-
+   const {isDragEntered} = UseDnD(
+       textFieldRef.current!,
+       "draggedOver",
+       setAdditionalImages
+   );
+   const intersectBtnDownRef = useRef<HTMLDivElement>(null);
+   const [ isBtnDownVisible, setIsBtnDownVisible ] = useState(true);
+   useIntersection(
+       intersectBtnDownRef.current,
+       false,
+       () => {
+          setIsBtnDownVisible(true);
+       },
+       () => {
+          setIsBtnDownVisible(false);
+          console.log("intersect ", isBtnDownVisible);
+       },
+       10
+   );
 
    useEffect(() => {
-      const pasteHandler = hanlePasteImage(setAdditionalImages)
-      textFieldRef.current?.addEventListener('paste', pasteHandler)
+      const pasteHandler = hanlePasteImage(setAdditionalImages);
+      textFieldRef.current?.addEventListener("paste", pasteHandler);
 
       return () => {
-         textFieldRef.current?.removeEventListener('paste', pasteHandler)
-      }
+         textFieldRef.current?.removeEventListener("paste", pasteHandler);
+      };
    }, []);
 
    const onFormSubmit: SubmitHandler<EditForm> = async ({
@@ -70,7 +99,8 @@ function PostFormEdit({
       await toastNotify(
           {successText: "saved the post"},
           {
-             tryFn: () => onSubmitEdit(title, content, isPublished, additionalImages),
+             tryFn: () =>
+                 onSubmitEdit(title, content, isPublished, additionalImages),
           }
       );
    };
@@ -84,22 +114,25 @@ function PostFormEdit({
       fileUploadInputRef.current.click();
    }
 
-   const handleFileInput = (event) => {
-      event.preventDefault()
-      const files = event.target.files; // files are empty in console - known bug
-      console.log('event.target', files);
+   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      const files = event.target.files!; // files are empty in console - known bug
+      console.log("event.target", files);
       iterateOverFiles(files, ({file, url}) => {
          setAdditionalImages((prev) => {
             if (prev.find((item) => item?.file?.name === file.name)) {
                return [ ...prev ];
             }
-            return [ ...prev, {
-               img: url,
-               file: file,
-               id: Date.now()
-            } ]
-         })
-      })
+            return [
+               ...prev,
+               {
+                  img: url,
+                  file: file,
+                  id: Date.now(),
+               },
+            ];
+         });
+      });
       // if (event.target.files && event.target.files[0]) {
       //    const keys = Object.keys(event.target.files)
       //    keys.forEach((key) => {
@@ -120,23 +153,40 @@ function PostFormEdit({
       //       reader.readAsDataURL(event.target.files[key])
       //    })
       // }
-   }
+   };
 
    function handleGoDownClick(e) {
-      window.scroll(0, document.body.scrollHeight)
+      window.scroll(0, document.body.scrollHeight);
    }
 
    return (
        <>
-          {additionalImages.length > 0 && <IconButton className = 'rainbow go-down-btn' onClick = {handleGoDownClick} color = 'primary' size = 'large'>
-              <KeyboardDoubleArrowDownRoundedIcon/>
-          </IconButton>}
+          {additionalImages.length > 0 && (
+              <IconButton
+                  style = {{
+                     visibility: isBtnDownVisible ? "visible" : "hidden",
+                     opacity: isBtnDownVisible ? 1 : 0,
+                    transition: '300ms all ease-in-out'
+                  }}
+                  className = "rainbow go-down-btn"
+                  onClick = {handleGoDownClick}
+                  color = "primary"
+                  size = "large"
+              >
+                 <KeyboardDoubleArrowDownRoundedIcon/>
+              </IconButton>
+          )}
 
           <form onSubmit = {handleSubmit(onFormSubmit)}>
              <Typography mb = "9px" component = "div" variant = "caption">
-                {l.rightClickToEditTitle}
+                {isScreenWidthLessThen1000
+                    ? "Double tab to edit the title"
+                    : l.rightClickToEditTitle}
              </Typography>
-             <h1 style = {{margin: 0}} onContextMenu = {handleContextTitle}>
+             <h1
+                 style = {{margin: 0, userSelect: "none"}}
+                 onContextMenu = {handleContextTitle}
+             >
                 {!isEditingTitle ? (
                     <>{title}</>
                 ) : (
@@ -146,7 +196,7 @@ function PostFormEdit({
                         onChange = {(e) => setTitle(e.target.value)}
                         name = "title"
                         onBlur = {() => {
-                           !title && setTitle(defaultValue.title);
+                           !title && setTitle(defaultValuePost.title);
                            setTimeout(() => setIsEditingTitle(false), 0);
                         }}
                         placeholder = "My awesome post"
@@ -165,10 +215,10 @@ function PostFormEdit({
                            display: "flex",
                            justifyContent: "space-between",
                            alignItems: "center",
-                           flexWrap: 'wrap',
+                           flexWrap: "wrap",
                         }}
                     >
-                       <span>{defaultValue.slug}</span>
+                       <span>{defaultValuePost.slug}</span>
 
                        <label htmlFor = "file">
                           <Typography
@@ -188,7 +238,7 @@ function PostFormEdit({
                            style = {{display: "none"}}
                            type = "file"
                            multiple
-                           accept = "image/*"
+                           accept = "image/png, image/jpeg, image/webp"
                        />
                     </p>
                     <Controller
@@ -213,7 +263,7 @@ function PostFormEdit({
                                 fullWidth
                                 inputRef = {obj.ref}
                                 inputProps = {{
-                                   ref: (input) => {
+                                   ref: (input: HTMLTextAreaElement) => {
                                       textFieldRef.current = input;
                                    },
                                 }}
@@ -262,57 +312,19 @@ function PostFormEdit({
                 {l.saveChanges}
              </Button>
              {additionalImages.length > 0 && (
-                 <div className='spacer'>
-                    <ul className = "additionalImagesList">
-                       {additionalImages.map(({img, id}) => {
-                          return (
-                              <div key = {id}>
-                                 <li
-                                     style = {{
-                                        width: "200px",
-                                        position: "relative",
-                                        height: "100%",
-                                     }}
-                                     key = {id}
-                                 >
-                                    <IconButton
-                                        size = "small"
-                                        color = "warning"
-                                        style = {{
-                                           position: "absolute",
-                                           top: "5px",
-                                           right: "5px",
-                                           mixBlendMode: "difference",
-                                           backdropFilter: "blur(1.2px)",
-                                        }}
-                                        onClick = {() =>
-                                            setAdditionalImages((prevState) =>
-                                                prevState.filter((image) => image.id !== id)
-                                            )
-                                        }
-                                    >
-                                       <CloseIcon/>
-                                    </IconButton>
-
-                                    <img
-                                        style = {{
-                                           objectFit: "cover",
-                                           maxWidth: "initial",
-                                           pointerEvents: "none",
-                                           width: "100%",
-                                           height: "100%",
-                                        }}
-                                        src = {img}
-                                        alt = "additional image"
-                                    />
-                                 </li>
-                              </div>
-                          );
-                       })}
-                    </ul>
-                    <h3 style={{textAlign: 'center', marginTop: '5px'}}>Additional images</h3>
-                 </div>
+                 <ImageSlider
+                     images = {additionalImages}
+                     onCloseImgClick = {(e, id) =>
+                         setAdditionalImages((prevState) =>
+                             prevState.filter((image) => image.id !== id)
+                         )
+                     }
+                 />
              )}
+             <div
+                 ref = {intersectBtnDownRef}
+                 style = {{height: 1, backgroundColor: additionalImages.length ? "gray" : 'initial'}}
+             />
           </form>
        </>
    );

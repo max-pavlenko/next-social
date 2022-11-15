@@ -7,8 +7,8 @@ export function useLocale () {
    const router = useRouter();
    const {locale, locales, defaultLocale} = router;
 
-      let lang = ( locale ? locales.find(lang=>locale.startsWith(lang)) : defaultLocale);
-      return getLangFile(lang);
+      let lang = ( locale ? locales!.find(lang=>locale.startsWith(lang)) : defaultLocale);
+      return getLangFile(lang!);
 }
 
 export function getLangFile(lang: string){
@@ -17,5 +17,6 @@ export function getLangFile(lang: string){
       case 'uk': return en;
       case 'ua': return ua;
       case 'ru': return ru;
+      default: return en;
    }
 }

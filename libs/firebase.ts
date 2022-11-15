@@ -87,7 +87,7 @@ export const signUpWithEmail = async (email: string, password: string) => {
 export const verifyEmail = async (redirectURL: string = '') => {
    !auth.currentUser?.emailVerified && await toastNotify({successText: 'send confirm message. Check your email',}, {
       tryFn: async () => {
-         await auth.currentUser.sendEmailVerification({url: SITE_URL + `/${redirectURL}`});
+         await auth.currentUser?.sendEmailVerification({url: SITE_URL + `/${redirectURL}`});
       }
    })
 }
@@ -116,17 +116,17 @@ export const resetPassword = async (email: string) => {
    }, {duration: RESET_PASSWORD_TOAST_DURATION})
 }
 
-export const deleteAccount = async (router: NextRouter = null) => {
+export const deleteAccount = async (router: NextRouter | null = null) => {
    await toastNotify({successText: 'deleted the account',}, {
       tryFn: async () => {
          console.log('deleted the account');
          await reauthenticate();
          const batch = firestore.batch();
-         batch.delete(firestore.doc(`users/${auth.currentUser.uid}`));
+         batch.delete(firestore.doc(`users/${auth.currentUser?.uid}`));
          batch.delete(firestore.doc(`usernames/${User.user.username}`));
-         await auth.currentUser.delete();
+         await auth.currentUser?.delete();
          await auth.signOut();
-         User.setUser({...User.user, data: null, username: null,});
+         User.setUser({...User.user, data: null, username: '' ,});
          User.setPhotoURL('');
          router && await router.push('/');
          await batch.commit();
@@ -135,14 +135,14 @@ export const deleteAccount = async (router: NextRouter = null) => {
 }
 
 export const reauthenticate = async () => {
-   auth.currentUser.providerData[0].providerId === PRODIVER_IDS.GOOGLE && await reauthenticateWithPopup(auth.currentUser, googleAuthProvider);
+   auth.currentUser?.providerData[0]?.providerId === PRODIVER_IDS.GOOGLE && await reauthenticateWithPopup(auth.currentUser, googleAuthProvider);
 }
 
 export const updatePassword = async (newPassword: string) => {
    await toastNotify({successText: 'updated the password. Don\'t forget it',}, {
       tryFn: async () => {
          await reauthenticate();
-         await auth.currentUser.updatePassword(newPassword);
+         await auth.currentUser?.updatePassword(newPassword);
       }
    }, {duration: UPDATE_PASSWORD_TOAST_DURATION_SUCCESS})
 }

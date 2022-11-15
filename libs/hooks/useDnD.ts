@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { iterateOverFiles } from '../../utils/helpers';
+import { AdditionalImageData } from '../../components/Forms/PostFormEdit';
 
-export default function (element: HTMLElement, classesForDragIn: string, additionalSetter?: Dispatch<SetStateAction<unknown>>){
+export default function (element: HTMLElement, classesForDragIn: string, additionalSetter?: Dispatch<SetStateAction<any>>){
    const [ isDragEntered, setIsDragEntered ] = useState(false);
    const [fileList, setFileList] = useState<{ file: File, data: string }[]>([])
 
@@ -36,14 +37,16 @@ export default function (element: HTMLElement, classesForDragIn: string, additio
    }
    function handleDragDrop(e: DragEvent) {
       e.preventDefault();
-      const files = e.dataTransfer.files
+      const files = e.dataTransfer?.files || [] as unknown as FileList;
       console.log('e',files);
       iterateOverFiles(files, ({file, url})=>{
-         additionalSetter(prev => [...prev, {
-            img: url,
-            file: file,
-            id: Math.random(),
-         }])
+         if (additionalSetter) {
+            additionalSetter((prev: AdditionalImageData[]) => [ ...prev, {
+               img: url,
+               // file: file,
+               id: Math.round(Date.now() * Math.random()),
+            } ])
+         }
 
          setFileList((prev) => {
             if (prev.find((item) => item.file.name === file.name)) {
