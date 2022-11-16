@@ -15,8 +15,8 @@ const ImageSlider = ({
    maxWidth?: string | undefined;
 }) => {
    return (
-       <div style = {maxWidth && {maxWidth}} className = "spacer">
-          <ul className = "additionalImagesList">
+       <div className = "spacer">
+          <ul style = {maxWidth && {maxWidth}} className = "additionalImagesList">
              {images.map(({img, id}) => {
                 return (
                     <div key = {id}>

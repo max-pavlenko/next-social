@@ -35,8 +35,8 @@ const PostContent = ({post}: { post: IPost }) => {
              <ReactMarkdown>{post?.content}</ReactMarkdown>
           </div>
           {post.additionalImages?.length > 0 && (
-              <ImageSlider
-                  images = {Array(8).fill(0).map(_ => post.additionalImages[0])}/>
+              <ImageSlider maxWidth='60vw'
+                  images = {post.additionalImages}/>
           )}
        </>
    );
