@@ -21,6 +21,11 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    const [ username, setUsername ] = useState(post.username);
    const l = useLocale();
    const {isScreenWidthLessThen370} = useLessThenMediaQuery(370);
+   const handleEdit: MouseEventHandler<HTMLButtonElement> = async(ev) => {
+      const e = ev as unknown as MouseEvent;
+      e.preventDefault();
+      await router.push(`admin/${post.slug}`)
+   }
    const {menuElement, handleClick} = useMenu(<div style={{display: 'flex', paddingInline: '0.2rem'}}>
       <IconButton onClick = {handleEdit}>
          <ModeEditOutlineOutlinedIcon/>
@@ -53,13 +58,6 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
           {successText: 'deleted the post'},
           {tryFn: async () => await postRef.delete()})
    }
-
-   async function handleEdit(ev: MouseEventHandler<HTMLAnchorElement>) {
-      const e = ev as unknown as MouseEvent;
-      e.preventDefault();
-      await router.push(`admin/${post.slug}`)
-   }
-
 
    return (
        <Container style={isScreenWidthLessThen370 ? {padding: '1rem'} : {}} className = "card" sx = {{position: "relative"}}>
