@@ -31,7 +31,6 @@ export default function Document() {
              <link rel = "apple-touch-icon" type = "image/png" sizes = "192x192" href = "/icons/icon-192x192.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "384x384" href = "/icons/icon-384x384.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "512x512" href = "/icons/icon-512x512.png"/>
-             <title>NXT | Social</title>
           </Head>
           <body>
           <Main/>

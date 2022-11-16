@@ -31,6 +31,7 @@ const CreateNewPostForm = observer(() => {
          updatedAt: serverTimestamp() as unknown as Date,
          heartsCount: 0,
          userPath: `users/${uidUser}`,
+         additionalImages: [],
       }
       await toastNotify({successText: 'created the post'}, {
          tryFn: async () => {
