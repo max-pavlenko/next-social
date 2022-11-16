@@ -1,7 +1,7 @@
 import { signOut } from '../../libs/firebase';
 import { Button } from '@mui/material';
 import { CSSProperties } from 'react';
-import { UpdatePasswordPage } from '../../pages/update-password';
+import UpdatePasswordPage from '../../pages/update-password';
 
 const Entered = ({styles = {}}: { styles?: CSSProperties }) => {
    return (
