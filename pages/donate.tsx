@@ -17,9 +17,13 @@ interface IProps {
 const DonatePage = ({prices}: IProps) => {
    const [ amount, setAmount ] = useState<string | number>('1');
    const l = useLocale();
+   const [ isDonateLoaderVisible, setIsDonateLoaderVisible ] = useState(false);
+   const [ dots, setDots ] = useState('');
 
    const handleDonate = async () => {
+      let intervalID;
       try {
+         intervalID = setInterval(() => setDots(prevState => prevState + '.'), 350);
          const res = await axios.post('/api/payment', {
             items: [
                {id: 1, quantity: 2},
@@ -28,10 +32,16 @@ const DonatePage = ({prices}: IProps) => {
             donation: amount,
          });
          window.location = res.data.url;
+         clearInterval(intervalID);
+         setDots('');
       } catch (e) {
+         clearInterval(intervalID)
+         setDots('');
+         setIsDonateLoaderVisible(false);
          console.warn(e)
       }
    };
+
    return (
        <AnimatePage>
           <MetaTags title='Donation' desc='Donate to support our work, and enhance your life' imagePath={vercel} />
@@ -45,8 +55,11 @@ const DonatePage = ({prices}: IProps) => {
                    }} inputProps = {{min: 1}} type = 'number' fullWidth label = 'Amount, $' placeholder = '1.5'/>
                 </Grid>
                 <Grid alignItems = 'center' textAlign = 'center' item xs = {4}>
-                   <Button fullWidth size = 'large' variant = 'contained' onClick = {handleDonate}>
-                      {l.donate}
+                   <Button onClick = {handleDonate} fullWidth size = 'large' variant = 'contained'>
+                      <span style = {{position: 'relative'}}>
+                         {`${l.donate}`}
+                         <span style = {{position: 'absolute', bottom: '0', right: '0', translate: '100% 0'}}>{`${dots}`}</span>
+                      </span>
                    </Button>
                 </Grid>
              </Grid>

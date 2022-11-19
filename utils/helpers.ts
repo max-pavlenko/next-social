@@ -29,6 +29,7 @@ export async function handleLogOut(router: NextRouter) {
    //router.push('/').then(r => r);
    User.setUser({ data: null, username: null});
    User.setPhotoURL('');
+   localStorage.setItem('prolongedAuth', 'false');
 }
 
 export const toastNotify = async ({successText, errorText}: { successText: string, errorText?: string }, {

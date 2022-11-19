@@ -97,7 +97,7 @@ async function handleLogging(userCredential: Promise<UserCredential>, redirectUR
       console.warn(userCredential);
       const user = userCredential.user;
       await verifyEmail(redirectURL);
-
+      localStorage.setItem('prolongedAuth', 'true');
       console.log('userCredential', userCredential)
    })
        .catch((error) => {

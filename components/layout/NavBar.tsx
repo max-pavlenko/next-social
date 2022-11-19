@@ -31,7 +31,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const selectRef = useRef<HTMLSelectElement>(null);
    const flagCode = router.locale === 'en' ? 'us' : router.locale;
    const langOptionRef = useRef<HTMLOptionElement>(null);
-   const {isScreenWidthLessThen400, setIsScreenWidthLessThen400} = useLessThenMediaQuery(400);
+   const {isScreenWidthLessThen400} = useLessThenMediaQuery(400);
 
    function handleLoadComplete() {
       setIsLoading(false);

@@ -6,7 +6,7 @@ import { useLocale } from '../translations/useLocale';
 const DonatePopup = () => {
   const l = useLocale();
 
-  return (
+   return (
     <Box
         sx={{
           gap: 2,

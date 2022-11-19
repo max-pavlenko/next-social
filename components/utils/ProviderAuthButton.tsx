@@ -22,6 +22,7 @@ function ProviderAuthButton({
                const user = userCredential.user;
                console.log(provider+'', userCredential)
             });
+            localStorage.setItem('prolongedAuth', 'true')
             setIsLoading(true)
             await saveURL(router);
             setIsLoading(false)

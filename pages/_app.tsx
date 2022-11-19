@@ -35,23 +35,20 @@ function MyApp({Component, pageProps}) {
    const {pathname} = useRouter();
    const previousY = useRef(0);
    const [isNavBarVisible, setIsNavBarVisible] = useState(true);
+   const {isAuthenticating} = useUserData();
 
    useEffect(() => {
-      document.addEventListener('scroll', handleScroll)
+      document.addEventListener('scroll', handleScroll);
       return ()=>{
          document.removeEventListener('scroll', handleScroll)
       }
-   }, []);
+   }, [])
 
    const handleScroll = e => {
       setIsNavBarVisible(previousY.current >= window.scrollY);
       previousY.current = window.scrollY;
    }
-
-   const {isAuthenticating, user} = useUserData();
-
-   if (isAuthenticating ) return <><MetaTags desc='Loading while authenticating' title='Loading...'/><Loader/></>;
-   console.log('isAuthenticating', isAuthenticating)
+   if (isAuthenticating) return <><MetaTags desc='Loading...' title='Loading...'/><Loader/></>;
 
    return (
        <ThemeProvider theme = {theme}>
