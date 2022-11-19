@@ -180,7 +180,7 @@ function PostFormEdit({
           <form onSubmit = {handleSubmit(onFormSubmit)}>
              <Typography mb = "9px" component = "div" variant = "caption">
                 {isScreenWidthLessThen1000
-                    ? "Double tab to edit the title"
+                    ? "Double tap to edit the title"
                     : l.rightClickToEditTitle}
              </Typography>
              <h1

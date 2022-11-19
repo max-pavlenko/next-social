@@ -1,7 +1,7 @@
 import { getUserWithUsername } from '../../utils/helpers';
 import { convertToJSON, firestore } from '../../libs/firebase';
 import PostContent from '../../components/layout/Posts/PostContent';
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import AuthCheck from '../../components/utils/AuthCheck';
 import HeartButton from '../../components/layout/HeartButton';
@@ -19,7 +19,7 @@ const UserPost = ({post, path, username}: {post: IPost, path: string, username: 
 
    return (
        <AnimatePage>
-          <Container>
+          <div>
              {usedPost && (
                  <>
                     <MetaTags title = {`Post ${usedPost.title}`}
@@ -50,7 +50,7 @@ const UserPost = ({post, path, username}: {post: IPost, path: string, username: 
                     </main>
                  </>
              )}
-          </Container>
+          </div>
        </AnimatePage>
    );
 };

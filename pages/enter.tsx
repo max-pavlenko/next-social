@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import UsernameForm from '../components/Forms/UsernameForm';
 import LoggingForm from '../components/Forms/LoggingForm';
 import ConfirmEmail from '../components/layout/PageLayout/ConfirmEmail';
-import Entered from '../components/utils/Entered';
 import MetaTags from '../components/utils/MetaTags';
 import React from 'react';
 import { auth } from '../libs/firebase';
@@ -20,7 +19,7 @@ const EnterPage = observer(() => {
              {
                 auth.currentUser ?
                     !auth.currentUser.emailVerified ? <ConfirmEmail/>
-                        : username ? <Entered/> : <UsernameForm/>
+                        : username ? null : <UsernameForm/>
                     : (<LoggingForm/>)
              }
           </main>

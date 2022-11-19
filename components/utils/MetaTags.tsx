@@ -1,12 +1,13 @@
 import Head from 'next/head';
 
-const MetaTags = ({desc, imagePath, title}: {title: string, desc: string, imagePath: string}) => {
+const MetaTags = ({desc, imagePath = process.env.NEXT_PUBLIC_SERVER_URL_PROD + '/images/billy-herrington.gif', title}: {title: string, desc: string, imagePath?: string}) => {
     const img = imagePath;
-    const computedTitle = title || ' ';
+    let computedTitle = title ? title + ' | NXT' : '- NXT -';
+    if (title === 'undefined') computedTitle = 'Loading...'
     return (
         <>
             <Head>
-                <title>{computedTitle} | NXT</title>
+                <title>{computedTitle}</title>
                 <meta name = 'twitter:card' content = 'summary'/>
                 <meta name = 'twitter:site' content = {process.env.NEXT_PUBLIC_SERVER_URL_PROD}/>
                 <meta name = 'twitter:title' content = {title}/>

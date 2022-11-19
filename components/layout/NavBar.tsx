@@ -17,7 +17,7 @@ import LocalesNames from '../../translations/localesNames';
 import { useLocale } from '../../translations/useLocale';
 import useLessThenMediaQuery from '../../libs/hooks/useLessThenMediaQuery';
 
-const NavBar = observer(() => {
+const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const {photoURL, user} = User;
    const router = useRouter();
@@ -91,7 +91,7 @@ const NavBar = observer(() => {
    }
 
    return (
-       <nav className = "navbar">
+       <nav className = {`navbar ${classname}`}>
           <ul>
              <li style={{display: "flex", alignItems: "center", gap: '15px'}}>
                 {!isScreenWidthLessThen400 && <LinkWithoutScroll href = "/">

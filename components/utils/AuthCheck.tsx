@@ -5,6 +5,7 @@ import { Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { auth } from '../../libs/firebase';
 import LinkWithoutScroll from './LinkWithoutScroll';
+import MetaTags from './MetaTags';
 
 // @ts-ignore
 const AuthCheck = observer(({
@@ -43,6 +44,7 @@ export default AuthCheck;
 function RestrictedText({additionalText = ""}: { additionalText?: string }) {
    return (
        <Typography variant = "h5" textAlign = "center">
+          <MetaTags title='Not Authorized' desc='Please, authorize to proceed' imagePath='' />
           You must be logged in{additionalText || ""} to have an access.&nbsp;
           <LinkWithoutScroll style = {{color: "peru"}} href = "/enter">
              Log In

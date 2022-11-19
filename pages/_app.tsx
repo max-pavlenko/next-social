@@ -13,6 +13,8 @@ import { AnimatePresence } from 'framer-motion';
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { Poppins } from '@next/font/google'
 import { Analytics } from '@vercel/analytics/react';
+import { useEffect, useRef, useState } from 'react';
+import MetaTags from '../components/utils/MetaTags';
 
 
 NProgress.configure({showSpinner: true});
@@ -31,15 +33,29 @@ const poppins = Poppins({
 
 function MyApp({Component, pageProps}) {
    const {pathname} = useRouter();
+   const previousY = useRef(0);
+   const [isNavBarVisible, setIsNavBarVisible] = useState(true);
+
+   useEffect(() => {
+      document.addEventListener('scroll', handleScroll)
+      return ()=>{
+         document.removeEventListener('scroll', handleScroll)
+      }
+   }, []);
+
+   const handleScroll = e => {
+      setIsNavBarVisible(previousY.current >= window.scrollY);
+      previousY.current = window.scrollY;
+   }
 
    const {isAuthenticating, user} = useUserData();
 
-   if (isAuthenticating && !user?.uid) return <Loader/>;
+   if (isAuthenticating ) return <><MetaTags desc='Loading while authenticating' title='Loading...'/><Loader/></>;
    console.log('isAuthenticating', isAuthenticating)
 
    return (
        <ThemeProvider theme = {theme}>
-          <NavBar/>
+          <NavBar classname={isNavBarVisible ? '' : 'hideTop'}/>
           <AnimatePresence onExitComplete = {() => window.scrollTo(0, 0)}>
              <Component key = {pathname} {...pageProps} />
              <ContextMenu/>
