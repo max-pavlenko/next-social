@@ -21,9 +21,9 @@ const HeartButton = ({postRef}: { postRef: DocumentReference }) => {
    }
 
    return heartDoc?.exists ? (
-       <Button variant='outlined' style={{position: 'relative'}} size='large' onClick = {removeHeart}>💔 Unlike</Button>
+       <Button variant='outlined' style={{position: 'relative'}} size='large' onClick = {removeHeart}>💔</Button>
    ) : (
-       <Button variant='contained' size='large' onClick = {addLike}>💕 Like</Button>
+       <Button variant='contained' size='large' onClick = {addLike}>💕</Button>
    );
 };
 

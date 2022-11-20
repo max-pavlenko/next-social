@@ -3,7 +3,6 @@ import { Button, Container, Stack, Typography } from "@mui/material";
 import LinkWithoutScroll from "../components/utils/LinkWithoutScroll";
 import ReactConfetti from 'react-confetti';
 import MetaTags from '../components/utils/MetaTags';
-import vercel from '../public/vercel.svg';
 
 const SuccessDonationPage = () => {
    const [ showConfetti, setShowConfetti ] = useState(true);
@@ -17,7 +16,7 @@ const SuccessDonationPage = () => {
 
    return (
        <Container>
-          <MetaTags title='Thanks for donation!' desc='We are happy that we have such supportive and devoted community!' imagePath={vercel} />
+          <MetaTags title='Thanks for donation!' desc='We are happy that we have such supportive and devoted community!' />
           <Stack gap = {3} alignItems = "center">
              <Typography textAlign = "center" variant = "h3">
                 Thanks for your support! 💟

@@ -10,7 +10,6 @@ import { IPost } from '../../models/Post';
 import { FirebaseUser } from '../../models/User';
 import { observer } from 'mobx-react-lite';
 import AnimatePage from '../../components/utils/AnimatePage';
-import vercel from '../../public/vercel.svg'
 
 export interface UpdatePasswordForm {
    newPassword: string,
@@ -30,8 +29,7 @@ const UserProfilePage = observer(({
        <AnimatePage>
        <main>
           {user && <>
-              <MetaTags title = {`${user?.username || 'User Posts'}`} desc = {`Posts - ${(realtimePosts || posts)?.join(', ')}`}
-                        imagePath = {vercel}/>
+              <MetaTags title = {`${user?.username || 'User Posts'}`} desc = {`Posts - ${(realtimePosts || posts)?.join(', ')}`}/>
               <UserProfile user = {user}/>
               <div style = {{
                  display: 'flex',

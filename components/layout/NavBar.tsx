@@ -87,6 +87,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
 
    async function handleLanguageChange(e) {
       const locale = e.target.value;
+      localStorage.setItem('locale', locale)
       await router.push(router.pathname, router.asPath, {locale});
    }
 

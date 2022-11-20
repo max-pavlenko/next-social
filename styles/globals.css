@@ -240,12 +240,17 @@ button.btn-google {
     }
 
 button.btn-logo {
-    background-color: var(--color-text);
+    background-image: linear-gradient(135deg, blue 25%, yellow 100%);
     color: white;
     text-transform: uppercase;
     font-size: 1.9rem;
     padding: 0.4rem 0.8rem;
     font-family: 'Cabin Sketch', sans-serif;
+    transition: 0.25s all ease-in-out;
+    }
+
+.btn-logo:hover{
+    scale: 1.03;
     }
 
 /* Cards */

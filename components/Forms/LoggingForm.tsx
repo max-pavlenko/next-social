@@ -17,6 +17,7 @@ import {
 import { toastModal } from '../../utils/toastModal';
 import toast from 'react-hot-toast';
 import { PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S } from '../../utils/constants';
+import { useRouter } from 'next/router';
 
 export interface ILoggingForm {
    email: string;
@@ -27,6 +28,7 @@ const LoggingForm = () => {
    const [ showPassword, setShowPassword ] = useState(false)
    const [ isLoggingIn, setIsLoggingIn ] = useState(true);
    const [ resetPasswordCountDown, setResetPasswordCountDown ] = useState(0);
+   const router = useRouter();
 
    useEffect(() => {
       if (resetPasswordCountDown<=0) return;

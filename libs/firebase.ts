@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 import {
    PRODIVER_IDS,
    RESET_PASSWORD_TOAST_DURATION,
-   SITE_URL,
    toastStyleConfig,
    UPDATE_PASSWORD_TOAST_DURATION_SUCCESS
 } from '../utils/constants';
@@ -70,29 +69,35 @@ export function convertToJSON(snapshot: QueryDocumentSnapshot) {
 export async function signOut() {
    await toastNotify({successText: 'signed out'}, {
       tryFn: async () => {
-         await auth.signOut()
+         await auth.signOut();
+         localStorage.setItem('prolongedAuth', 'false');
          console.log('Signout Succesfull')
       }
    })
 }
 
 export const logInWithEmail = async (email: string, password: string) => {
-   await handleLogging(auth.signInWithEmailAndPassword(email, password), User.user.username || 'not_logged_in');
+   try {
+      await handleLogging(auth.signInWithEmailAndPassword(email, password), User.user.username || 'not_logged_in');
+   } catch (e) {
+      console.warn(e)
+   }
 }
 
 export const signUpWithEmail = async (email: string, password: string) => {
-   await handleLogging(auth.createUserWithEmailAndPassword(email, password), '/enter')
+   await handleLogging(auth.createUserWithEmailAndPassword(email, password), 'enter')
 }
 
 export const verifyEmail = async (redirectURL: string = '') => {
    !auth.currentUser?.emailVerified && await toastNotify({successText: 'send confirm message. Check your email',}, {
       tryFn: async () => {
-         await auth.currentUser?.sendEmailVerification({url: SITE_URL + `/${redirectURL}`});
+         await auth.currentUser?.sendEmailVerification({url: process.env['NEXT_PUBLIC_SERVER_URL_PROD'] + `/${redirectURL}`});
       }
    })
 }
 
 async function handleLogging(userCredential: Promise<UserCredential>, redirectURL: string = '') {
+
    userCredential.then(async (userCredential) => {
       console.warn(userCredential);
       const user = userCredential.user;
@@ -119,16 +124,25 @@ export const resetPassword = async (email: string) => {
 export const deleteAccount = async (router: NextRouter | null = null) => {
    await toastNotify({successText: 'deleted the account',}, {
       tryFn: async () => {
+         localStorage.setItem('prolongedAuth', 'false')
          console.log('deleted the account');
          await reauthenticate();
          const batch = firestore.batch();
+         firestore
+             .collection(`users/${auth.currentUser?.uid}/posts`)
+             .get()
+             .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                   doc.ref.delete();
+                });
+             });
+         router && await router.push('/');
          batch.delete(firestore.doc(`users/${auth.currentUser?.uid}`));
          batch.delete(firestore.doc(`usernames/${User.user.username}`));
          await auth.currentUser?.delete();
          await auth.signOut();
          User.setUser({...User.user, data: null, username: '' ,});
          User.setPhotoURL('');
-         router && await router.push('/');
          await batch.commit();
       }
    })

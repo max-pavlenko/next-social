@@ -16,10 +16,10 @@ export const theme = createTheme({
    },
 });
 
-export const INTERSECTION_MARGIN = 100;
-export const POSTS_PER_PAGE = 2;
-export const FALLBACK_IMAGE = 'https://i.stack.imgur.com/l60Hf.png';
-export const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+const {NODE_ENV, NEXT_PUBLIC_SERVER_URL, NEXT_PUBLIC_SERVER_URL_PROD} = process.env
+export const INTERSECTION_MARGIN = 90;
+export const POSTS_PER_PAGE = 4;
+export const FALLBACK_IMAGE = '/images/default.png';
 export const DEFAULT_ERROR_TEXT = 'An error occurred...';
 export const RESET_PASSWORD_COOLDOWN_S = 30;
 export const RESET_PASSWORD_TOAST_DURATION = 10 * 1000;

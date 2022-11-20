@@ -5,7 +5,6 @@ import axios from 'axios';
 import AnimatePage from '../components/utils/AnimatePage';
 import { useLocale } from '../translations/useLocale';
 import MetaTags from '../components/utils/MetaTags';
-import vercel from '../public/vercel.svg';
 
 interface IPrice extends Stripe.Price {
 }
@@ -44,7 +43,7 @@ const DonatePage = ({prices}: IProps) => {
 
    return (
        <AnimatePage>
-          <MetaTags title='Donation' desc='Donate to support our work, and enhance your life' imagePath={vercel} />
+          <MetaTags title='Donation' desc='Donate to support our work, and enhance your life' />
           <Container>
              <Typography variant = 'h4' textAlign = 'center'>{l.donationDescription}! ✨
              </Typography>

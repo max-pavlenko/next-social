@@ -62,7 +62,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    return (
        <Container style={isScreenWidthLessThen370 ? {padding: '1rem'} : {}} className = "card" sx = {{position: "relative"}}>
           <Box style = {{display: "flex", gap: "8px", alignItems: "center"}}>
-             <LinkWithoutScroll style = {{display: "flex", gap: "8px", alignItems: "center"}} href = {username}>
+             <LinkWithoutScroll style = {{display: "flex", gap: "8px", alignItems: "center"}} href = {username || '/'}>
 
                    <CheckmarkIcon style = {{display: 'inline-block'}}/>
                    <span style={{fontStyle: 'italic', fontWeight: '300', fontSize: '15px'}}>{l.postBy} @{username}</span>

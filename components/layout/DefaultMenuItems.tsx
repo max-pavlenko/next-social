@@ -1,6 +1,6 @@
 import User from '../../store/User';
 import { Divider, ListItemIcon, MenuItem } from '@mui/material';
-import { DeleteForeverOutlined, Logout, MenuBookSharp, Settings, UpdateOutlined } from '@mui/icons-material';
+import { Logout, MenuBookSharp, Settings, UpdateOutlined } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import { handleLogOut } from '../../utils/helpers';
 import { toastModal } from '../../utils/toastModal';
@@ -58,12 +58,12 @@ const DefaultMenuItems = () => {
                 {l.updatePassword}
              </MenuItem>
           </LinkWithoutScroll>
-          <MenuItem onClick={handleDeleteAccount}>
-             <ListItemIcon>
-                <DeleteForeverOutlined fontSize="small" />
-             </ListItemIcon>
-             {l.deleteAccount}
-          </MenuItem>
+          {/* <MenuItem onClick={handleDeleteAccount}> */}
+          {/*    <ListItemIcon> */}
+          {/*       <DeleteForeverOutlined fontSize="small" /> */}
+          {/*    </ListItemIcon> */}
+          {/*    {l.deleteAccount} */}
+          {/* </MenuItem> */}
           <MenuItem onClick={() => handleLogOut(router)}>
              <ListItemIcon>
                 <Logout fontSize="small" />

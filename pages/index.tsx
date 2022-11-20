@@ -10,13 +10,12 @@ import { INTERSECTION_MARGIN, POSTS_PER_PAGE } from '../utils/constants';
 import { useInView } from 'react-intersection-observer';
 import AnimatePage from '../components/utils/AnimatePage';
 import DonatePopup from '../components/DonatePopup';
-import vercel from '../public/vercel.svg';
 
 export default function Home({initialPosts}: { initialPosts: IPost[] }) {
    const [ posts, setPosts ] = useState(initialPosts);
    const [ isLoadingNewPosts, setIsLoadingNewPosts ] = useState(false);
    const postsDidEnd = useRef(false);
-   const {ref, inView, entry} = useInView({
+   const {ref: loadNewPostRef, inView, entry} = useInView({
       rootMargin: `${INTERSECTION_MARGIN}px`
    });
 
@@ -51,14 +50,14 @@ export default function Home({initialPosts}: { initialPosts: IPost[] }) {
        <AnimatePage>
           <DonatePopup/>
           <main style = {{position: 'relative'}}>
-             <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit 2)</Typography>
-             <MetaTags title = 'Home' desc = 'Posts & Experience Universe' imagePath = {vercel}/>
+             <Typography variant = 'caption'>Try infinite scroll with scroll reload (limit {POSTS_PER_PAGE})</Typography>
+             <MetaTags title = 'Home' desc = 'Posts & Experience Universe'/>
              {posts && <PostFeed posts = {posts}/>}
 
              {isLoadingNewPosts && <Container>
                  <Loader style = {{position: 'absolute', bottom: '5%', left: '50%', translate: '-50%'}}/>
              </Container>}
-             <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {ref}/>
+             <div style = {{backgroundColor: 'transparent', height: '1px'}} ref = {loadNewPostRef}/>
              {postsDidEnd.current && !isLoadingNewPosts &&
                  <Typography variant = 'h3' textAlign = 'center'>You&apos;re up to date now!</Typography>}
           </main>

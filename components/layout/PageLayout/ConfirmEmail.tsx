@@ -18,7 +18,7 @@ const ConfirmEmail = () => {
 
    return (
        <Stack gap={2}>
-         <Typography textAlign='center' variant='h4'>To proceed, you have to confirm you email. {finalEmail}</Typography>
+         <Typography textAlign='center' variant='h4'>To proceed, you have to confirm your email. {finalEmail}</Typography>
           <Button size='large' variant='contained' sx={{alignSelf: 'center'}} onClick={()=>verifyEmail()}>Resend email</Button>
           <Button size='large' variant='contained' sx={{alignSelf: 'center'}} onClick={handleOpenGmail}>Check Gmail</Button>
           <Button size='large' variant='outlined' sx={{alignSelf: 'center'}} onClick={handleOpenEmail}>Check Default EMail</Button>

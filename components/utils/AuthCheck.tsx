@@ -44,7 +44,7 @@ export default AuthCheck;
 function RestrictedText({additionalText = ""}: { additionalText?: string }) {
    return (
        <Typography variant = "h5" textAlign = "center">
-          <MetaTags title='Not Authorized' desc='Please, authorize to proceed' imagePath='' />
+          <MetaTags title='Not Authorized' desc='Please, authorize to proceed' />
           You must be logged in{additionalText || ""} to have an access.&nbsp;
           <LinkWithoutScroll style = {{color: "peru"}} href = "/enter">
              Log In

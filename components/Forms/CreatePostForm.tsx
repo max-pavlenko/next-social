@@ -6,6 +6,7 @@ import { Button, Grid, TextField } from '@mui/material';
 import { uid } from 'uid';
 import { toastNotify } from '../../utils/helpers';
 import { IPost } from '../../models/Post';
+import { useRouter } from 'next/router';
 
 const kebabCase = require('lodash.kebabcase');
 
@@ -14,8 +15,9 @@ const CreateNewPostForm = observer(() => {
    const [ title, setTitle ] = useState('');
    const slug = encodeURI(kebabCase(title));
    const isValid = slug.length > 3 && title.length < 100;
+   const router = useRouter();
 
-   async function createPost(e) {
+   async function createPostSubmit(e) {
       e.preventDefault();
       if (!isValid) return;
       const uidUser = auth.currentUser.uid;
@@ -26,7 +28,7 @@ const CreateNewPostForm = observer(() => {
          uid: uid(32),
          username,
          published: false,
-         content: 'default cont',
+         content: 'My idea is...',
          createdAt: serverTimestamp() as unknown as Date,
          updatedAt: serverTimestamp() as unknown as Date,
          heartsCount: 0,
@@ -35,13 +37,14 @@ const CreateNewPostForm = observer(() => {
       }
       await toastNotify({successText: 'created the post'}, {
          tryFn: async () => {
+            await router.push('/admin/' + slug)
             await ref.set(data)
          }
       });
    }
 
    return (
-       <form style={{padding: '20px'}} onSubmit = {createPost}>
+       <form style={{padding: '20px'}} onSubmit = {createPostSubmit}>
           <Grid container>
              <Grid item xs = {10} mx = 'auto' mt = '10px'>
                 <TextField fullWidth value = {title} onChange = {(e) => setTitle(e.target.value)}

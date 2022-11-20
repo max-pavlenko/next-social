@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import User from '../../store/User';
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, Stack, TextField } from '@mui/material';
 import { firestore } from '../../libs/firebase';
 import UsernameMessage from '../utils/UsernameMessage';
 import { observer } from 'mobx-react-lite';
@@ -10,6 +10,7 @@ import { UsernameFormModes } from '../../models/Form';
 import toast from 'react-hot-toast';
 import Entered from '../utils/Entered';
 import Image from 'next/image';
+import { downloadFile } from '../../utils/helpers';
 
 const debounce = require('lodash.debounce');
 
@@ -23,6 +24,9 @@ const UsernameForm = observer(({
    const {displayName, uid} = User.user.data;
    const {photoURL, user: {username}} = User;
    const router = useRouter();
+   let photoURLBlob;
+   const isntPhotoURL = !photoURL?.startsWith('http')
+   isntPhotoURL && fetch(photoURL).then(res => res.blob()).then(blob => photoURLBlob = blob);
    const [ enteredName, setEnteredName ] = useState(username || displayName);
 
    useEffect(() => {
@@ -84,13 +88,9 @@ const UsernameForm = observer(({
       }
    }, 400), []);
 
-   function handleDownloadImage(fileUrl: string, fileName: string) {
-      const alink = document.createElement('a');
-      console.log(fileUrl);
-      alink.href = fileUrl;
-      alink.target = '_blank';
-      alink.download = fileName;
-      alink.click();
+   function handleDownloadImage(fileUrl: string, fileName: string, fileBlob: Blob) {
+      console.log('photoURLBlob', fileBlob)
+      downloadFile('image', fileBlob)
    }
 
    return <form onSubmit = {handleUsernameSubmit}>
@@ -110,13 +110,14 @@ const UsernameForm = observer(({
       </Grid>
       <ImageUploader shouldShowImgURL = {false}/>
       {photoURL &&
-          <>
+          <Stack sx={{alignItems: 'center'}}>
               <div><Image height = {250} width = {250} style = {{margin: '0 auto', objectFit: 'cover'}} src = {photoURL} alt = 'Preview user avatar'/>
               </div>
-              <Button sx={{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name')} variant = 'outlined'>
-                  Download image
-              </Button>
-          </>
+             {isntPhotoURL && <Button sx = {{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name', photoURLBlob)}
+                      variant = 'outlined'>
+                Download image
+             </Button>}
+          </Stack>
       }
    </form>
 });

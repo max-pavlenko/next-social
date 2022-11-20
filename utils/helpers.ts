@@ -29,7 +29,6 @@ export async function handleLogOut(router: NextRouter) {
    //router.push('/').then(r => r);
    User.setUser({ data: null, username: null});
    User.setPhotoURL('');
-   localStorage.setItem('prolongedAuth', 'false');
 }
 
 export const toastNotify = async ({successText, errorText}: { successText: string, errorText?: string }, {
@@ -94,11 +93,11 @@ export function hanlePasteImage(setter) {
    }
 }
 
-export function downloadFile(fileExtension: string, blob: File){
+export function downloadFile(type: string, blob: File | Blob){
    const url = window.URL.createObjectURL(blob);
    const a = document.createElement('a');
    a.href = url;
-   a.download = fileExtension + '_' + Math.random().toFixed(6).slice(2);
+   a.download = type + '_' + Math.random().toFixed(6).slice(2)+'.'+blob.type.split('/')[1];
    document.body.appendChild(a);
    a.click();
    document.body.removeChild(a)

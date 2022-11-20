@@ -11,7 +11,6 @@ import { toastModal } from '../../utils/toastModal';
 import { invertBool } from '../../utils/helpers';
 import AnimatePage from '../../components/utils/AnimatePage';
 import { useLocale } from '../../translations/useLocale';
-import vercel from '../../public/vercel.svg';
 import MetaTags from '../../components/utils/MetaTags';
 import firebase from 'firebase/compat';
 import Loader from '../../components/layout/Loader';
@@ -46,7 +45,7 @@ function PostManager() {
    }, [ post ]);
 
    function onLinkClick() {
-      toastModal('Did you saved the post and wish to continue?', async () => {
+      toastModal('Did you save the post and wish to continue?', async () => {
              await router.push(`/${user.current?.username}/${post.slug}`);
           },
       );
@@ -67,7 +66,7 @@ function PostManager() {
 
    return (
        <main className = {styles.container}>
-          <MetaTags title= {`${post && `Editing ${post.title}`}`} desc='' imagePath={vercel} />
+          <MetaTags title= {`${post && `Editing ${post.title}`}`} desc='' />
           {!postRef && <Typography color = 'rebeccapurple'>{l.noPermission}.</Typography>}
           {post ? (
               <>

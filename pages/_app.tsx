@@ -32,12 +32,15 @@ const poppins = Poppins({
 });
 
 function MyApp({Component, pageProps}) {
-   const {pathname} = useRouter();
    const previousY = useRef(0);
    const [isNavBarVisible, setIsNavBarVisible] = useState(true);
    const {isAuthenticating} = useUserData();
+   const router = useRouter()
 
    useEffect(() => {
+      const locale = localStorage.getItem('locale')
+      if(locale && locale !== router.defaultLocale) router.replace(router.pathname, router.asPath, {locale});
+
       document.addEventListener('scroll', handleScroll);
       return ()=>{
          document.removeEventListener('scroll', handleScroll)
@@ -53,8 +56,8 @@ function MyApp({Component, pageProps}) {
    return (
        <ThemeProvider theme = {theme}>
           <NavBar classname={isNavBarVisible ? '' : 'hideTop'}/>
-          <AnimatePresence onExitComplete = {() => window.scrollTo(0, 0)}>
-             <Component key = {pathname} {...pageProps} />
+          <AnimatePresence key={router.route} onExitComplete = {() => window.scrollTo(0, 0)}>
+             <Component key = {router.route} {...pageProps} />
              <ContextMenu/>
              <Analytics />
           </AnimatePresence>
