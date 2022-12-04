@@ -19,7 +19,7 @@ const ImageSlider = ({
        <div className = "spacer">
           <ul style = {maxWidth && {maxWidth}} className = "additionalImagesList">
              {images.map(({img, id}) => {
-                return (
+                 return (
                     <div key = {id}>
                        <li
                            style = {{
@@ -51,7 +51,7 @@ const ImageSlider = ({
                                  <CloseIcon/>
                               </IconButton>
                           )}
-
+                           {/* @ts-ignore*/}
                            <div><ReactImageMagnify {...{
                                smallImage: {
                                    alt: 'Wristwatch by Ted Baker London',

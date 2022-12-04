@@ -26,7 +26,6 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    const {isScreenWidthLessThen370} = useLessThenMediaQuery(370);
    const {user: {lightMode}} = User;
     console.log('dark md', lightMode)
-   const actionsColor = {}//{color: lightMode ? 'inherit' : 'primary'}
 
    const handleEdit: MouseEventHandler<HTMLButtonElement> = async(ev) => {
       const e = ev as unknown as MouseEvent;
@@ -35,11 +34,11 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    }
    const {menuElement, handleClick} = useMenu(<div style={{display: 'flex', paddingInline: '0.2rem'}}>
       <IconButton onClick = {handleEdit}>
-         <ModeEditOutlineOutlinedIcon {...actionsColor}/>
+         <ModeEditOutlineOutlinedIcon/>
       </IconButton>
 
       <IconButton onClick = {confirmDeletion}>
-         <DeleteOutlineSharp {...actionsColor}/>
+         <DeleteOutlineSharp/>
       </IconButton>
    </div>, {horizontal: 'left', vertical: 'top'});
 
@@ -94,16 +93,16 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
                  {!isScreenWidthLessThen370
                      ? <>
                          <IconButton  onClick={handleEdit}>
-                             <ModeEditOutlineOutlinedIcon {...actionsColor}/>
+                             <ModeEditOutlineOutlinedIcon/>
                          </IconButton>
 
                          <IconButton onClick={confirmDeletion}>
-                             <DeleteOutlineSharp {...actionsColor}/>
+                             <DeleteOutlineSharp/>
                          </IconButton>
                      </>
                      : <>
                          <IconButton onClick={handleClick}>
-                             <MoreVertOutlinedIcon {...actionsColor}/>
+                             <MoreVertOutlinedIcon/>
                          </IconButton>
                          {menuElement}
                      </>

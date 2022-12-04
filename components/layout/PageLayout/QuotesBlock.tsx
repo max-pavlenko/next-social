@@ -63,7 +63,7 @@ const QuotesBlock = observer(({Loader, quoteId = ''}: { Loader: React.ReactEleme
              <cite  title = "Source title">
                 -- <b>{quote.author}</b>
              </cite>
-             {!quoteId && <>
+             {!quoteId && <> {/*@ts-ignore*/}
                  <Button
                  size = 'small'
                  className={styles.blockquote__firstBtn}
