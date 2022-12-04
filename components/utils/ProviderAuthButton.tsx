@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import React, {useState} from 'react';
+import {Button} from '@mui/material';
 import Loader from '../layout/Loader';
-import { AuthProvider } from 'firebase/auth';
-import { toastNotify } from '../../utils/helpers';
-import { saveURL } from '../../utils/saveURL';
-import { auth } from '../../libs/firebase';
-import { useRouter } from 'next/router';
+import {AuthProvider} from 'firebase/auth';
+import {toastNotify} from '../../utils/helpers';
+import {saveURL} from '../../utils/saveURL';
+import {auth} from '../../libs/firebase';
+import {useRouter} from 'next/router';
+import Image from 'next/image';
 
 function ProviderAuthButton({
                                provider,
@@ -34,7 +35,7 @@ function ProviderAuthButton({
        <>
           {isLoading && <Loader style = {{position: 'absolute', top: '45%'}}/>}
           <Button variant = 'outlined' className = 'btn-google' onClick = {signInWithProvider}>
-                <img src = {imgSrc} alt = {`${btnTitle} logo`}/>
+                <Image width={30} height={30} src = {imgSrc} alt = {`${btnTitle} logo`}/>
              {btnTitle}
           </Button>
        </>)

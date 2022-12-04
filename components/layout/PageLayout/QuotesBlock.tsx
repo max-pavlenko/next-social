@@ -1,30 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '@mui/material';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Button} from '@mui/material';
 import axios from 'axios';
-import { auth, firestore } from '../../../libs/firebase';
-import { IQuoteData } from '../../../store/User';
-import { toastNotify } from '../../../utils/helpers';
-import { CheckmarkIcon } from 'react-hot-toast';
+import {auth, firestore} from '../../../libs/firebase';
+import User, {IQuoteData} from '../../../store/User';
+import {toastNotify} from '../../../utils/helpers';
+import {CheckmarkIcon} from 'react-hot-toast';
 import styles from '../../../styles/Blockquote.module.scss'
-import { useLocale } from '../../../translations/useLocale';
+import {useLocale} from '../../../translations/useLocale';
+import {observer} from "mobx-react-lite";
 
-const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quoteId?: string }) => {
+const QuotesBlock = observer(({Loader, quoteId = ''}: { Loader: React.ReactElement, quoteId?: string }) => {
    const [ quote, setQuote ] = useState<IQuoteData>({text: "...", author: "...", _id: ''});
    const [ isLoading, setIsLoading ] = useState(true);
    const shouldFetchQuote = useRef(true);
    const [ addedQuoteAsFavorite, setAddedQuoteAsFavorite ] = useState(false);
    const userRef = useRef(firestore.collection('users').doc(auth?.currentUser?.uid));
    const l = useLocale();
+   const {user: {lightMode}} = User;
 
    const fetchQuote = useCallback(() => {
       if (!shouldFetchQuote.current) return;
       (async function () {
-         await axios.get(`https://api.quotable.io/${quoteId ? 'quotes/' + quoteId : 'random'}`).then((r) => {
-            console.log(r.data._id);
-            setAddedQuoteAsFavorite(false);
-            setQuote({text: r.data.content, author: r.data.author, _id: r.data._id});
+         try {
+            await axios.get(`https://api.quotable.io/${quoteId ? 'quotes/' + quoteId : 'random'}`).then((r) => {
+               console.log(r.data._id);
+               setAddedQuoteAsFavorite(false);
+               setQuote({text: r.data.content, author: r.data.author, _id: r.data._id});
+               setIsLoading(false);
+            });
+         } catch (e) {
+            console.log('error ', e)
             setIsLoading(false);
-         });
+         }
       })();
       shouldFetchQuote.current = false;
    }, []);
@@ -47,6 +54,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
    }, []);
 
    if (isLoading) return Loader;
+   const actionsColor = {color: lightMode ? 'inherit' : 'primary'}
 
    return (
        <blockquote className = "blockquote">
@@ -61,7 +69,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
                  className={styles.blockquote__firstBtn}
                  onClick = {() => markQuoteAsFavorite(quote)}
                  variant = "outlined"
-                 color = "secondary"
+                 {...actionsColor}
              >
                  <div style={{marginRight: '5px'}}>{addedQuoteAsFavorite && <CheckmarkIcon/>}</div>
                 {l.addFavoriteQuote}
@@ -74,7 +82,7 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
                         fetchQuote();
                      }}
                      variant = "outlined"
-                     color = "secondary"
+                     color ={`${lightMode ? 'secondary' : 'warning'}`}
                  >
                     {l.more}...
                  </Button>
@@ -83,6 +91,6 @@ const QuotesBlock = ({Loader, quoteId = ''}: { Loader: React.ReactElement, quote
           </div>
        </blockquote>
    );
-};
+});
 
 export default QuotesBlock;

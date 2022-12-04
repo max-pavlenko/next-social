@@ -1,13 +1,13 @@
 import User from '../store/User';
-import { observer } from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import UsernameForm from '../components/Forms/UsernameForm';
 import LoggingForm from '../components/Forms/LoggingForm';
 import ConfirmEmail from '../components/layout/PageLayout/ConfirmEmail';
 import MetaTags from '../components/utils/MetaTags';
 import React from 'react';
-import { auth } from '../libs/firebase';
+import {auth} from '../libs/firebase';
 import AnimatePage from '../components/utils/AnimatePage';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 const EnterPage = observer(() => {
    const {username} = User.user;

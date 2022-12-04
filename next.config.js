@@ -1,5 +1,4 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
@@ -9,12 +8,5 @@ const nextConfig = {
   i18n: {
     locales: ['en', 'ua', 'ru'],
     defaultLocale: 'en'
-  },
-  experimental: {
-    fontLoaders: [
-      { loader: '@next/font/google', options: { subsets: ['latin'] } }
-    ]
   }
-}
-
-module.exports = nextConfig
+};

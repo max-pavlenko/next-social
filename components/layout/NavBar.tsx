@@ -1,21 +1,22 @@
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import User from "../../store/User";
-import { observer } from "mobx-react-lite";
+import {observer} from "mobx-react-lite";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Loader from "./Loader";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import MenuAccount from "./MenuAccount";
-import { handleLogOut } from "../../utils/helpers";
-import { FALLBACK_IMAGE } from "../../utils/constants";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { auth, firestore } from "../../libs/firebase";
-import { useMenu } from "../../libs/hooks/useMenu";
+import {handleLogOut} from "../../utils/helpers";
+import {FALLBACK_IMAGE} from "../../utils/constants";
+import {useDocumentData} from "react-firebase-hooks/firestore";
+import {auth, firestore} from "../../libs/firebase";
+import {useMenu} from "../../libs/hooks/useMenu";
 import DefaultMenuItems from './DefaultMenuItems';
 import LinkWithoutScroll from '../utils/LinkWithoutScroll';
 import LocalesNames from '../../translations/localesNames';
-import { useLocale } from '../../translations/useLocale';
+import {useLocale} from '../../translations/useLocale';
 import useLessThenMediaQuery from '../../libs/hooks/useLessThenMediaQuery';
+import NightModeSwitch from "../utils/NightModeSwitch";
 
 const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const [ isLoading, setIsLoading ] = useState(false);
@@ -98,7 +99,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
                 {!isScreenWidthLessThen400 && <LinkWithoutScroll href = "/">
                    <button style = {{margin: 0}} className = "btn-logo">NXT</button>
                 </LinkWithoutScroll>}
-                <div style={{display: "flex", alignItems: "center"}}>
+                <div style={{display: "flex", alignItems: "center", gap: 5}}>
                    <span className = {`fi fi-${flagCode}`}/>
                       <select ref={selectRef} value = {router.locale} className = 'language-select'
                                    onChange = {handleLanguageChange}
@@ -110,6 +111,8 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
                           </option>
                       ))}
                    </select>
+                   <NightModeSwitch/>
+
                 </div>
              </li>
 
@@ -171,6 +174,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
                                   onLoadingComplete = {handleLoadComplete}
                                   onLoadStart = {handleLoadStart}
                                   width = {30}
+                                  priority={false}
                                   height = {30}
                                   src = {userState?.photoURL || photoURL || FALLBACK_IMAGE}
                                   alt = "User avatar"

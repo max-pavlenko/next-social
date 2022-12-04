@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import {Box, Button} from "@mui/material";
 import LinkWithoutScroll from "./utils/LinkWithoutScroll";
-import { useLocale } from '../translations/useLocale';
+import {useLocale} from '../translations/useLocale';
 
 const DonatePopup = () => {
   const l = useLocale();
@@ -19,7 +19,7 @@ const DonatePopup = () => {
       className="donate-popup"
 
     >
-      <div className='rainbow' style={{ fontSize: "2rem", color: 'hotpink', pointerEvents: 'none' }}>❣</div>
+      <div className='rainbow' style={{ fontSize: "2rem", color: 'hotpink', userSelect: 'none' }}>❣</div>
       <LinkWithoutScroll href = "/donate">
         <Button
             className = "donate-popup__btn"

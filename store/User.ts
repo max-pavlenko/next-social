@@ -1,17 +1,22 @@
-import { makeAutoObservable } from 'mobx';
-import { FALLBACK_IMAGE } from '../utils/constants';
+import {makeAutoObservable} from 'mobx';
+import {FALLBACK_IMAGE} from '../utils/constants';
 
 export interface IUser {
     data: IDataUser | null,
     username: string,
+    lightMode: boolean,
 }
 
 class User {
-    user: IUser = {data: null, username: ''}
+    user: IUser = {data: null, username: '', lightMode: true}
     photoURL: string = '';
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setDarkMode(mode: boolean){
+        this.user.lightMode = mode;
     }
 
     setUser(user: IUser) {

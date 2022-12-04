@@ -1,18 +1,21 @@
-import { IPost } from "../../../models/Post";
-import { Box, Container, IconButton } from "@mui/material";
-import { CheckmarkIcon } from "react-hot-toast";
-import SvgIcon from "@mui/icons-material/DeleteOutlineSharp";
+import {IPost} from "../../../models/Post";
+import {Box, Container, IconButton} from "@mui/material";
+import {CheckmarkIcon} from "react-hot-toast";
+import DeleteOutlineSharp from "@mui/icons-material/DeleteOutlineSharp";
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { auth, firestore } from "../../../libs/firebase";
-import { useRouter } from 'next/router';
-import { MouseEventHandler, useEffect, useState } from 'react';
-import { toastNotify } from '../../../utils/helpers';
-import { toastModal } from '../../../utils/toastModal';
+import {auth, firestore} from "../../../libs/firebase";
+import {useRouter} from 'next/router';
+import {MouseEventHandler, useEffect, useState} from 'react';
+import {toastNotify} from '../../../utils/helpers';
+import {toastModal} from '../../../utils/toastModal';
 import LinkWithoutScroll from '../../utils/LinkWithoutScroll';
-import { useLocale } from '../../../translations/useLocale';
+import {useLocale} from '../../../translations/useLocale';
 import useLessThenMediaQuery from '../../../libs/hooks/useLessThenMediaQuery';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { useMenu } from '../../../libs/hooks/useMenu';
+import {useMenu} from '../../../libs/hooks/useMenu';
+import {motion} from "framer-motion";
+import {observer} from "mobx-react-lite";
+import User from "../../../store/User";
 
 function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolean; }) {
    const router = useRouter();
@@ -21,6 +24,10 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    const [ username, setUsername ] = useState(post.username);
    const l = useLocale();
    const {isScreenWidthLessThen370} = useLessThenMediaQuery(370);
+   const {user: {lightMode}} = User;
+    console.log('dark md', lightMode)
+   const actionsColor = {}//{color: lightMode ? 'inherit' : 'primary'}
+
    const handleEdit: MouseEventHandler<HTMLButtonElement> = async(ev) => {
       const e = ev as unknown as MouseEvent;
       e.preventDefault();
@@ -28,11 +35,11 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    }
    const {menuElement, handleClick} = useMenu(<div style={{display: 'flex', paddingInline: '0.2rem'}}>
       <IconButton onClick = {handleEdit}>
-         <ModeEditOutlineOutlinedIcon/>
+         <ModeEditOutlineOutlinedIcon {...actionsColor}/>
       </IconButton>
 
       <IconButton onClick = {confirmDeletion}>
-         <SvgIcon/>
+         <DeleteOutlineSharp {...actionsColor}/>
       </IconButton>
    </div>, {horizontal: 'left', vertical: 'top'});
 
@@ -59,53 +66,68 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
           {tryFn: async () => await postRef.delete()})
    }
 
+    const variants = {
+        hidden: { opacity: -1, x: 50, y: 0 },
+        enter: { opacity: 1, x: 0, y: 0 },
+        exit: { opacity: 0, x: -50, y: 0 },
+    }
+
    return (
-       <Container style={isScreenWidthLessThen370 ? {padding: '1rem'} : {}} className = "card" sx = {{position: "relative"}}>
-          <Box style = {{display: "flex", gap: "8px", alignItems: "center"}}>
-             <LinkWithoutScroll style = {{display: "flex", gap: "8px", alignItems: "center"}} href = {username || '/'}>
+       <motion.div whileInView='enter'
+                   variants = {variants}
+                   viewport={{once: false, amount: 0.2}}
+                   initial="hidden"
+                   exit='exit'
+                   transition={{type: 'tween', duration: 0.2, }}>
+           <Container style={isScreenWidthLessThen370 ? {padding: '1rem'} : {}} className="card"
+                              sx={{position: "relative"}}>
+           <Box style={{display: "flex", gap: "8px", alignItems: "center"}}>
+               <LinkWithoutScroll style={{display: "flex", gap: "8px", alignItems: "center"}} href={username || '/'}>
 
-                   <CheckmarkIcon style = {{display: 'inline-block'}}/>
-                   <span style={{fontStyle: 'italic', fontWeight: '300', fontSize: '15px'}}>{l.postBy} @{username}</span>
+                   <CheckmarkIcon style={{display: 'inline-block'}}/>
+                   <span
+                       style={{fontStyle: 'italic', fontWeight: '300', fontSize: '15px'}}>{l.postBy} @{username}</span>
 
-             </LinkWithoutScroll>
-             {isConfigurable && (
-                 <span style = {{marginLeft: "auto"}}>
+               </LinkWithoutScroll>
+               {isConfigurable && (
+                   <span style={{marginLeft: "auto"}}>
                  {!isScreenWidthLessThen370
                      ? <>
-                        <IconButton onClick = {handleEdit}>
-                           <ModeEditOutlineOutlinedIcon/>
-                        </IconButton>
+                         <IconButton  onClick={handleEdit}>
+                             <ModeEditOutlineOutlinedIcon {...actionsColor}/>
+                         </IconButton>
 
-                        <IconButton onClick = {confirmDeletion}>
-                           <SvgIcon/>
-                        </IconButton>
+                         <IconButton onClick={confirmDeletion}>
+                             <DeleteOutlineSharp {...actionsColor}/>
+                         </IconButton>
                      </>
                      : <>
-                        <IconButton onClick = {handleClick}>
-                           <MoreVertOutlinedIcon/>
-                        </IconButton>
-                        {menuElement}
+                         <IconButton onClick={handleClick}>
+                             <MoreVertOutlinedIcon {...actionsColor}/>
+                         </IconButton>
+                         {menuElement}
                      </>
                  }
               </span>
-             )}
-          </Box>
+               )}
+           </Box>
 
-          <LinkWithoutScroll href = {`${username}/${post.slug}`}>
-             <h2 style = {{cursor: "pointer", display: 'inline-block'}}>
-                {post.title}
-             </h2>
-          </LinkWithoutScroll>
+           <LinkWithoutScroll href={`${username}/${post.slug}`}>
+               <h2 style={{cursor: "pointer", display: 'inline-block'}}>
+                   {post.title}
+               </h2>
+           </LinkWithoutScroll>
 
-          <footer>
-        <span style = {{pointerEvents: "none"}}>
+           <footer>
+        <span style={{pointerEvents: "none"}}>
           {postWordCount} {l.words}. {l.thats} {minutesToRead} min
-           {+minutesToRead === 1 ? "" : "s"}{l.to} {l.read}
+            {+minutesToRead === 1 ? "" : "s"}{l.to} {l.read}
         </span>
-             <span style={{whiteSpace: 'nowrap'}} className = "push-left">💕 {post.heartsCount}</span>
-          </footer>
+               <span style={{whiteSpace: 'nowrap'}} className="push-left">💕 {post.heartsCount}</span>
+           </footer>
        </Container>
+       </motion.div>
    );
 }
 
-export default PostItem;
+export default observer(PostItem);

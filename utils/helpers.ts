@@ -1,13 +1,15 @@
-import { firestore, signOut } from '../libs/firebase';
-import { IPost } from '../models/Post';
-import { Timestamp } from 'firebase/firestore';
-import toast, { ToastOptions } from 'react-hot-toast';
-import { FirebaseError } from '@firebase/util';
+import {firestore, signOut} from '../libs/firebase';
+import {IPost} from '../models/Post';
+import {Timestamp} from 'firebase/firestore';
+import toast, {ToastOptions} from 'react-hot-toast';
+import {FirebaseError} from '@firebase/util';
 import User from '../store/User';
-import { NextRouter } from 'next/router';
-import { SetStateAction } from 'react';
-import { DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig } from './constants';
+import {NextRouter} from 'next/router';
+import {SetStateAction} from 'react';
+import {DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig} from './constants';
 import * as Yup from 'yup';
+import {PaletteMode} from "@mui/material";
+import {grey} from "@mui/material/colors";
 
 /**
  * Get a user/{uid} document with username
@@ -27,7 +29,10 @@ export async function getUserWithUsername(username: string) {
 export async function handleLogOut(router: NextRouter) {
    await signOut();
    //router.push('/').then(r => r);
-   User.setUser({ data: null, username: null});
+   User.setUser({
+      ...User.user,
+      data: null, username: null,
+   });
    User.setPhotoURL('');
 }
 
@@ -115,3 +120,60 @@ export function iterateOverFiles(files: FileList, resultCallback: ({file, url}: 
       })
    }
 }
+
+export function switchMode(isDarkMode: boolean, callback: (isDarkMode: boolean) => void = () => {}) {
+   localStorage.setItem('mode', (isDarkMode).toString());
+   User.setDarkMode(isDarkMode);
+   const modeToDelete = isDarkMode === false ? 'light' : 'dark';
+   const modeToToggle = modeToDelete === 'dark' ? 'light' : 'dark';
+
+   document.documentElement.dataset[modeToToggle] = 'any value for this just to work';
+   delete document.documentElement.dataset[modeToDelete];
+
+   callback(isDarkMode)
+}
+
+export function setModeFromLS(callback: (isDarkMode: boolean) => void = () => {}) {
+   const mode = localStorage.getItem('mode')
+   console.log('mode', mode === 'true')
+   if (mode == null || (mode !== 'false' && mode !== 'true')) return;
+   switchMode(mode === 'true', (isDarkMode)=> callback(isDarkMode));
+}
+
+export const getDesignTokens = (mode: PaletteMode) => ({
+   palette: {
+      mode,
+      ...{
+         contrastThreshold: 3,
+         tonalOffset: 0.2
+      },
+      ...(mode === 'light'
+          ? {
+             primary: {
+                main: '#AB09D8',
+             },
+             secondary: {
+                main: '#5C76B7'
+             },
+             error: {
+                main: '#F40B27'
+             },
+
+          }
+          : {
+             primary: {
+                main: '#d562ff',
+             },
+             secondary: {
+                main: '#03dcff'
+             },
+             error: {
+                main: '#ff5b5b'
+             },
+             text: {
+                primary: '#fff',
+                secondary: grey[500],
+             },
+          }),
+   },
+});

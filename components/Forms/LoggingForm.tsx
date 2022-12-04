@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { Box, Button, Grid, IconButton, InputAdornment, Stack, Typography } from "@mui/material";
+import {useEffect, useState} from "react";
+import {Box, Button, Grid, IconButton, InputAdornment, Stack, Typography} from "@mui/material";
 import ProviderAuthButton from "../utils/ProviderAuthButton";
 import * as Yup from "yup";
-import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import {Form, Formik, FormikHelpers, FormikProps} from "formik";
 import FormikInput from "../utils/FormikInput";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { invertBool } from '../../utils/helpers';
+import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {invertBool} from '../../utils/helpers';
 import {
    facebookAuthProvider,
    githubAuthProvider,
@@ -14,10 +14,11 @@ import {
    resetPassword,
    signUpWithEmail
 } from '../../libs/firebase';
-import { toastModal } from '../../utils/toastModal';
+import {toastModal} from '../../utils/toastModal';
 import toast from 'react-hot-toast';
-import { PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S } from '../../utils/constants';
-import { useRouter } from 'next/router';
+import {PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S} from '../../utils/constants';
+import {useRouter} from 'next/router';
+import {motion} from "framer-motion";
 
 export interface ILoggingForm {
    email: string;
@@ -77,6 +78,12 @@ const LoggingForm = () => {
       });
    }
 
+   const variants = {
+      hidden: { opacity: -1, x: 50, y: 20 },
+      enter: { opacity: 1, x: 0, y: 0 },
+      exit: { opacity: 0, x: -50, y: 0 },
+   }
+
    return (
        <Formik
            initialValues = {{
@@ -100,19 +107,30 @@ const LoggingForm = () => {
        >
           {(formik) => (
               <Form>
-                 <Grid container spacing = {3}>
-                    <Grid item xs = {12} sm = {6}>
-                       <FormikInput
-                           props = {{
-                              fullWidth: true,
-                              type: "email",
-                              label: "Email",
-                              name: "email",
-                              autoComplete: "email",
-                           }}
-                       />
+                 <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                       <motion.div
+                                   initial={{x: -50, y: -20}}
+                                   animate={{x: 0, y: 0}}
+                                   transition={{type: 'spring', duration: 0.3}}>
+                          <FormikInput
+                              props={{
+                                 fullWidth: true,
+                                 type: "email",
+                                 label: "Email",
+                                 name: "email",
+                                 autoComplete: "email",
+                              }}
+                          />
+                       </motion.div>
                     </Grid>
                     <Grid item xs = {12} sm = {6}>
+                       <motion.div
+                           variants={variants}
+                           initial="hidden"
+                           animate={['enter']}
+                           exit='exit'
+                           transition={{type: 'spring', duration: 0.3}}>
                        <FormikInput
                            props = {{
                               fullWidth: true,
@@ -133,77 +151,90 @@ const LoggingForm = () => {
                               },
                            }}
                        />
+                       </motion.div>
                     </Grid>
 
-                    <Grid sx = {{sm: {flexDirection: 'column'}}} item container gap = {2} alignItems = 'center'
-                          justifyContent = "center">
-                       <Stack alignItems = 'end' gap = {2}>
+                    <motion.div
+                        animate={{opacity: 1, scale: 1, transition: {delay: 0.2, type: 'just'}}}
+                        initial={{opacity: 0, scale: 0}}
+                        style={{padding: '24px 0 12px', paddingLeft: '48px', marginInline: 'auto'}}
+                    >
+                       <Grid sx={{sm: {flexDirection: 'column'}}} item container gap={2} alignItems='center'
+                                      justifyContent="center">
+                       <Stack alignItems='end' gap={2}>
                           {isLoggingIn && (
-                              <Stack alignItems = 'end'>
-                                 <Typography variant = 'subtitle2'>Forgot password?</Typography>
+                              <Stack alignItems='end'>
+                                 <Typography variant='subtitle2'>Forgot password?</Typography>
                                  {resetPasswordCountDown === 0 ?
-                                     <a tabIndex = {0} onClick = {() => handleResetPassword(formik)}>
-                                        <Typography color = 'violet' variant = 'subtitle1'>
+                                     <a tabIndex={0} onClick={() => handleResetPassword(formik)}>
+                                        <Typography color='violet' variant='subtitle1'>
                                            Reset it.
                                         </Typography>
                                      </a>
-                                     : <Typography >
+                                     : <Typography>
                                         You can resend reset mail in {resetPasswordCountDown} secs.
                                      </Typography>}
                               </Stack>
                           )}
 
-                          <Button color = "warning" variant = "outlined" onClick = {() => handleFormReset(formik)}>
+                          <Button color="warning" variant="outlined" onClick={() => handleFormReset(formik)}>
                              Reset Form
                           </Button>
                        </Stack>
 
-                       <Stack alignItems = 'start' gap = {2}>
-                          <Button disabled = {!formik.isValid}
-                                  variant = "contained" type = "submit">
+                       <Stack alignItems='start' gap={2}>
+                          <Button disabled={!formik.isValid}
+                                  variant="contained" type="submit">
                              {isLoggingIn ? 'Log In' : 'Sign Up'}
                           </Button>
 
                           <Box>
-                             <Typography variant = 'subtitle2'>{isLoggingIn ? 'Don\'t' : 'Already'} have an
-                                                                                                    account? </Typography>
-                             <a onClick = {changeLoggingState} tabIndex = {0}>
-                                <Typography color = 'violet' variant = 'subtitle1'>
+                             <Typography variant='subtitle2'>{isLoggingIn ? 'Don\'t' : 'Already'} have an
+                                account? </Typography>
+                             <a onClick={changeLoggingState} tabIndex={0}>
+                                <Typography color='violet' variant='subtitle1'>
                                    {isLoggingIn ? 'Sign up' : 'Log in'}.
                                 </Typography>
                              </a>
                           </Box>
                        </Stack>
-                    </Grid>
+                    </Grid></motion.div>
 
-                    <Grid justifyContent = "center" container item>
-                       <Grid
-                           sx = {{display: "flex", alignItems: "center"}}
-                           className = "no-padding"
-                           item
-                           xs = {4}
-                       >
-                          <div className = "delimeter"></div>
+                       <Grid justifyContent="center" container item>
+                          <Grid
+                              sx={{display: "flex", alignItems: "center"}}
+                              className="no-padding"
+                              item
+                              xs={4}
+                          >
+                             <div className="delimeter"></div>
+                          </Grid>
+                          <Grid className="no-padding" textAlign="center" item xs={2} md={1}>
+                             OR
+                          </Grid>
+                          <Grid
+                              sx={{display: "flex", alignItems: "center"}}
+                              className="no-padding"
+                              item
+                              xs={4}
+                          >
+                             <div className="delimeter"></div>
+                          </Grid>
                        </Grid>
-                       <Grid className = "no-padding" textAlign = "center" item xs = {2} md = {1}>
-                          OR
-                       </Grid>
-                       <Grid
-                           sx = {{display: "flex", alignItems: "center"}}
-                           className = "no-padding"
-                           item
-                           xs = {4}
-                       >
-                          <div className = "delimeter"></div>
-                       </Grid>
-                    </Grid>
 
+                    <motion.div
+                        animate={{opacity: 1, scale: 1, transition: {delay: 0.4}}}
+                        initial={{opacity: 0, scale: 0}}
+                        style={{padding: '24px 0 12px', paddingLeft: '48px', marginInline: 'auto'}}
+                    >
                     <Grid container justifyContent = "center" gap={2} item xs = {12}>
                        <ProviderAuthButton btnTitle='Google' imgSrc={PROVIDERS_IMAGES.GOOGLE} provider={googleAuthProvider}/>
                        <ProviderAuthButton btnTitle='GitHub' imgSrc={PROVIDERS_IMAGES.GITHUB} provider={githubAuthProvider}/>
                        <ProviderAuthButton btnTitle='Facebook' imgSrc={PROVIDERS_IMAGES.FACEBOOK} provider={facebookAuthProvider}/>
                     </Grid>
+                    </motion.div>
                  </Grid>
+
               </Form>
           )}
        </Formik>

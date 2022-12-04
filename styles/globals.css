@@ -4,16 +4,20 @@
 :root {
     --color-bg: #EEF0F1;
     --color-text: #08090A;
-    --color-blue: #3B49DF;
+    --color-blue: #AB09D8;
     --color-red: #DF3B3B;
     --color-green: #3BDF72;
-    --color-gray: #B5BDC4;
+    --color-border: #B5BDC4;
+    --rgb-white: 255,255,255;
+    --color-white: rgb(var(--rgb-white));
+    --small-highlight: 0.9;
+    --post-color: #fff;
     }
 
 html,
 body {
     padding: 0 !important;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg) !important;
     color: var(--color-text);
     margin: 50px 0 0;
     font-family: Poppins, "Roboto", sans-serif;
@@ -22,15 +26,27 @@ body {
 
 body{
     overflow: initial !important; /* for context menu, removing it, when RMC */
+    overflow-x: hidden !important;
     }
+
+html[data-dark]{
+    --rgb-white: 87,87,87;
+    --small-highlight: 1.1;
+    --color-bg: rgb(100,100,100);
+    --color-blue: #d562ff;
+    --color-border: var(--color-blue);
+    --color-text: rgb(237,237,237);
+    --post-color: transparent;
+}
 
 h3{
     margin: 0;
     }
 
 * {
-    transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out, color 0s;
     border: none;
+    box-sizing: border-box;
     }
 
 body::-webkit-scrollbar{
@@ -38,7 +54,7 @@ body::-webkit-scrollbar{
     }
 
 body::-webkit-scrollbar-track{
-    background-color: #fff;
+    background-color: rgba(var(--rgb-white), 0.4);
     }
 body::-webkit-scrollbar-thumb{
     background-color: var(--color-blue);
@@ -56,6 +72,14 @@ body::-webkit-scrollbar-thumb{
     background-color: transparent;
     }
 
+.additionalImage{
+    transition: 0.2s all ease-in-out;
+}
+
+.additionalImage:hover{
+    scale: 2;
+}
+
 .additionalImagesList{
     width: 100%;
     min-width: 100%;
@@ -65,6 +89,7 @@ body::-webkit-scrollbar-thumb{
     gap: 7px;
     padding: 8px 0;
     overflow-x: scroll;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-snap-align: center;
     height: 200px;
@@ -114,10 +139,6 @@ a {
     cursor: pointer;
     }
 
-* {
-    box-sizing: border-box;
-    }
-
 img {
     max-width: 100%;
     }
@@ -146,12 +167,12 @@ code {
 .navbar {
     height: 70px;
     width: 100%;
-    background: white;
+    background: var(--color-white);
     position: fixed;
     top: 0;
     padding: 0 10vw;
     font-weight: bold;
-    border-bottom: 1px solid var(--color-gray);
+    border-bottom: 1px solid var(--color-border);
     z-index: 99;
     transition: 0.2s all ease-in-out;
     }
@@ -182,7 +203,7 @@ code {
 /* Buttons */
 
 .btn, button {
-    background-color: var(--color-gray);
+    background-color: var(--color-border);
     border: none;
     color: var(--color-text);
     padding: 1rem 2rem;
@@ -231,12 +252,12 @@ button.btn-green {
     }
 
 button.btn-google {
-
+        position: relative;
     }
 
 .btn-google img {
-    width: 30px;
     margin-right: 10px;
+    object-fit: contain;
     }
 
 button.btn-logo {
@@ -258,8 +279,8 @@ button.btn-logo {
 .card {
     padding: 1.5rem;
     margin: 1rem 0;
-    background-color: white;
-    border: 1px solid var(--color-gray);
+    background-color: var(--post-color);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     }
 
@@ -378,10 +399,10 @@ input[type="file"] {
     }
 
 .blockquote {
-    background-color: white;
+    background-color: var(--post-color);
     border-radius: 8px;
     padding: 10px;
-    border: 1px solid var(--color-gray);
+    border: 1px solid var(--color-border);
     }
 
 .blockquote p {
@@ -412,13 +433,13 @@ input[type="file"] {
     z-index: 98;
     color: #333;
     border-radius: 7px;
-    border: 2px solid var(--color-gray);
+    border: 2px solid var(--color-border);
     position: fixed;
     top: 74.5px;
     right: 0;
     transform: translateX(84%);
     transition: all 0.3s ease-in-out;
-    background-image: linear-gradient(45deg, #fff 40%, #3B49DF54);
+    background-color: var(--color-bg),
     }
 
 .donate-popup:hover {
@@ -447,7 +468,7 @@ input[type="file"] {
 .delimeter {
     width: 100%;
     height: 3px;
-    background-color: darkviolet;
+    background-color: var(--color-border);
     }
 
 .no-padding {
@@ -458,13 +479,19 @@ input[type="file"] {
     padding: 7px 10px;
     font-family: 'Noto Sans', sans-serif;
     border-radius: 3px;
+    background-color: var(--color-white);
+    filter: brightness(var(--small-highlight));
     }
+
+.darkModeSwitcher{
+    padding: 5px;
+}
 
 .language-option{
     font-family: inherit;
     padding: 3px 6px;
     border: none;
-    color: darkviolet;
+    color: var(--color-text);
     }
 
 .draggedOver{
@@ -488,3 +515,7 @@ input[type="file"] {
 .hideTop{
     translate: 0 -100%;
     }
+
+.MuiInputBase-adornedStart{
+    background-color: initial !important;
+}

@@ -1,19 +1,24 @@
-import { motion } from 'framer-motion';
-import React, { ReactNode } from 'react';
+import {motion} from 'framer-motion';
+import React, {ReactNode} from 'react';
+import {useRouter} from "next/router";
 
 const AnimatePage = ({children}: {children: ReactNode}) => {
    const variants = {
-      hidden: {opacity: 0, x: 0, y: 0, transition: {duration: 0.5, bounce: 1}},
-      enter: {opacity: 1, x: 0, y: 0, transition: {duration: 0.5, bounce: 1}},
-      exit: {opacity: -1, x: 0, y: 0, transition: {duration: 0.5, bounce: 1}},
+       hidden: { opacity: -1, x: 0, y: 0 },
+       enter: { opacity: 1, x: 0, y: 0 },
+       exit: { opacity: 0, x: 0, y: 0 },
    }
+
+   const {route} = useRouter();
+
    return (
        <motion.div
+           key={route}
+           whileInView='enter'
            variants = {variants}
-           initial = "hidden"
-           animate = "enter"
-           exit = "exit"
-           transition = {{type: 'spring'}}
+           initial="hidden"
+           exit={{opacity: 0, x: 0, y: 0, transition: {duration: 3}}}
+           transition={{ type: 'tween' }}
        >
           {children}
        </motion.div>

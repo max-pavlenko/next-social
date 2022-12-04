@@ -1,11 +1,11 @@
-import { Head, Html, Main, NextScript } from 'next/document'
+import {Head, Html, Main, NextScript} from 'next/document'
 
 export default function Document() {
    return (
        <Html>
           <Head>
-             <link rel = "manifest" href = "/manifest.json"/>
 
+              <meta name='description' content='Universe of ultimate skills & experience sharing'/>
              <meta name = "mobile-web-app-capable" content = "yes"/>
              <meta name = "apple-mobile-web-app-capable" content = "yes"/>
              <meta name = "application-name" content = "NXT"/>
