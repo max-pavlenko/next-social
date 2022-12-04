@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-const MetaTags = ({desc, imagePath = process.env.NEXT_PUBLIC_SERVER_URL_PROD + '/images/billy-sky.jfif', title}: {title: string, desc: string, imagePath?: string}) => {
+const MetaTags = ({desc, imagePath = process.env.NEXT_PUBLIC_SERVER_URL_PROD + '/images/billy-sky.png', title}: {title: string, desc: string, imagePath?: string}) => {
     const img = imagePath;
     let computedTitle = title ? title + ' | NXT' : '- NXT -';
     if (title === 'undefined') computedTitle = 'Loading...'
