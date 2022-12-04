@@ -14,7 +14,7 @@ const AnimatePage = ({children}: {children: ReactNode}) => {
    return (
        <motion.div
            key={route}
-           animate='enter'
+           whileInView='enter'
            variants = {variants}
            initial="hidden"
            exit={{opacity: 0, x: 0, y: 0, transition: {duration: 0.15}}}
