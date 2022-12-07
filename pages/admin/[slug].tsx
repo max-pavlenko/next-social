@@ -1,20 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import AuthCheck from '../../components/utils/AuthCheck';
-import { useRouter } from 'next/router';
-import { auth, firestore, serverTimestamp } from '../../libs/firebase';
+import {useRouter} from 'next/router';
+import {auth, firestore, serverTimestamp} from '../../libs/firebase';
 import styles from '../../styles/Admin.module.scss';
-import { useDocumentDataOnce, } from 'react-firebase-hooks/firestore';
-import PostFormEdit, { AdditionalImageData } from '../../components/Forms/PostFormEdit';
-import { IPost } from '../../models/Post';
-import { Button, Typography } from '@mui/material';
-import { toastModal } from '../../utils/toastModal';
-import { invertBool } from '../../utils/helpers';
+import {useDocumentDataOnce,} from 'react-firebase-hooks/firestore';
+import PostFormEdit, {AdditionalImageData} from '../../components/Forms/PostFormEdit';
+import {IPost} from '../../models/Post';
+import {Button, Typography} from '@mui/material';
+import {toastModal} from '../../utils/toastModal';
+import {invertBool} from '../../utils/helpers';
 import AnimatePage from '../../components/utils/AnimatePage';
-import { useLocale } from '../../translations/useLocale';
+import {useLocale} from '../../translations/useLocale';
 import MetaTags from '../../components/utils/MetaTags';
 import firebase from 'firebase/compat';
 import Loader from '../../components/layout/Loader';
+import {usePreventUserFromErasingContent} from '../../libs/hooks/usePreventUserFromErasingContent';
 import DocumentData = firebase.firestore.DocumentData;
+
 
 const AdminPostEdit = () => {
 
@@ -36,6 +38,8 @@ function PostManager() {
    const post = postData as IPost;
    const user = useRef<DocumentData | undefined>(undefined);
    const l = useLocale();
+   const [areChangesSaved, setAreChangesSaved] = useState(false);
+   usePreventUserFromErasingContent(!areChangesSaved)
    console.log(post, postRef);
 
    useEffect(() => {
@@ -71,7 +75,7 @@ function PostManager() {
           {post ? (
               <>
                  <section>
-                    <PostFormEdit onSubmitEdit = {handleEditFormSubmit} defaultValuePost = {post}
+                    <PostFormEdit setChangesSaved={setAreChangesSaved} onSubmitEdit = {handleEditFormSubmit} defaultValuePost = {post}
                                   isPreview = {isPreview}/>
                  </section>
 

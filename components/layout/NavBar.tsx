@@ -2,7 +2,7 @@ import {Button} from "@mui/material";
 import User from "../../store/User";
 import {observer} from "mobx-react-lite";
 import Image from "next/image";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import Loader from "./Loader";
 import {useRouter} from "next/router";
 import MenuAccount from "./MenuAccount";
@@ -17,6 +17,9 @@ import LocalesNames from '../../translations/localesNames';
 import {useLocale} from '../../translations/useLocale';
 import useLessThenMediaQuery from '../../libs/hooks/useLessThenMediaQuery';
 import NightModeSwitch from "../utils/NightModeSwitch";
+
+const debounce = require('lodash.debounce');
+
 
 const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const [ isLoading, setIsLoading ] = useState(false);
@@ -33,6 +36,22 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const flagCode = router.locale === 'en' ? 'us' : router.locale;
    const langOptionRef = useRef<HTMLOptionElement>(null);
    const {isScreenWidthLessThen400} = useLessThenMediaQuery(400);
+   const [isNavBarVisible, setIsNavBarVisible] = useState(true);
+   const previousY = useRef(0);
+
+   const handleScroll = e => {
+      console.log('debounce')
+      setIsNavBarVisible(previousY.current > window.scrollY);
+      previousY.current = window.scrollY;
+   }
+   const handleScrollDebounced = useCallback(debounce(handleScroll, 150), []);
+
+   useEffect(() => {
+      document.addEventListener('scroll', handleScrollDebounced);
+      return () => {
+         document.removeEventListener('scroll', handleScrollDebounced)
+      }
+   }, []);
 
    function handleLoadComplete() {
       setIsLoading(false);
@@ -93,7 +112,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
    }
 
    return (
-       <nav className = {`navbar ${classname}`}>
+       <nav className = {`navbar ${classname} ${isNavBarVisible ? '' : 'hideTop'}`}>
           <ul>
              <li style={{display: "flex", alignItems: "center", gap: '15px'}}>
                 {!isScreenWidthLessThen400 && <LinkWithoutScroll href = "/">
@@ -193,6 +212,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
                           <Button
                               variant = "contained"
                               color = "secondary"
+                              style={{whiteSpace: 'nowrap'}}
                               className = "btn-blue"
                           >
                              {l.logIn}

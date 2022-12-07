@@ -1,5 +1,5 @@
-import { IPost } from "../../models/Post";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {IPost} from "../../models/Post";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import ReactMarkdown from "react-markdown/with-html";
 import {
    Button,
@@ -12,16 +12,16 @@ import {
    Typography,
 } from "@mui/material";
 import styles from "../../styles/Admin.module.scss";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { hanlePasteImage, invertBool, iterateOverFiles, toastNotify, } from "../../utils/helpers";
+import {ChangeEvent, Dispatch, useEffect, useRef, useState} from "react";
+import {hanlePasteImage, invertBool, iterateOverFiles, toastNotify,} from "../../utils/helpers";
 import ImageUploader from "../layout/ImageUploader";
-import { useLocale } from "../../translations/useLocale";
+import {useLocale} from "../../translations/useLocale";
 import useLessThenMediaQuery from "../../libs/hooks/useLessThenMediaQuery";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 import UseDnD from "../../libs/hooks/useDnD";
 import ImageSlider from "../layout/ImageSlider";
-import { useIntersection } from "../../libs/hooks/useIntersection";
+import {useIntersection} from "../../libs/hooks/useIntersection";
 
 export interface EditForm {
    content: string;
@@ -38,8 +38,10 @@ function PostFormEdit({
                          isPreview,
                          defaultValuePost,
                          onSubmitEdit,
+                         setChangesSaved,
                       }: {
    isPreview: boolean;
+   setChangesSaved: Dispatch<boolean>,
    defaultValuePost: IPost;
    onSubmitEdit: (
        title: string,
@@ -70,6 +72,7 @@ function PostFormEdit({
    );
    const intersectBtnDownRef = useRef<HTMLDivElement>(null);
    const [ isBtnDownVisible, setIsBtnDownVisible ] = useState(true);
+
    useIntersection(
        intersectBtnDownRef.current,
        false,
@@ -96,6 +99,7 @@ function PostFormEdit({
                                                            content: contentFromForm,
                                                            isPublished,
                                                         }) => {
+      setChangesSaved(true)
       await toastNotify(
           {successText: "saved the post"},
           {
@@ -220,12 +224,12 @@ function PostFormEdit({
                     >
                        <span>{defaultValuePost.slug}</span>
 
-                       <label htmlFor = "file">
+                       <label style={{whiteSpace: 'nowrap'}} htmlFor = "file">
                           <Typography
                               sx = {{cursor: "pointer", mr: "5px"}}
                               variant = "caption"
                           >
-                             Paste, DnD or choose photos
+                             Paste, DnD or choose additional photos
                           </Typography>
                           <IconButton size = "large" onClick = {handleFilesAttach}>
                              <AttachFileOutlinedIcon/>

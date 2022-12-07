@@ -1,9 +1,9 @@
-import { ReactElement } from "react";
+import {ReactElement} from "react";
 import User from "../../store/User";
-import { observer } from "mobx-react-lite";
-import { Button, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { auth } from '../../libs/firebase';
+import {observer} from "mobx-react-lite";
+import {Button, Typography} from "@mui/material";
+import {useRouter} from "next/router";
+import {auth} from '../../libs/firebase';
 import LinkWithoutScroll from './LinkWithoutScroll';
 import MetaTags from './MetaTags';
 
@@ -25,11 +25,9 @@ const AuthCheck = observer(({
        if (!shouldShowAccessText && userIsNotLoggedIn)
           return (
               <LinkWithoutScroll href = "/enter">
-
                     <Button size = "large" variant = "outlined">
                        Log in 🎀
                     </Button>
-
               </LinkWithoutScroll>
           );
 
@@ -46,7 +44,7 @@ function RestrictedText({additionalText = ""}: { additionalText?: string }) {
        <Typography variant = "h5" textAlign = "center">
           <MetaTags title='Not Authorized' desc='Please, authorize to proceed' />
           You must be logged in{additionalText || ""} to have an access.&nbsp;
-          <LinkWithoutScroll style = {{color: "peru"}} href = "/enter">
+          <LinkWithoutScroll style = {{color: "var(--color-blue)", fontWeight: 600}} href = "/enter">
              Log In
           </LinkWithoutScroll>
        </Typography>

@@ -25,7 +25,7 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
    const l = useLocale();
    const {isScreenWidthLessThen370} = useLessThenMediaQuery(370);
    const {user: {lightMode}} = User;
-    console.log('dark md', lightMode)
+    const actionsColor = lightMode ? 'inherit' : 'primary';
 
    const handleEdit: MouseEventHandler<HTMLButtonElement> = async(ev) => {
       const e = ev as unknown as MouseEvent;
@@ -33,11 +33,11 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
       await router.push(`admin/${post.slug}`)
    }
    const {menuElement, handleClick} = useMenu(<div style={{display: 'flex', paddingInline: '0.2rem'}}>
-      <IconButton onClick = {handleEdit}>
+      <IconButton color={actionsColor} onClick = {handleEdit}>
          <ModeEditOutlineOutlinedIcon/>
       </IconButton>
 
-      <IconButton onClick = {confirmDeletion}>
+      <IconButton color={actionsColor} onClick = {confirmDeletion}>
          <DeleteOutlineSharp/>
       </IconButton>
    </div>, {horizontal: 'left', vertical: 'top'});
@@ -92,16 +92,16 @@ function PostItem({post, isConfigurable,}: { post: IPost; isConfigurable: boolea
                    <span style={{marginLeft: "auto"}}>
                  {!isScreenWidthLessThen370
                      ? <>
-                         <IconButton  onClick={handleEdit}>
+                         <IconButton color={actionsColor}  onClick={handleEdit}>
                              <ModeEditOutlineOutlinedIcon/>
                          </IconButton>
 
-                         <IconButton onClick={confirmDeletion}>
+                         <IconButton color={actionsColor} onClick={confirmDeletion}>
                              <DeleteOutlineSharp/>
                          </IconButton>
                      </>
                      : <>
-                         <IconButton onClick={handleClick}>
+                         <IconButton color={actionsColor} onClick={handleClick}>
                              <MoreVertOutlinedIcon/>
                          </IconButton>
                          {menuElement}

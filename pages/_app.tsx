@@ -9,53 +9,38 @@ import {Router, useRouter} from 'next/router';
 import {ContextMenu} from '../components/utils/contextMenu';
 import Loader from '../components/layout/Loader';
 import "../node_modules/flag-icons/css/flag-icons.min.css";
-import {Poppins} from '@next/font/google'
 import {Analytics} from '@vercel/analytics/react';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import MetaTags from '../components/utils/MetaTags';
 import {AnimatePresence} from "framer-motion";
-import {getDesignTokens, setModeFromLS} from "../utils/helpers";
+import {getDesignTokens, setModeFromLS, switchMode} from "../utils/helpers";
 import {observer} from "mobx-react-lite";
 import User from '../store/User';
 
 
 NProgress.configure({showSpinner: true});
 Router.events.on('routeChangeStart', NProgress.start);
-
 Router.events.on('routeChangeError', NProgress.done);
-
 Router.events.on('routeChangeComplete', NProgress.done)
 
-const poppins = Poppins({
-    style: ['normal', 'italic'],
-    weight: ['400', '600'],
-    preload: true,
-    fallback: ['Roboto', 'Arial', 'sans'],
-});
+// const poppins = Poppins({
+//     style: ['normal', 'italic'],
+//     weight: ['400', '600'],
+//     preload: true,
+//     fallback: ['Roboto', 'Arial', 'sans'],
+// });
 
 function MyApp({Component, pageProps}) {
-    const previousY = useRef(0);
-    const [isNavBarVisible, setIsNavBarVisible] = useState(true);
     const {isAuthenticating} = useUserData();
     const router = useRouter()
-    const url = `https://wallis.dev${router.route}`
+    const url = `${router.route}`
     const {user: {lightMode}} = User;
 
     useEffect(() => {
-        setModeFromLS();
-        const locale = localStorage.getItem('locale')
+        localStorage.getItem('mode') ? setModeFromLS() : switchMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+        const locale = localStorage.getItem('locale');
         if (locale && locale !== router.defaultLocale) router.replace(router.pathname, router.asPath, {locale});
-
-        document.addEventListener('scroll', handleScroll);
-        return () => {
-            document.removeEventListener('scroll', handleScroll)
-        }
     }, [])
-
-    const handleScroll = e => {
-        setIsNavBarVisible(previousY.current >= window.scrollY);
-        previousY.current = window.scrollY;
-    }
 
     const theme = useMemo(() => createTheme(getDesignTokens(lightMode ? 'light' : 'dark')), [lightMode]);
 
@@ -65,10 +50,11 @@ function MyApp({Component, pageProps}) {
 
     return (
         <ThemeProvider theme={theme}>
-            <NavBar classname={isNavBarVisible ? '' : 'hideTop'}/>
+            <NavBar/>
             <AnimatePresence mode='wait' onExitComplete={() => window.scrollTo(0, 0)}>
                 <Component key={url} {...pageProps} />
             </AnimatePresence>
+
             <ContextMenu/>
             <Analytics/>
             <Toaster/>

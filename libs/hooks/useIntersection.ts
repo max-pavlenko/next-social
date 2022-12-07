@@ -1,10 +1,10 @@
-import { INTERSECTION_MARGIN } from '../../utils/constants';
+import {INTERSECTION_MARGIN} from '../../utils/constants';
 
 export const useIntersection = (element: HTMLElement | null, additionalReturnPredicate = false,  fnAfterIntersection: () => void, fnElse: () => void, intersectMargin = INTERSECTION_MARGIN) => {
     let observer;
     const intersectCb: IntersectionObserverCallback = function (entries) {
         const [ entry ] = entries;
-        if (!entry.isIntersecting || additionalReturnPredicate || entry.intersectionRatio!==1) {
+        if (!entry.isIntersecting || additionalReturnPredicate) {
             fnAfterIntersection();
             return;
         }
