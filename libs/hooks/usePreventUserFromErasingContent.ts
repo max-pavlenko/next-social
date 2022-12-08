@@ -6,11 +6,12 @@ export function usePreventUserFromErasingContent(shouldPreventLeaving) {
 
     useEffect(() => {
         // Prevents tab quit / tab refresh
+        function handleBeforeUnload() {
+            return stringToDisplay;
+        }
         if (shouldPreventLeaving) {
             // Adding window alert if the shop quits without saving
-            window.onbeforeunload = function () {
-                return stringToDisplay;
-            };
+            window.addEventListener('beforeunload', handleBeforeUnload)
         } else {
             window.onbeforeunload = () => {};
         }
@@ -27,6 +28,7 @@ export function usePreventUserFromErasingContent(shouldPreventLeaving) {
         }
         return () => {
             delete SingletonRouter.router.change;
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         };
     }, [shouldPreventLeaving]);
 }

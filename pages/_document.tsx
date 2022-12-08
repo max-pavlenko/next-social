@@ -4,7 +4,7 @@ export default function Document() {
    return (
        <Html>
           <Head>
-
+              <link rel="manifest" crossOrigin="use-credentials" href="/manifest.json" />
               <meta name='description' content='Universe of ultimate skills & experience sharing'/>
              <meta name = "mobile-web-app-capable" content = "yes"/>
              <meta name = "apple-mobile-web-app-capable" content = "yes"/>
@@ -20,7 +20,6 @@ export default function Document() {
              <link rel = "icon" type = "image/png" sizes = "128x128" href = "/icons/icon-128x128.png"/>
              <link rel = "icon" type = "image/png" sizes = "144x144" href = "/icons/icon-144x144.png"/>
              <link rel = "icon" type = "image/png" sizes = "152x152" href = "/icons/icon-152x152.png"/>
-             <link rel = "icon" type = "image/png" sizes = "192x192" href = "/icons/icon-192x192.png"/>
              <link rel = "icon" type = "image/png" sizes = "384x384" href = "/icons/icon-384x384.png"/>
              <link rel = "icon" type = "image/png" sizes = "512x512" href = "/icons/icon-512x512.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "72x72" href = "/icons/icon-72x72.png"/>
@@ -28,7 +27,6 @@ export default function Document() {
              <link rel = "apple-touch-icon" type = "image/png" sizes = "128x128" href = "/icons/icon-128x128.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "144x144" href = "/icons/icon-144x144.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "152x152" href = "/icons/icon-152x152.png"/>
-             <link rel = "apple-touch-icon" type = "image/png" sizes = "192x192" href = "/icons/icon-192x192.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "384x384" href = "/icons/icon-384x384.png"/>
              <link rel = "apple-touch-icon" type = "image/png" sizes = "512x512" href = "/icons/icon-512x512.png"/>
           </Head>
