@@ -6,14 +6,14 @@ import { invertBool } from '../../../utils/helpers';
 import { UsernameFormModes } from '../../../models/Form';
 import { FirebaseUser } from '../../../models/User';
 import { auth, firestore } from '../../../libs/firebase';
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from 'next/image';
 
 const UserProfile = ({user}: { user: FirebaseUser }) => {
    const [ isEditingUsername, setIsEditingUsername ] = useState(false);
    const uid = auth.currentUser?.uid;
-   const userRef = firestore.collection('users').doc(uid);
-   const [ userFetched ] = useDocumentDataOnce<FirebaseUser>(userRef);
+   const userRef = uid && firestore.collection('users').doc(uid);
+   const [ userFetched ] = useDocumentData<FirebaseUser>(userRef || null);
 
    function handleEditUsername() {
       setIsEditingUsername(invertBool);

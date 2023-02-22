@@ -1,0 +1,27 @@
+.items{
+  display: flex;
+  gap: 4vmin;
+  user-select: none;
+  flex-flow: row nowrap;
+  overflow-x: scroll;
+  cursor: grab;
+
+  &::-webkit-scrollbar{
+    height: 6px;
+    cursor: default !important;
+  }
+
+  &::-webkit-scrollbar-thumb{
+    background-color: var(--color-border);
+    border-radius: 8px;
+  }
+
+  & > *{
+    width: 40vmin;
+    user-select: none;
+    height: 56vmin;
+    object-fit: cover;
+    object-position: 50% center;
+    pointer-events: auto;
+  }
+}

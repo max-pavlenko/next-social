@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import User from '../../store/User';
 import { Button, Grid, Stack, TextField } from '@mui/material';
 import { firestore } from '../../libs/firebase';
@@ -21,19 +21,20 @@ const UsernameForm = observer(({
                                    { onSubmit?: () => void, mode?: UsernameFormModes }) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const [ isValid, setIsValid ] = useState(false);
-   const {displayName, uid} = User.user.data;
+   const displayName = User.user.data?.displayName;
+   const uid = User.user.data?.uid;
    const {photoURL, user: {username}} = User;
    const router = useRouter();
-   let photoURLBlob;
+   let photoURLBlob: Blob | null = null;
    const isntPhotoURL = !photoURL?.startsWith('http')
    isntPhotoURL && fetch(photoURL).then(res => res.blob()).then(blob => photoURLBlob = blob);
-   const [ enteredName, setEnteredName ] = useState(username || displayName);
+   const [ enteredName, setEnteredName ] = useState<string>(username || displayName || '');
 
    useEffect(() => {
       checkUsername(enteredName);
    }, [ enteredName ]);
 
-   async function handleUsernameSubmit(e) {
+   async function handleUsernameSubmit(e: SubmitEvent) {
       e.preventDefault();
       if (!isValid) return;
 
@@ -58,7 +59,7 @@ const UsernameForm = observer(({
       }
    }
 
-   function handleNameChange(e) {
+   function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
       const targetValue = e.target.value;
       const inputVal = targetValue.toLowerCase().trim();
       const regex = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
@@ -71,7 +72,8 @@ const UsernameForm = observer(({
       setEnteredName(targetValue);
    }
 
-   const checkUsername = useCallback(debounce(async (username) => {
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   const checkUsername = useCallback(debounce(async (username: string) => {
       if (!username) return;
 
       if (username.length < 3) {
@@ -93,6 +95,7 @@ const UsernameForm = observer(({
       downloadFile('image', fileBlob)
    }
 
+   // @ts-ignore
    return <form onSubmit = {handleUsernameSubmit}>
       <Grid container spacing = {3}>
          <Grid mx = 'auto' style = {{
@@ -113,7 +116,7 @@ const UsernameForm = observer(({
           <Stack sx={{alignItems: 'center'}}>
               <div><Image height = {250} width = {250} style = {{margin: '0 auto', objectFit: 'cover'}} src = {photoURL} alt = 'Preview user avatar'/>
               </div>
-             {isntPhotoURL && <Button sx = {{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name', photoURLBlob)}
+             {isntPhotoURL && <Button sx = {{mt: 2}} onClick = {() => handleDownloadImage(photoURL, 'name', photoURLBlob!)}
                       variant = 'outlined'>
                 Download image
              </Button>}

@@ -8,20 +8,20 @@ const AnimatePage = ({children}: {children: ReactNode}) => {
        enter: { opacity: 1, x: 0, y: 0 },
        exit: { opacity: 0, x: 0, y: 0 },
    }
+  const {route} = useRouter();
 
-   const {route} = useRouter();
 
    return (
-       <motion.div
-           key={route}
-           whileInView='enter'
-           variants = {variants}
-           initial="hidden"
-           exit={{opacity: 0, x: 0, y: 0, transition: {duration: 0.15}}}
-           transition={{ type: 'tween' }}
+       <div
+           // key={route}
+           // whileInView='enter'
+           // variants = {variants}
+           // initial="hidden"
+           // exit={{opacity: 0, x: 0, y: 0}}
+           // transition={{ type: 'tween', duration: 0.35 }}
        >
           {children}
-       </motion.div>
+       </div>
    );
 };
 

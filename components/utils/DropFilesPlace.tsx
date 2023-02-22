@@ -1,11 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-
-interface OwnProps {}
-
-type Props = OwnProps;
-
-const DropFilesPlace: FunctionComponent<Props> = ({}) => {
+const DropFilesPlace = ({}) => {
 
   return (
       <div style={{width: '100%', height: '100%', display: 'flex',justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>

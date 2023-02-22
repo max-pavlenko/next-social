@@ -10,6 +10,9 @@ import { IPost } from '../../models/Post';
 import { FirebaseUser } from '../../models/User';
 import { observer } from 'mobx-react-lite';
 import AnimatePage from '../../components/utils/AnimatePage';
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import Breadcrumbs from "../../components/utils/Breadcrumbs";
 
 export interface UpdatePasswordForm {
    newPassword: string,
@@ -41,7 +44,7 @@ const UserProfilePage = observer(({
               }}>
                   <Typography component = 'span' variant = 'h5'>Favorite quote:</Typography>
                  {quoteIdExists ?
-                     <QuotesBlock quoteId = {user.favoriteQuoteData._id} Loader = {<Loader />}/>
+                     <QuotesBlock quoteId = {user.favoriteQuoteData?._id} Loader = {<Loader />}/>
                      : <Typography component = 'span' variant = 'h5'>not chosen yet</Typography>
                  }</div>
              {realtimePosts && <PostFeed posts = {realtimePosts}/>}
@@ -51,7 +54,7 @@ const UserProfilePage = observer(({
    );
 });
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps({query}: GetServerSideProps) {
    const {username} = query;
 
    const userDoc = await getUserWithUsername(username);

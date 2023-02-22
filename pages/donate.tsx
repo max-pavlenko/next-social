@@ -6,6 +6,8 @@ import AnimatePage from '../components/utils/AnimatePage';
 import {useLocale} from '../translations/useLocale';
 import MetaTags from '../components/utils/MetaTags';
 import {motion} from 'framer-motion';
+import LinkWithoutScroll from "../components/utils/LinkWithoutScroll";
+import Breadcrumbs from "../components/utils/Breadcrumbs";
 
 interface IPrice extends Stripe.Price {
 }
@@ -50,7 +52,7 @@ const DonatePage = ({prices}: IProps) => {
 
    return (
        <AnimatePage>
-          <MetaTags title='Donation' desc='Donate to support our work, and enhance your life' />
+          <MetaTags title='Donation' desc='Donate to support our work, and eventually enhance our future' />
           <Container>
              <Typography variant = 'h4' textAlign = 'center'>{l.donationDescription}! ✨
              </Typography>
@@ -70,7 +72,7 @@ const DonatePage = ({prices}: IProps) => {
                 <Grid alignItems = 'center' textAlign = 'center' item xs = {4}>
                    <motion.div animate='enter'
                                variants = {variants}
-                               viewport={{once: false, amount: 0.2}}
+                               viewport={{once: false,  amount: 0.2}}
                                initial="hidden"
                                exit='exit'
                                transition={{type: 'tween', duration: 0.3, delay: 0.5}}>
@@ -81,6 +83,20 @@ const DonatePage = ({prices}: IProps) => {
                       </span>
                    </Button>
                    </motion.div>
+                </Grid>
+                <Grid justifyContent = 'center' mt={1} container>
+                   <Grid item>
+                      <motion.div animate='enter'
+                                  variants = {variants}
+                                  viewport={{once: false, amount: 0.2}}
+                                  initial="hidden"
+                                  exit='exit'
+                                  transition={{type: 'tween', duration: 0.3, delay: 0.7}}>
+                         <LinkWithoutScroll className='highlight' href="/about-us">
+                            Why you should trust us
+                         </LinkWithoutScroll>
+                      </motion.div>
+                   </Grid>
                 </Grid>
              </Grid>
           </Container>

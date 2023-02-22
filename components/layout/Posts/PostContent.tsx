@@ -12,11 +12,12 @@ const PostContent = ({post}: { post: IPost }) => {
    const router = useRouter();
    const {username} = router.query;
    const createdAt = typeof post.createdAt === 'number' ? new Date(post.createdAt) : (post.createdAt as Timestamp).toDate();
-   const [ displayDate, setDisplayDate ] = useState('');
+   const [ displayDate, setDisplayDate ] = useState<Date | null>(null);
    useEffect(() => {
       console.log('createdAt', createdAt)
-      setDisplayDate(createdAt.toISOString())
+      setDisplayDate(createdAt)
    }, []);
+   const dateFormatter = new Intl.DateTimeFormat(router.locale, {dateStyle: 'medium', timeStyle: 'short'})
 
    return (
        <>
@@ -25,11 +26,9 @@ const PostContent = ({post}: { post: IPost }) => {
              <Typography variant = 'caption' className = 'text-sm'>
                 Written by&nbsp;
                 <LinkWithoutScroll className = 'text-info' href = {`/${username}`}>
-
                    @{username as string}
-
                 </LinkWithoutScroll>
-                &nbsp;on {displayDate || 0}
+                &nbsp;on {dateFormatter.format(displayDate!) || 0}
              </Typography>
 
              <ReactMarkdown>{post?.content}</ReactMarkdown>

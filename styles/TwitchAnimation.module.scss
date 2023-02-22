@@ -1,0 +1,100 @@
+.main {
+  width: 200px;
+  height: 200px;
+  background: var(--color-blue);
+  border-left: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  box-shadow: 0 0 0 transparent;
+  border-radius: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.wrapper{
+  width: min-content;
+  position: relative;
+
+  &:hover{
+    & .main{
+      transform: translate(12px, -12px);
+      filter: drop-shadow(-12px 12px 0 var(--color-blue-accent));
+    }
+
+    & .rect {
+      scale: 1;
+    }
+
+    & .topRect {
+      transform: translate(6px, -9px);
+    }
+
+    & .rightRect {
+      transform: translate(8.5px, -5px);
+    }
+
+    & .eye{
+      animation: .4s double-blink alternate;
+    }
+  }
+}
+//
+//*{
+//  transition: 0.15s;
+//}
+
+.rect {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  scale: 0;
+}
+
+.topRect{
+  border-right: 12px solid var(--color-blue-accent);
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  background: transparent;
+  left: 0;
+  top: 0;
+}
+
+.rightRect{
+  border-right: 12px solid transparent;
+  border-left: 12px solid transparent;
+  border-top: 12px solid var(--color-blue-accent);
+  background: transparent;
+  right: 0;
+  bottom: 0;
+}
+
+.eye {
+  position: absolute;
+  top: 40%;
+  width: 3px;
+  background: #fff;
+  height: 25%;
+}
+
+.eyeLeft{
+  left: 40%;
+}
+.eyeRight{
+  right: 45%;
+}
+
+@keyframes double-blink{
+  0% {
+    transform: scaleY(1);
+  }
+  25% {
+    transform: scaleY(0);  }
+  50% {
+    transform: scaleY(1);
+  }
+  75% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}

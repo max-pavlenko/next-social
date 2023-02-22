@@ -1,0 +1,43 @@
+.dragArea{
+  background-color: var(--color-white);
+  backdrop-filter: brightness(var(--small-highlight));
+  margin-inline: auto;
+  user-select: none;
+  display: grid;
+  place-content: center;
+  cursor: move;
+
+  max-height: 0;
+  overflow: hidden;
+}
+
+.dragContainer{
+  border: 2px solid var(--color-border);
+  position: fixed;
+  transition: 0.15s all ease-in-out;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+.dragContent{
+  background: var(--color-bg);
+  padding: 8px 10px;
+  overflow-y: auto;
+  position: relative;
+  height: 120px;
+
+  &::-webkit-scrollbar{
+    width: 6px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb{
+    background-color: var(--color-border);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-track{
+    background-color: var(--color-white);
+    backdrop-filter: brightness(var(--small-highlight));
+  }
+}

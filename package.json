@@ -18,6 +18,7 @@
     "@next/font": "^13.0.3",
     "@stripe/react-stripe-js": "^1.13.0",
     "@stripe/stripe-js": "^1.41.0",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react-image-magnify": "^2.7.1",
     "@vercel/analytics": "^0.1.5",
     "add": "^2.0.6",
@@ -36,6 +37,7 @@
     "next-pwa": "^5.6.0",
     "next-stripe": "1.0.0-beta.8",
     "nprogress": "^0.2.0",
+    "prettier": "^2.8.1",
     "react": "18.2.0",
     "react-confetti": "^6.1.0",
     "react-dom": "18.2.0",
@@ -55,6 +57,7 @@
   },
   "devDependencies": {
     "@types/node": "18.7.18",
+    "@types/nprogress": "^0.2.0",
     "@types/react": "18.0.20",
     "eslint": "8.23.1",
     "eslint-config-next": "13.0.3",

@@ -1,6 +1,7 @@
 import {createTheme} from '@mui/material';
 import {ToastOptions} from 'react-hot-toast';
 import {onEmailClick, onTelegramClick} from '../pages/development';
+import username from "../pages/[username]";
 
 export const theme = createTheme({
    palette: {
@@ -20,7 +21,6 @@ export const theme = createTheme({
    },
 });
 
-const {NODE_ENV, NEXT_PUBLIC_SERVER_URL, NEXT_PUBLIC_SERVER_URL_PROD} = process.env
 export const INTERSECTION_MARGIN = 90;
 export const POSTS_PER_PAGE = 4;
 export const FALLBACK_IMAGE = '/images/default.png';
@@ -59,5 +59,26 @@ export const FEATURES_TO_DO = [
 export const FEEDBACK_MEANS = [
    {type: 'Telegram', color: 'blue', content: `@${TELEGRAM_NAME}`, clickHandler: onTelegramClick},
    {type: 'Email', color: 'red', content: EMAIL, clickHandler: onEmailClick},
+]
 
+type RouteBase = {
+   path: string,
+   href?: string
+}
+
+export interface NamedRoute extends RouteBase {
+   name: string;
+   nameFn?: never;
+}
+
+export interface NamedFnRoute extends RouteBase {
+   nameFn: (obj: Record<string, any>) => string;
+   name?: never;
+}
+
+export const ROUTES: (NamedRoute | NamedFnRoute)[] = [
+   {name: `Home`, path: '/', href: '/'},
+   {name: `Donation`, path: '/donate', href: '/'},
+   {nameFn: ({username}) => `User ${username}`, path: '/[username]', href: '/'},
+   {nameFn: ({ slug }) => `Post ${slug}`, path: '/[username]/[slug]', href: '/'},
 ]

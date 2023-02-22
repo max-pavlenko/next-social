@@ -1,0 +1,171 @@
+  .audioPlayer {
+    background: #111;
+    border-radius: 5px;
+    padding: 5px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 0 25px;
+  }
+
+  .audioName {
+    position: absolute;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    width: 100%;
+    left: 0;
+    z-index: 2;
+    text-transform: capitalize;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: 400;
+    top: calc(100% + 2px);
+    background: #111;
+    margin: 0;
+    border-radius: 3px;
+  }
+
+  .playBtn {
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    //background: url("./audio-player-icon-sprite.png") 0 center/500% 100% no-repeat;
+    appearance: none;
+    border: none;
+    overflow: hidden;
+
+    &.playing {
+      //background: url("./audio-player-icon-sprite.png") 25% center/500% 100% no-repeat;
+    }
+  }
+
+  .volumeBar {
+    display: grid;
+    place-content: center;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    position: relative;
+
+    &.half {
+    }
+    &.over {
+    }
+
+    &:hover .volumeField {
+      opacity: 1;
+      visibility: visible;
+      width: 200px;
+    }
+  }
+
+  .volumeField {
+    opacity: 0;
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    appearance: none;
+    height: 20px;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    margin: 0;
+    border-radius: 2px;
+    background: transparent;
+    padding: 8px 0;
+    //overflow: hidden;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      height: 15px;
+      width: 15px;
+      border-radius: 50%;
+      background: rgba(255,255,255 / 1);
+      z-index: 4;
+      outline: 3px solid var(--color-border);
+      //box-shadow: -275px -300px 0 290px orange;
+    }
+
+    //&::-webkit-slider-runnable-track{
+    //  background: red;
+    //  height: 10px;
+    //}
+
+    &::-webkit-slider-container{
+      background: rgba(255,255,255, 0.7);
+      //overflow: hidden;
+    }
+  }
+
+  .progressIndicator {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    flex: 1;
+    font-size: 12px;
+    align-items: center;
+    height: 20px;
+  }
+
+  .progressBar {
+    appearance: none;
+    padding: 0;
+    flex: 1;
+    background-color: var(--color-bg);
+    box-shadow: inset 0 0 5px var(--color-border);
+    height: var(--range-input-height);
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 7px;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      height: var(--range-input-height);
+      width: var(--range-input-height);
+      border-radius: 50%;
+      background: var(--color-blue-accent);
+      box-shadow: calc(-300px - var(--range-input-height) / 2) 0 0 300px var(--color-blue-accent);
+      border: 2px solid var(--color-white);
+      position: relative;
+    }
+  }
+
+  .duration,
+  .currentTime {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 2px #111;
+  }
+
+  .duration {
+    margin-left: 2px;
+    margin-right: 5px;
+
+    &::before {
+      content: '/';
+      display: inline-block;
+      margin-right: 2px;
+    }
+  }
+
+  .canvas {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    opacity: 0.4;
+  }
+
+  .sliderLeftShadow{
+    height: 4px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    background-color: #fff;
+    transition: 0.1s linear;
+  }

@@ -1,0 +1,16 @@
+.categories {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.FAQ {
+  container: faq / inline-size;
+}
+
+@container faq (max-width: 400px) {
+  .categories {
+    flex-wrap: wrap;
+  }
+}

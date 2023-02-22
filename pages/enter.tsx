@@ -12,6 +12,7 @@ import {useRouter} from 'next/router';
 const EnterPage = observer(() => {
    const {username} = User.user;
    const router = useRouter();
+
    return (
        <AnimatePage>
           <main>

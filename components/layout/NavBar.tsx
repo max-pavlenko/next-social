@@ -20,31 +20,30 @@ import NightModeSwitch from "../utils/NightModeSwitch";
 
 const debounce = require('lodash.debounce');
 
-
 const NavBar = observer(({classname = ''}: {classname?: string}) => {
    const [ isLoading, setIsLoading ] = useState(false);
    const {photoURL, user} = User;
    const router = useRouter();
    const [ userRealtime ] = useDocumentData(firestore.doc("users/" + auth.currentUser?.uid));
-   const [ userState, setUserState ] = useState(null);
+   const [ userState, setUserState ] = useState<typeof User>(null!);
    const {menuElement, handleClick} = useMenu(<DefaultMenuItems/>);
    const l = useLocale();
-   const languages = router.locales.map(locale => {
+   const languages = router.locales!.map(locale => {
       return {locale, langName: LocalesNames[locale] || 'unknown'}
    })
    const selectRef = useRef<HTMLSelectElement>(null);
-   const flagCode = router.locale === 'en' ? 'us' : router.locale;
+   let flagCode = router.locale === 'en' ? 'us' : router.locale;
+   flagCode = flagCode === 'ru' ? '' : flagCode;
    const langOptionRef = useRef<HTMLOptionElement>(null);
    const {isScreenWidthLessThen400} = useLessThenMediaQuery(400);
    const [isNavBarVisible, setIsNavBarVisible] = useState(true);
    const previousY = useRef(0);
 
    const handleScroll = e => {
-      console.log('debounce')
       setIsNavBarVisible(previousY.current > window.scrollY);
       previousY.current = window.scrollY;
    }
-   const handleScrollDebounced = useCallback(debounce(handleScroll, 150), []);
+   const handleScrollDebounced = useCallback(debounce(handleScroll, 50), []);
 
    useEffect(() => {
       document.addEventListener('scroll', handleScrollDebounced);
@@ -64,7 +63,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
    }, [ userRealtime ]);
 
    function handleLoadStart() {
-      setIsLoading(false);
+      setIsLoading(true);
    }
 
    // const navigationItems: { element: JSX.Element, path: string }[] = [
@@ -116,7 +115,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
           <ul>
              <li style={{display: "flex", alignItems: "center", gap: '15px'}}>
                 {!isScreenWidthLessThen400 && <LinkWithoutScroll href = "/">
-                   <button style = {{margin: 0}} className = "btn-logo">NXT</button>
+                      <button style={{ margin: 0 }} className="btn-logo">Swr</button>
                 </LinkWithoutScroll>}
                 <div style={{display: "flex", alignItems: "center", gap: 5}}>
                    <span className = {`fi fi-${flagCode}`}/>
@@ -187,7 +186,7 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
 
                     {user.username && (
                         <li>
-                           <a onClick = {handleClick}>
+                           <a style={{position: 'relative'}} onClick = {handleClick}>
                               <Image
                                   quality = {95}
                                   onLoadingComplete = {handleLoadComplete}
@@ -198,6 +197,16 @@ const NavBar = observer(({classname = ''}: {classname?: string}) => {
                                   src = {userState?.photoURL || photoURL || FALLBACK_IMAGE}
                                   alt = "User avatar"
                               />
+                              <div style={{
+                                 borderRadius: "50%",
+                                 backgroundColor: "limegreen",
+                                 width: 15,
+                                 height: 14,
+                                 position: "absolute",
+                                 bottom: 5,
+                                 right: 0,
+                                 border: "4px solid var(--color-white)"
+                              }} />
                            </a>
                            {menuElement}
                         </li>

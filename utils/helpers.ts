@@ -121,16 +121,16 @@ export function iterateOverFiles(files: FileList, resultCallback: ({file, url}: 
    }
 }
 
-export function switchMode(isDarkMode: boolean, callback: (isDarkMode: boolean) => void = () => {}) {
-   localStorage.setItem('mode', (isDarkMode).toString());
-   User.setDarkMode(isDarkMode);
-   const modeToDelete = isDarkMode === false ? 'light' : 'dark';
+export function switchMode(isLightMode: boolean, callback: (isDarkMode: boolean) => void = () => {}) {
+   localStorage.setItem('mode', (isLightMode).toString());
+   User.setDarkMode(isLightMode);
+   const modeToDelete = isLightMode === false ? 'light' : 'dark';
    const modeToToggle = modeToDelete === 'dark' ? 'light' : 'dark';
 
    document.documentElement.dataset[modeToToggle] = 'any value for this just to work';
    delete document.documentElement.dataset[modeToDelete];
 
-   callback(isDarkMode)
+   callback(isLightMode)
 }
 
 export function setModeFromLS(callback: (isDarkMode: boolean) => void = () => {}) {
