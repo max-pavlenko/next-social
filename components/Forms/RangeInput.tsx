@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from "react";
+import React, { DetailedHTMLProps, InputHTMLAttributes, useRef } from "react";
 import styles from "../../styles/RangeInput.module.scss";
 
 const RangeInput = ({
@@ -27,7 +27,7 @@ const RangeInput = ({
 export default RangeInput;
 
 export interface RangeInputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-  barClass?: string | undefined,
+  barClass?: string,
   barWidth?: string,
   barThumbSize?: string,
 }

@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import * as env from 'dotenv'
+import { NextApiRequest, NextApiResponse } from "next";
+import * as env from "dotenv";
 
 env.config();
 const stripe = require('stripe')(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }]
       })
       res.status(200).json({url: session.url});
-   } catch (e) {
+   } catch (e: any) {
       res.status(500).json(e.message);
       console.warn(e)
    }

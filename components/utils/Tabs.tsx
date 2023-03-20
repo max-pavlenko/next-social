@@ -1,7 +1,7 @@
-import React, {ReactNode, useState} from 'react';
+import React, { ReactNode, useState } from "react";
 import styles from "../../styles/AboutUs.module.scss";
-import {Typography} from "@mui/material";
-import {AnimatePresence, motion} from "framer-motion";
+import { ButtonBase, Typography } from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
 
 export type Tab = {title: string, content: ReactNode | string}
 
@@ -22,7 +22,7 @@ const Tabs = ({tabsData}: {tabsData: Tab[]}) => {
         <div className={styles.tabbedBox}>
             <div className={styles.tabsContainer}>
                 {tabsData.map(({title, content}, i) => (
-                    <a key={i} onClick={() => handleTabClick({title, content})}
+                    <ButtonBase component='div' key={i} onClick={() => handleTabClick({title, content})}
                        className={`${styles.tab} ${title === currentTab.title && styles.activeTab}`}>
                         <Typography style={{fontFamily: 'Nunito, sans-serif',}}>
                             {title}
@@ -31,7 +31,7 @@ const Tabs = ({tabsData}: {tabsData: Tab[]}) => {
                             <motion.div id='underline' className={styles.underlineBottom}
                                         layoutId="underline"/>
                         ) : null}
-                    </a>
+                    </ButtonBase>
                 ))}
                 <div className={styles.removeBorders}/>
             </div>

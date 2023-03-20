@@ -1,11 +1,9 @@
-import {createTheme} from '@mui/material';
-import {ToastOptions} from 'react-hot-toast';
-import {onEmailClick, onTelegramClick} from '../pages/development';
-import username from "../pages/[username]";
+import { createTheme } from "@mui/material";
+import { ToastOptions } from "react-hot-toast";
+import { onEmailClick, onTelegramClick } from "../pages/development";
 
 export const theme = createTheme({
    palette: {
-
       mode: 'dark',
       primary: {
          main: '#AB09D8',

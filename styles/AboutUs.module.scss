@@ -21,7 +21,7 @@ $tabInlinePadding: 20px;
 }
 
 .tab {
-  padding: 10px $tabInlinePadding;
+  padding: 10px $tabInlinePadding !important;
   font-size: 16px;
   background-color: transparent;
   transition: 0.2s all ease;
@@ -88,13 +88,15 @@ $tabInlinePadding: 20px;
 }
 
 .removeBorders {
-  margin: -2px;
+  margin-top: -3px;
+  margin-right: -2px;
+  background: var(--color-bg);
   margin-left: 0;
-  flex: 1;
+  flex: 1 1;
   display: block;
   border-bottom: 2px solid var(--color-border);
   border-left: 2px solid var(--color-border);
-  border-top: 2px solid var(--color-bg);
+  border-top: 7px solid transparent;
   border-right: 2px solid var(--color-bg);
 
   @media screen and (max-width: 700px) {

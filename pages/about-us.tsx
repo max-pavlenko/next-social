@@ -1,5 +1,5 @@
 "use server";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Typography } from "@mui/material";
 import Tabs from "../components/utils/Tabs";
 import Slider from "../components/utils/Slider";
@@ -9,16 +9,29 @@ import FAQ from "../components/layout/FAQ";
 import ScrollableHorizontalList from "../components/layout/ScrollableHorizontalList";
 import Section from "../components/utils/Section";
 import TwitchAnimation from "../components/TwitchAnimation";
-import Player from '../components/layout/Player';
+import Player from "../components/layout/Player";
 import useLessThenMediaQuery from "../libs/hooks/useLessThenMediaQuery";
+
 const AboutUs = () => {
   const songURLResultRef = useRef<string[]>([]);
   const { isScreenWidthLessThen650 } = useLessThenMediaQuery(650)
 
-  
+
   useEffect(() => {
     let dataBlob = null;
     try {
+      fetch("/music/Californication.mp3")
+        .then(res => res.blob())
+        .then(data => {
+          dataBlob = data;
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            console.log('Californication', e, e.target!.result)
+            songURLResultRef.current.push(e.target!.result as string);
+          };
+          reader.readAsDataURL(dataBlob);
+        });
+
       fetch("/music/Dead_Voxel_C418.mp3")
         .then(res => res.blob())
         .then(data => {
@@ -46,7 +59,7 @@ const AboutUs = () => {
       console.warn('data', e);
     }
   }, []);
-  
+
   return (
     <>
       <MetaTags title="About Us"

@@ -1,19 +1,14 @@
-import { getUserWithUsername } from '../../utils/helpers';
-import { convertToJSON, firestore } from '../../libs/firebase';
-import PostContent from '../../components/layout/Posts/PostContent';
-import { Typography } from '@mui/material';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import AuthCheck from '../../components/utils/AuthCheck';
-import HeartButton from '../../components/layout/HeartButton';
-import { IPost } from '../../models/Post';
-import MetaTags from '../../components/utils/MetaTags';
-import { GetServerSideProps } from 'next';
-import AnimatePage from '../../components/utils/AnimatePage';
+import { getUserWithUsername } from "../../utils/helpers";
+import { convertToJSON, firestore } from "../../libs/firebase";
+import PostContent from "../../components/layout/Posts/PostContent";
+import { Typography } from "@mui/material";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import AuthCheck from "../../components/utils/AuthCheck";
+import HeartButton from "../../components/layout/HeartButton";
+import { IPost } from "../../models/Post";
+import MetaTags from "../../components/utils/MetaTags";
+import AnimatePage from "../../components/utils/AnimatePage";
 import { ParsedUrlQuery } from "querystring";
-import { useRouter } from "next/router";
-import { ROUTES } from "../../utils/constants";
-import Link from 'next/link';
-import Breadcrumbs from "../../components/utils/Breadcrumbs";
 
 const UserPost = ({post, path, username}: {post: IPost, path: string, username: string}) => {
    const postRef = firestore.doc(path);
@@ -62,7 +57,7 @@ const UserPost = ({post, path, username}: {post: IPost, path: string, username: 
 
 export default UserPost;
 
-export const getServerSideProps: GetServerSideProps = async ({params}: {params: ParsedUrlQuery & {username: string, slug: string}}) => {
+export const getServerSideProps = async ({params}: {params: ParsedUrlQuery & {username: string, slug: string}}) => {
    const {username, slug: postSlug} = params;
    console.log({username, postSlug})
    const userDoc = await getUserWithUsername(username as string);

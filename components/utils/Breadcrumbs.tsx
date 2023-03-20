@@ -13,12 +13,10 @@ const Breadcrumbs = () => {
 
   const newRoutesData = routesData.map((route) => ({
     ...route,
-    href: queryKeys.reduce((accum, currentValue) =>
-      accum = accum.replace(`[${currentValue}]`, query[currentValue] as string), route.path)
+    href: queryKeys.reduce((accum, currentValue) => accum.replace(`[${currentValue}]`, query[currentValue] as string), route.path)
   }));
 
   console.log("routesData", newRoutesData, routesData, query);
-
 
   return (
     <div>

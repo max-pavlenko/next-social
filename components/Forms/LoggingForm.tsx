@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
-import {Box, Button, Grid, IconButton, InputAdornment, Stack, Typography} from "@mui/material";
+import React, { createRef, useEffect, useState } from "react";
+import { Box, Button, Grid, IconButton, InputAdornment, Stack, Typography } from "@mui/material";
 import ProviderAuthButton from "../utils/ProviderAuthButton";
 import * as Yup from "yup";
-import {Form, Formik, FormikHelpers, FormikProps} from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import FormikInput from "../utils/FormikInput";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {invertBool} from '../../utils/helpers';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { invertBool } from "../../utils/helpers";
 import {
    facebookAuthProvider,
    githubAuthProvider,
@@ -13,12 +13,13 @@ import {
    logInWithEmail,
    resetPassword,
    signUpWithEmail
-} from '../../libs/firebase';
-import {toastModal} from '../../utils/toastModal';
-import toast from 'react-hot-toast';
-import {PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S} from '../../utils/constants';
-import {useRouter} from 'next/router';
-import {motion} from "framer-motion";
+} from "../../libs/firebase";
+import { toastModal } from "../../utils/toastModal";
+import toast from "react-hot-toast";
+import { PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S } from "../../utils/constants";
+import ReCAPTCHA from "react-google-recaptcha";
+import { motion } from "framer-motion";
+import axios from "axios";
 
 export interface ILoggingForm {
    email: string;
@@ -29,10 +30,42 @@ const LoggingForm = () => {
    const [ showPassword, setShowPassword ] = useState(false)
    const [ isLoggingIn, setIsLoggingIn ] = useState(true);
    const [ resetPasswordCountDown, setResetPasswordCountDown ] = useState(0);
-   const router = useRouter();
+   const [isRecaptachaSolved, setIsRecaptachaSolved] = useState(false);
+   const recaptchaRef = createRef<ReCAPTCHA>();
+
+   const onReCAPTCHAChange = (captchaCode: string | null) => {
+      // If the reCAPTCHA code is null or undefined indicating that
+      // the reCAPTCHA was expired then return early
+      if (!captchaCode) {
+         return;
+      }
+
+      axios.post("/api/logging", {
+         captcha: captchaCode
+      }, {
+         headers: {
+            "Content-Type": "application/json"
+         },
+      })
+        .then(response => {
+           if (response.status === 200) {
+              // If the response is ok than show the success alert
+              setIsRecaptachaSolved(true);
+           }
+           else {
+              throw new Error(response.data.message)
+           }
+        })
+        .catch(error => {
+           const err: Error = error;
+           alert(err?.message || "Something went wrong")
+           setIsRecaptachaSolved(false);
+           recaptchaRef.current!.reset()
+        })
+   };
 
    useEffect(() => {
-      if (resetPasswordCountDown<=0) return;
+      if (resetPasswordCountDown <= 0) return;
       const timeOutId = setTimeout(() => {
          console.log('resetPasswordCountDown',resetPasswordCountDown);
          setResetPasswordCountDown((prevState) => --prevState)
@@ -41,7 +74,7 @@ const LoggingForm = () => {
    }, [ resetPasswordCountDown ]);
 
    async function handleResetPassword(formik: FormikProps<ILoggingForm>) {
-      if (formik.errors.email?.length > 0 || Object.keys(formik.touched).length === 0) {
+      if (formik.errors.email?.length! > 0 || Object.keys(formik.touched).length === 0) {
          toast.error('Please, provide valid email!')
          return;
       }
@@ -59,7 +92,7 @@ const LoggingForm = () => {
       await signUpWithEmail(email, password);
    }
 
-   async function handleSubmit(data) {
+   async function handleSubmit(data: ILoggingForm) {
       console.log('isLoggingIn', isLoggingIn)
       isLoggingIn ? await handleLogIn(data) : await handleSignUp(data)
    }
@@ -94,19 +127,36 @@ const LoggingForm = () => {
               email: Yup.string()
                   .email("Enter a valid email")
                   .required("Email is required")
-                  .email("Email is has incorrect format"),
+                  .email("Email has incorrect format"),
               password: Yup.string()
                   .min(6, "Password should be of minimum 6 characters length")
                   .max(30, "Password should be of maximum 30 characters length")
                   .required("Password is required"),
            })}
-           onSubmit = {async (values: ILoggingForm, {setSubmitting}: FormikHelpers<ILoggingForm>) => {
-              setSubmitting(false);
-              await handleSubmit(values);
+           onSubmit = {async (values: ILoggingForm, { setSubmitting }: FormikHelpers<ILoggingForm>) => {
+              console.log("isRecaptachaSolved", isRecaptachaSolved);
+              if(isRecaptachaSolved){
+                 setSubmitting(false);
+                 await handleSubmit(values);
+                 return;
+              }
+
+              try {
+                 await recaptchaRef.current!.executeAsync();
+                 setSubmitting(false);
+                 await handleSubmit(values);
+              } catch (e) {
+              }
            }}
        >
           {(formik) => (
               <Form>
+                 <ReCAPTCHA
+                   ref={recaptchaRef}
+                   size="invisible"
+                   sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                   onChange={onReCAPTCHAChange}
+                 />
                  <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                        <motion.div

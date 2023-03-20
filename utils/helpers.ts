@@ -1,15 +1,15 @@
-import {firestore, signOut} from '../libs/firebase';
-import {IPost} from '../models/Post';
-import {Timestamp} from 'firebase/firestore';
-import toast, {ToastOptions} from 'react-hot-toast';
-import {FirebaseError} from '@firebase/util';
-import User from '../store/User';
-import {NextRouter} from 'next/router';
-import {SetStateAction} from 'react';
-import {DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig} from './constants';
-import * as Yup from 'yup';
-import {PaletteMode} from "@mui/material";
-import {grey} from "@mui/material/colors";
+import { firestore, signOut } from "../libs/firebase";
+import { IPost } from "../models/Post";
+import { Timestamp } from "firebase/firestore";
+import toast, { ToastOptions } from "react-hot-toast";
+import { FirebaseError } from "@firebase/util";
+import User from "../store/User";
+import { NextRouter } from "next/router";
+import { SetStateAction } from "react";
+import { DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig } from "./constants";
+import * as Yup from "yup";
+import { PaletteMode } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 /**
  * Get a user/{uid} document with username

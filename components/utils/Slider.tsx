@@ -90,7 +90,7 @@ const Slider = ({ sliderData }: { sliderData: Slide[] }) => {
           </a>
         </>
       </div>
-      <div style={{ display: "flex", gap: 3, justifyContent: 'center', marginTop: 8 }}>
+      <div style={{ display: "flex", gap: 10, justifyContent: 'center', marginTop: 8 }}>
         {sliderData.map((_, i) => (
           <a onClick={()=>handleChangeSlide(i)} className={`slideDot ${i === currentSlideIndex && 'activeDot'}`} key={i} />
         ))}
