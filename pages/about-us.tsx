@@ -1,26 +1,25 @@
-"use server";
-import React, { useEffect, useRef } from "react";
-import { Typography } from "@mui/material";
-import Tabs from "../components/utils/Tabs";
-import Slider from "../components/utils/Slider";
-import MetaTags from "../components/utils/MetaTags";
-import { GetServerSideProps } from "next";
-import FAQ from "../components/layout/FAQ";
-import ScrollableHorizontalList from "../components/layout/ScrollableHorizontalList";
-import Section from "../components/utils/Section";
-import TwitchAnimation from "../components/TwitchAnimation";
-import Player from "../components/layout/Player";
-import useLessThenMediaQuery from "../libs/hooks/useLessThenMediaQuery";
+'use server';
+import React, { useEffect, useRef } from 'react';
+import { Typography } from '@mui/material';
+import Tabs from '../components/utils/Tabs';
+import Slider from '../components/utils/Slider';
+import MetaTags from '../components/utils/MetaTags';
+import { GetServerSideProps } from 'next';
+import FAQ from '../components/layout/FAQ';
+import ScrollableHorizontalList from '../components/layout/ScrollableHorizontalList';
+import Section from '../components/utils/Section';
+import TwitchAnimation from '../components/TwitchAnimation';
+import Player from '../components/layout/Player';
+import useLessThenMediaQuery from '../libs/hooks/useLessThenMediaQuery';
 
 const AboutUs = () => {
   const songURLResultRef = useRef<string[]>([]);
-  const { isScreenWidthLessThen650 } = useLessThenMediaQuery(650)
-
+  const { isScreenWidthLessThen650 } = useLessThenMediaQuery(650);
 
   useEffect(() => {
     let dataBlob = null;
     try {
-      fetch("/music/Californication.mp3")
+      fetch('/music/Californication.mp3')
         .then(res => res.blob())
         .then(data => {
           dataBlob = data;

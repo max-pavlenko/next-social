@@ -13,8 +13,8 @@ yarn.lock
 /coverage
 
 # next.js
-/.next/
-/out/
+#/.next/
+#/out/
 
 # production
 /build
@@ -30,7 +30,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env*.local
+#.env*.local
 
 # vercel
 .vercel
