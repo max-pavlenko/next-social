@@ -1,0 +1,23 @@
+.popup {
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 10px 15px;
+  width: min-content;
+  height: max-content;
+  z-index: 98;
+  color: #333;
+  border-radius: 7px;
+  border: 2px solid var(--color-border);
+  position: fixed;
+  top: 74.5px;
+  right: 0;
+  transform: translateX(84%);
+  transition: all 0.3s ease-in-out;
+  background-color: var(--color-bg) !important;
+
+  &:hover {
+    transform: translateX(5%);
+  }
+}

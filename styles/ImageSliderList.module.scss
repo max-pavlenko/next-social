@@ -1,0 +1,46 @@
+.deleteImageBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  mix-blend-mode: difference;
+  backdrop-filter: blur(1.2px);
+  z-index: 100;
+}
+
+.listItem {
+  width: 200px;
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  font-size: 16px;
+}
+
+.additionalImagesList {
+  min-width: 100%;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  gap: 7px;
+  padding: 8px 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 200px;
+
+  &::-webkit-scrollbar {
+    appearance: none;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    appearance: none;
+    background-color: var(--color-blue);
+    border-radius: 8px;
+  }
+}
+
+.title {
+  text-align: center;
+  margin-top: 5px;
+}
