@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import IconButton from "@mui/material/IconButton";
-import PauseCircleOutlinedIcon from "@mui/icons-material/PauseCircleOutlined";
-import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
-import styles from "../../styles/Player.module.scss";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import VolumeDownIcon from "@mui/icons-material/VolumeDown";
-import { debounce } from "lodash";
-import RangeInput from "../Forms/RangeInput";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import IconButton from '@mui/material/IconButton';
+import PauseCircleOutlinedIcon from '@mui/icons-material/PauseCircleOutlined';
+import PlayCircleOutlineRoundedIcon from '@mui/icons-material/PlayCircleOutlineRounded';
+import styles from '../../styles/Player.module.scss';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import { debounce } from 'lodash';
+import RangeInput from '../Forms/RangeInput';
+import { firestore } from '../../libs/firebase';
 
 const Player = ({
   barWidth = 3,
   barGap = 1,
   isInitiallyMuted = false,
-  title = "Default",
-  srcs = []
+  title = 'Default',
+  srcs = [],
 }: any) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.15);
@@ -53,7 +54,7 @@ const Player = ({
   }, [isPlaying]);
 
   useEffect(() => {
-    const songTime = localStorage.getItem("songTime");
+    const songTime = localStorage.getItem('songTime');
     attachEvents();
     canvasCtxRef.current = canvasRef.current!.getContext('2d')!;
 
@@ -62,10 +63,12 @@ const Player = ({
     trackRef.current = audioCtxRef.current.createMediaElementSource(audioElRef.current!);
     analyserNodeRef.current.getByteFrequencyData(dataArray.current);
     trackRef.current.connect(gainNodeRef.current).connect(analyserNodeRef.current).connect(audioCtxRef.current.destination);
-    console.log("volemg", Number(localStorage.getItem("volume")));
-    changeVolume(Number(localStorage.getItem("volume")));
+    console.log('volemg', Number(localStorage.getItem('volume')));
+    firestore.collection('users').get().then(d => console.log('users', d.docs.map(doc => doc.data())));
+
+    changeVolume(Number(localStorage.getItem('volume')));
     return () => {
-      window.removeEventListener("beforeunload", handleUnload);
+      window.removeEventListener('beforeunload', handleUnload);
     };
   }, []);
 
