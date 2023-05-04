@@ -165,6 +165,7 @@ const Player = ({
     analyserNodeRef.current.getByteFrequencyData(dataArray.current);
     const canvas = canvasRef.current!;
     const canvasCtx = canvasCtxRef.current!;
+     if (!canvas) return;
 
     const barWidth = 7;
     const barGap = 5;

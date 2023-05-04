@@ -1,25 +1,25 @@
-import '../styles/globals.css';
+import '../styles/globals.scss';
 import '../styles/nprogress.css';
-import NavBar from '../components/layout/NavBar';
 import { Toaster } from 'react-hot-toast';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useUserData } from '../libs/hooks/useUserData';
 import NProgress from 'nprogress';
 import { Router, useRouter } from 'next/router';
-import { ContextMenu } from '../components/utils/contextMenu';
-import Loader from '../components/layout/Loader';
 import '../node_modules/flag-icons/css/flag-icons.min.css';
 import { Analytics } from '@vercel/analytics/react';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getDesignTokens, setModeFromLS, switchMode } from '../utils/helpers';
 import { observer } from 'mobx-react-lite';
-import User from '../store/User';
-import Footer from '../components/layout/PageLayout/Footer';
-import Draggable from '../components/layout/Draggable';
-import SmallToDo from '../components/layout/SmallToDo';
-import SmallTabs from '../components/layout/SmallTabs';
-import draggable from '../store/Draggable';
+import SmallToDo from '../src/features/todo/components/SmallToDo';
+import Loader from '../src/shared/components/ui/Loader';
+import NavBar from '../src/shared/components/widgets/layout/NavBar';
+import Footer from '../src/shared/components/widgets/layout/Footer';
+import SmallTabs from '../src/shared/components/widgets/SmallTabs';
+import { ContextMenu } from '../src/shared/components/utils/ContextMenu';
+import Draggable from '../src/features/draggable/components/Draggable';
+import User from '../src/features/user/store/User';
+import draggable from '../src/features/draggable/store/Draggable';
 
 
 NProgress.configure({ showSpinner: true });

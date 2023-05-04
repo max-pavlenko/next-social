@@ -1,14 +1,15 @@
 import { auth, firestore } from '../libs/firebase';
-import { NextRouter } from 'next/router';
+import { IUser } from '../src/features/user/store/User';
 
-export const saveURL = async (router: NextRouter) => {
-   let userDoc, user;
+export const saveURL = async (cb: ({ url, user }: { url: string, user: IUser }) => void = () => {
+}) => {
    const urlPageBeforeLogging = localStorage.getItem('pageURLBeforeLeaveForLogin');
    if (urlPageBeforeLogging) {
       localStorage.setItem('pageURLBeforeLeaveForLogin', '');
-   } else {
-      userDoc = firestore.collection('users').doc(auth.currentUser.uid);
-      user = (await userDoc.get()).data()
    }
-   await router.push(urlPageBeforeLogging ? urlPageBeforeLogging : '/' + user.username);
-}
+   else {
+      const userDoc = firestore.collection('users').doc(auth.currentUser!.uid);
+      const user = (await userDoc.get()).data() as IUser;
+      cb({ url: urlPageBeforeLogging || '', user });
+   }
+};

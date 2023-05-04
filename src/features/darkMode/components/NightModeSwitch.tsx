@@ -20,8 +20,7 @@ const NightModeSwitch = ({ style }: { style?: CSSProperties }) => {
    return (
      <AnimatePresence mode="wait">
         <motion.a
-          className="dark-mode-switcher"
-          style={{ ...style }}
+          style={{ ...style, fontSize: 20 }}
           onClick={() => switchMode(!isLightMode, (isDarkMode) => setIsLightMode(isDarkMode))}
           variants={variants}
           initial="hidden"

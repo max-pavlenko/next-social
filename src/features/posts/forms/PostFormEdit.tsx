@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown/with-html';
 import { Button, Checkbox, Container, FormControlLabel, FormGroup, IconButton, TextField, Typography } from '@mui/material';
 import styles from '../../../../styles/Admin.module.scss';
 import { ChangeEvent, FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { handlePasteImage, invertBool, iterateOverFiles, toastNotify } from '../../../../utils/helpers';
+import { handlePasteImage, invertBoolState, iterateOverFiles, toastNotify } from '../../../../utils/helpers';
 import ImageUploader from '../../../shared/components/widgets/ImageUploader';
 import { useLocale } from '../../../../translations/useLocale';
 import useLessThenMediaQuery from '../../../../libs/hooks/useLessThenMediaQuery';
@@ -27,7 +27,7 @@ export interface AdditionalImageData {
 
 type Props = {
    isPreview: boolean;
-   onSubmit: () => void,
+   onSubmit?: () => void,
    defaultValuePost: IPost;
    onSubmitEdit: (
      title: string,
@@ -37,7 +37,10 @@ type Props = {
    ) => void;
 }
 
-const PostFormEdit: FC<Props> = ({ isPreview, defaultValuePost, onSubmitEdit, onSubmit }) => {
+const PostFormEdit: FC<Props> = ({
+   isPreview, defaultValuePost, onSubmitEdit, onSubmit = () => {
+   },
+}) => {
    const { register, handleSubmit, reset, watch, formState, errors, control } =
      useForm<EditForm>({
         mode: 'onChange',
@@ -96,7 +99,7 @@ const PostFormEdit: FC<Props> = ({ isPreview, defaultValuePost, onSubmitEdit, on
 
    const handleContextTitle: MouseEventHandler<HTMLHeadingElement> = (e) => {
       e.preventDefault();
-      setIsEditingTitle(invertBool);
+      setIsEditingTitle(invertBoolState);
    };
 
    function handleFilesAttach() {

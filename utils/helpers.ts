@@ -1,15 +1,14 @@
-import { firestore, signOut } from "../libs/firebase";
-import { IPost } from "../models/Post";
-import { Timestamp } from "firebase/firestore";
-import toast, { ToastOptions } from "react-hot-toast";
-import { FirebaseError } from "@firebase/util";
-import User from "../store/User";
-import { NextRouter } from "next/router";
-import { SetStateAction } from "react";
-import { DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig } from "./constants";
-import * as Yup from "yup";
-import { PaletteMode } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { firestore, signOut } from '../libs/firebase';
+import { IPost } from '../models/Post';
+import { Timestamp } from 'firebase/firestore';
+import toast, { ToastOptions } from 'react-hot-toast';
+import { FirebaseError } from '@firebase/util';
+import User from '../src/features/user/store/User';
+import { SetStateAction } from 'react';
+import { DEFAULT_ERROR_TEXT, FIREBASE_ERRORS, toastStyleConfig } from './constants';
+import * as Yup from 'yup';
+import { PaletteMode } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 /**
  * Get a user/{uid} document with username
@@ -26,27 +25,28 @@ export async function getUserWithUsername(username: string) {
    }
 }
 
-export async function handleLogOut(router: NextRouter) {
+export async function handleLogOut() {
    await signOut();
    //router.push('/').then(r => r);
    User.setUser({
       ...User.user,
-      data: null, username: null,
+      data: null, username: '',
    });
    User.setPhotoURL('');
 }
 
-export const toastNotify = async ({successText, errorText}: { successText: string, errorText?: string }, {
+export const toastNotify = async ({ successText, errorText }: { successText: string, errorText?: string }, {
    tryFn,
-   errorFn = null
-}: { tryFn: () => void, errorFn?: (error) => void | null }, configOptions: ToastOptions = {}) => {
-   const config = {...Object.assign(toastStyleConfig, configOptions)};
+   errorFn = () => {
+   },
+}: { tryFn: () => void, errorFn?: (error: any) => void | null }, configOptions: ToastOptions = {}) => {
+   const config = { ...Object.assign(toastStyleConfig, configOptions) };
    try {
       await tryFn();
-      toast.success(`Successfully ${successText}!`, config)
+      toast.success(`Successfully ${successText}!`, config);
    } catch (e: any) {
       const error = e as FirebaseError;
-      if(errorFn){
+      if (errorFn) {
          errorFn(error);
       }
       else {
@@ -61,9 +61,9 @@ export function convertPostDateToFBCompatible(post: IPost) {
    return typeof post.createdAt === 'number' ? Timestamp.fromMillis(post.createdAt) : post.createdAt
 }
 
-export const invertBool: SetStateAction<boolean> = (prevVal) => {
+export const invertBoolState: SetStateAction<boolean> = (prevVal) => {
    return !prevVal;
-}
+};
 
 export const encodeStr = (str: string, filler: string = '*') =>{
    return str.split('').map((char, i, arr) => i >= 1 && i < arr.length - 1 ? filler : char).join('')
@@ -76,13 +76,13 @@ export const validateSchemaPassword = (passwordName: string) =>{
        .required(`${passwordName} password is required`)
 }
 
-export function hanlePasteImage(setter) {
-   return function (event) {
-      const {files} = (event.clipboardData);
-      iterateOverFiles(files, ({file, url})=>{
-            console.log('result', url, file);
-         setter(prev => [ ...prev, {img: url, id: Date.now()} ]);
-      })
+export function handlePasteImage(cb: ({ img, id }: { img: string, id: number }) => any) {
+   return (event: any) => {
+      const { files } = (event.clipboardData);
+      iterateOverFiles(files, ({ file, url }) => {
+         console.log('result', url, file);
+         cb({ img: url, id: Date.now() });
+      });
       // const file = files[0];
       // if(!file) return;
       // const fileType = file.type.split('/')[0];
@@ -102,7 +102,7 @@ export function downloadFile(type: string, blob: File | Blob){
    const url = window.URL.createObjectURL(blob);
    const a = document.createElement('a');
    a.href = url;
-   a.download = type + '_' + Math.random().toFixed(6).slice(2)+'.'+blob.type.split('/')[1];
+   a.download = `${type}_${Math.random().toFixed(6).slice(2)}.${blob.type.split('/')[1]}`;
    document.body.appendChild(a);
    a.click();
    document.body.removeChild(a)
@@ -110,21 +110,21 @@ export function downloadFile(type: string, blob: File | Blob){
 
 export function iterateOverFiles(files: FileList, resultCallback: ({file, url}: {file: File, url: string})=>void ){
    if (files.length > 0) {
-      const keys = Object.keys(files)
-      keys.forEach((key) => {
-         let file = files[key]
-         let reader = new FileReader();
-         reader.onload = (e) => resultCallback({file, url: e.target.result as string})
+      const keys = Object.keys(files) as any;
+      keys.forEach((key: any) => {
+         const file = files[key];
+         const reader = new FileReader();
+         reader.onload = (e) => resultCallback({ file, url: e.target!.result as string });
 
-         reader.readAsDataURL(files[key])
-      })
+         reader.readAsDataURL(files[key]);
+      });
    }
 }
 
 export function switchMode(isLightMode: boolean, callback: (isDarkMode: boolean) => void = () => {}) {
    localStorage.setItem('mode', (isLightMode).toString());
    User.setDarkMode(isLightMode);
-   const modeToDelete = isLightMode === false ? 'light' : 'dark';
+   const modeToDelete = isLightMode ? 'dark' : 'light';
    const modeToToggle = modeToDelete === 'dark' ? 'light' : 'dark';
 
    document.documentElement.dataset[modeToToggle] = 'any value for this just to work';

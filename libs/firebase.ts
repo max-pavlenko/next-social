@@ -4,15 +4,10 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import { toastNotify } from '../utils/helpers';
 import toast from 'react-hot-toast';
-import {
-   PRODIVER_IDS,
-   RESET_PASSWORD_TOAST_DURATION,
-   toastStyleConfig,
-   UPDATE_PASSWORD_TOAST_DURATION_SUCCESS
-} from '../utils/constants';
-import User from '../store/User';
-import { NextRouter } from 'next/router';
+import { PRODIVER_IDS, RESET_PASSWORD_TOAST_DURATION, toastStyleConfig, UPDATE_PASSWORD_TOAST_DURATION_SUCCESS } from '../utils/constants';
+import User from '../src/features/user/store/User';
 import { reauthenticateWithPopup } from 'firebase/auth';
+import { DocumentSnapshot } from '@firebase/firestore-types';
 
 export default firebase;
 
@@ -47,18 +42,19 @@ export const storage = firebase.storage(app);
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
 export const increment = firebase.firestore.FieldValue.increment;
 
-export function convertToJSON(snapshot: QueryDocumentSnapshot) {
+export function convertToJSON(snapshot: QueryDocumentSnapshot | DocumentSnapshot) {
    const data = snapshot.data();
    console.log('data', data);
    if (!data) return;
-   console.log('---')
-   if (data.hasOwnProperty('userPath'))
+   console.log('---');
+   if (data.hasOwnProperty('userPath')) {
       return {
          ...data,
          createdAt: data.createdAt?.toMillis() || 0,
          updatedAt: data.updatedAt?.toMillis() || 0,
-         userPath: data.userPath
+         userPath: data.userPath,
       }
+   }
    else return {
       ...data,
       createdAt: data.createdAt?.toMillis() || 0,
@@ -121,22 +117,23 @@ export const resetPassword = async (email: string) => {
    }, {duration: RESET_PASSWORD_TOAST_DURATION})
 }
 
-export const deleteAccount = async (router: NextRouter | null = null) => {
-   await toastNotify({successText: 'deleted the account',}, {
+export const deleteAccount = async (cb = () => {
+}) => {
+   await toastNotify({ successText: 'deleted the account' }, {
       tryFn: async () => {
-         localStorage.setItem('prolongedAuth', 'false')
+         localStorage.setItem('prolongedAuth', 'false');
          console.log('deleted the account');
          await reauthenticate();
          const batch = firestore.batch();
          firestore
-             .collection(`users/${auth.currentUser?.uid}/posts`)
-             .get()
-             .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                   doc.ref.delete();
-                });
-             });
-         router && await router.push('/');
+           .collection(`users/${auth.currentUser?.uid}/posts`)
+           .get()
+           .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                 doc.ref.delete();
+              });
+           });
+         cb();
          batch.delete(firestore.doc(`users/${auth.currentUser?.uid}`));
          batch.delete(firestore.doc(`usernames/${User.user.username}`));
          await auth.currentUser?.delete();

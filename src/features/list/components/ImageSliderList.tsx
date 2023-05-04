@@ -22,16 +22,16 @@ const ImageSliderList: FC<Props> = ({ title = 'Additional images', images, onClo
                   className={styles.listItem}
                   key={id}
                 >
-                   {onCloseImgClick && (
+                   <div className={styles.deleteImageBtn}>{onCloseImgClick && (
                      <IconButton
                        size="small"
                        color="warning"
-                       className={styles.deleteImageBtn}
+
                        onClick={(e) => onCloseImgClick(e, id)}
                      >
                         <CloseIcon />
                      </IconButton>
-                   )}
+                   )}</div>
 
                    <div>
                       <ReactImageMagnify {...{

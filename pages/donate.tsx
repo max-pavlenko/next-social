@@ -1,31 +1,30 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Stripe from 'stripe';
-import {Button, Container, Grid, TextField, Typography} from '@mui/material';
+import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import AnimatePage from '../components/utils/AnimatePage';
-import {useLocale} from '../translations/useLocale';
-import MetaTags from '../components/utils/MetaTags';
-import {motion} from 'framer-motion';
-import LinkWithoutScroll from "../components/utils/LinkWithoutScroll";
-import Breadcrumbs from "../components/utils/Breadcrumbs";
+import { useLocale } from '../translations/useLocale';
+import { motion } from 'framer-motion';
+import MetaTags from '../src/shared/components/utils/MetaTags';
+import AnimatePage from '../src/shared/components/utils/AnimatePage';
+import LinkWithoutScroll from '../src/shared/components/ui/LinkWithoutScroll';
 
 interface IPrice extends Stripe.Price {
 }
 
 interface IProps {
-   prices: IPrice[]
+   prices: IPrice[];
 }
 
-const DonatePage = ({prices}: IProps) => {
-   const [ amount, setAmount ] = useState<string | number>('1');
+const DonatePage = ({ prices }: IProps) => {
+   const [amount, setAmount] = useState<string | number>('1');
    const l = useLocale();
-   const [ isDonateLoaderVisible, setIsDonateLoaderVisible ] = useState(false);
-   const [ dots, setDots ] = useState('');
+   const [isDonateLoaderVisible, setIsDonateLoaderVisible] = useState(false);
+   const [dots, setDots] = useState('');
 
    const handleDonate = async () => {
       let intervalID;
       try {
-         intervalID = setInterval(() => setDots(prevState => prevState.length < 3 ? prevState + '.' : ''), 350);
+         intervalID = setInterval(() => setDots(prevState => prevState.length < 3 ? `${prevState}.` : ''), 350);
          const res = await axios.post('/api/payment', {
             items: [
                {id: 1, quantity: 2},

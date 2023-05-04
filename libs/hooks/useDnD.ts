@@ -1,52 +1,53 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { iterateOverFiles } from '../../utils/helpers';
-import { AdditionalImageData } from '../../components/Forms/PostFormEdit';
 
-export default function (element: HTMLElement, classesForDragIn: string, additionalSetter?: Dispatch<SetStateAction<any>>){
-   const [ isDragEntered, setIsDragEntered ] = useState(false);
-   const [fileList, setFileList] = useState<{ file: File, data: string }[]>([])
+export default function(element: HTMLElement, classesForDragIn: string, cb = ({ img, id }: { img: string, id: number }) => {
+}) {
+   const [isDragEntered, setIsDragEntered] = useState(false);
+   const [fileList, setFileList] = useState<{ file: File, data: string }[]>([]);
 
-   useEffect(()=>{
-      if(!element) return;
-      element.addEventListener('dragenter', handleDragEnter)
-      element.addEventListener('dragleave', handleDragLeave)
-      element.addEventListener('drop', handleDragDrop)
+   useEffect(() => {
+      if (!element) return;
+      element.addEventListener('dragenter', handleDragEnter);
+      element.addEventListener('dragleave', handleDragLeave);
+      element.addEventListener('drop', handleDragDrop);
 
-      return ()=> {
+      return () => {
          element.removeEventListener('dragenter', handleDragEnter);
          element.removeEventListener('dragleave', handleDragLeave);
          element.removeEventListener('drop', handleDragDrop);
-      }
+      };
    }, [element]);
 
-   useEffect(()=>{
-      element?.classList.toggle(classesForDragIn)
-   }, [isDragEntered])
+   useEffect(() => {
+      element?.classList.toggle(classesForDragIn);
+   }, [isDragEntered]);
 
    function handleDragEnter(e: DragEvent) {
-      e.preventDefault()
-      e.stopPropagation()
-      console.log('entered drop')
-      setIsDragEntered(true)
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('entered drop');
+      setIsDragEntered(true);
    }
 
    function handleDragLeave(e: DragEvent) {
-      e.preventDefault()
-      e.stopPropagation()
-      setIsDragEntered(false)
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragEntered(false);
    }
+
    function handleDragDrop(e: DragEvent) {
       e.preventDefault();
       const files = e.dataTransfer?.files || [] as unknown as FileList;
-      console.log('e',files);
-      iterateOverFiles(files, ({file, url})=>{
-         if (additionalSetter) {
-            additionalSetter((prev: AdditionalImageData[]) => [ ...prev, {
-               img: url,
-               // file: file,
-               id: Math.round(Date.now() * Math.random()),
-            } ])
-         }
+      console.log('e', files);
+      iterateOverFiles(files, ({ file, url }) => {
+
+         cb({
+            img: url,
+            // file: file,
+            id: Math.round(Date.now() * Math.random()),
+         });
+
 
          setFileList((prev) => {
             if (prev.find((item) => item.file.name === file.name)) {
@@ -55,10 +56,10 @@ export default function (element: HTMLElement, classesForDragIn: string, additio
 
             return [...prev, {
                data: url,
-               file: file,
-            }]
-         })
-      })
+               file,
+            }];
+         });
+      });
 
       // if (e.dataTransfer.files.length > 0) {
       //    const keys = Object.keys(files);
@@ -87,8 +88,8 @@ export default function (element: HTMLElement, classesForDragIn: string, additio
       //    })
       // }
 
-      setIsDragEntered(false)
+      setIsDragEntered(false);
    }
 
-   return {fileList, isDragEntered}
+   return { fileList, isDragEntered };
 }

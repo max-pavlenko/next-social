@@ -3,7 +3,7 @@ import { Divider, ListItemIcon, MenuItem } from '@mui/material';
 import { Logout, MenuBookSharp, Settings, UpdateOutlined } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import { handleLogOut } from '../../../../utils/helpers';
-import { toastModal } from '../../../../utils/toastModal';
+import { toastModal } from '../ui/ToastModal';
 import { deleteAccount } from '../../../../libs/firebase';
 import { useRouter } from 'next/router';
 import LinkWithoutScroll from '../ui/LinkWithoutScroll';

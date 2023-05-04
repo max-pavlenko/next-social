@@ -2,7 +2,7 @@ import { Container, IconButton } from '@mui/material';
 import { EditOutlined } from '@mui/icons-material';
 import { useState } from 'react';
 import UsernameForm from '../../auth/components/forms/UsernameForm';
-import { invertBool } from '../../../../utils/helpers';
+import { invertBoolState } from '../../../../utils/helpers';
 import { UsernameFormModes } from '../../../../models/UsernameForm';
 import { FirebaseUser } from '../../../../models/User';
 import { auth, firestore } from '../../../../libs/firebase';
@@ -16,7 +16,7 @@ const UserProfile = ({ user }: { user: FirebaseUser }) => {
    const [userFetched] = useDocumentData<FirebaseUser>(userRef || null);
 
    function handleEditUsername() {
-      setIsEditingUsername(invertBool);
+      setIsEditingUsername(invertBoolState);
    }
 
    return (

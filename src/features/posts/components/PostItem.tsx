@@ -7,7 +7,7 @@ import { auth, firestore } from '../../../../libs/firebase';
 import { useRouter } from 'next/router';
 import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import { toastNotify } from '../../../../utils/helpers';
-import { toastModal } from '../../../../utils/toastModal';
+import { toastModal } from '../../../shared/components/ui/ToastModal';
 import LinkWithoutScroll from '../../../shared/components/ui/LinkWithoutScroll';
 import { useLocale } from '../../../../translations/useLocale';
 import useLessThenMediaQuery from '../../../../libs/hooks/useLessThenMediaQuery';

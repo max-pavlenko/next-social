@@ -1,29 +1,29 @@
-import { getUserWithUsername } from "../../utils/helpers";
-import { convertToJSON, firestore } from "../../libs/firebase";
-import PostContent from "../../components/layout/Posts/PostContent";
-import { Typography } from "@mui/material";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import AuthCheck from "../../components/utils/AuthCheck";
-import HeartButton from "../../components/layout/HeartButton";
-import { IPost } from "../../models/Post";
-import MetaTags from "../../components/utils/MetaTags";
-import AnimatePage from "../../components/utils/AnimatePage";
-import { ParsedUrlQuery } from "querystring";
+import { getUserWithUsername } from '../../utils/helpers';
+import { convertToJSON, firestore } from '../../libs/firebase';
+import { Typography } from '@mui/material';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { IPost } from '../../models/Post';
+import { ParsedUrlQuery } from 'querystring';
+import MetaTags from '../../src/shared/components/utils/MetaTags';
+import AnimatePage from '../../src/shared/components/utils/AnimatePage';
+import PostContent from '../../src/features/posts/components/PostContent';
+import AuthCheck from '../../src/features/auth/components/AuthCheck';
+import HeartButton from '../../src/features/posts/components/HeartButton';
 
-const UserPost = ({post, path, username}: {post: IPost, path: string, username: string}) => {
+const UserPost = ({ post, path, username }: { post: IPost, path: string, username: string }) => {
    const postRef = firestore.doc(path);
-   const [ realtimePost ] = useDocumentData(postRef);
-   console.log('realtimePost', realtimePost)
+   const [realtimePost] = useDocumentData(postRef);
+   console.log('realtimePost', realtimePost);
    console.log(post, path);
    const usedPost = realtimePost as IPost;
 
 
    return (
-       <AnimatePage>
-          <div>
-             {usedPost && (
-                 <>
-                    <MetaTags title = {`Post ${usedPost.title}`}
+     <AnimatePage>
+        <div>
+           {usedPost && (
+             <>
+                <MetaTags title={`Post ${usedPost.title}`}
                               desc = {`Post ${usedPost.title} by ${username}`}
                               />
                     <main style = {{display: 'flex', gap: '10px'}}>
@@ -77,9 +77,9 @@ export const getServerSideProps = async ({params}: {params: ParsedUrlQuery & {us
 
    return {
       props: {
-         post: post,
-         path: path,
-         username
+         post,
+         path,
+         username,
       },
    }
 }

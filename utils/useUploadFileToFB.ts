@@ -1,14 +1,14 @@
-import { toastNotify } from "./helpers";
-import { auth, STATE_CHANGED, storage } from "../libs/firebase";
-import User from "../store/User";
-import { useEffect, useRef, useState } from "react";
-import { FileData } from '../components/layout/ImageUploader';
+import { toastNotify } from './helpers';
+import { auth, STATE_CHANGED, storage } from '../libs/firebase';
+import User from '../src/features/user/store/User';
+import { useEffect, useRef, useState } from 'react';
+import { FileData } from '../src/shared/components/widgets/ImageUploader';
 
 const POSSIBLE_IMAGE_EXTENSION = [ "png", "jpeg", "jpg", "gif" ];
 
 export function useUploadFileToFB(
-    file: File,
-    possibleExtensions: string[] = POSSIBLE_IMAGE_EXTENSION
+  file: File | null,
+  possibleExtensions: string[] = POSSIBLE_IMAGE_EXTENSION,
 ): FileData {
    const [ progress, setProgress ] = useState(0);
    const [ downloadURL, setDownloadURL ] = useState(null);

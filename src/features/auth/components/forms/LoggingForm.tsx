@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikInput from '../../../../shared/components/ui/FormikInput';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { invertBool } from '../../../../../utils/helpers';
+import { invertBoolState } from '../../../../../utils/helpers';
 import {
    facebookAuthProvider,
    githubAuthProvider,
@@ -14,10 +14,10 @@ import {
    resetPassword,
    signUpWithEmail,
 } from '../../../../../libs/firebase';
-import { toastModal } from '../../../../../utils/toastModal';
+import { toastModal } from '../../../../shared/components/ui/ToastModal';
 import toast from 'react-hot-toast';
 import { PROVIDERS_IMAGES, RESET_PASSWORD_COOLDOWN_S } from '../../../../../utils/constants';
-import ReCAPTCHA, { ReCAPTCHA } from 'react-google-recaptcha';
+import { ReCAPTCHA } from 'react-google-recaptcha';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import styles from '../../../../../styles/LoggingForm.module.scss';
@@ -37,7 +37,9 @@ const LoggingForm = () => {
    const onReCAPTCHAChange = (captchaCode: string | null) => {
       // If the reCAPTCHA code is null or undefined indicating that
       // the reCAPTCHA was expired then return early
+      console.log('onReCAPTCHAChange');
       if (!captchaCode) {
+         console.log('No captchaCode', captchaCode);
          return;
       }
 
@@ -51,6 +53,7 @@ const LoggingForm = () => {
         .then(response => {
            if (response.status === 200) {
               // If the response is ok than show the success alert
+              console.log('solved');
               setIsRecaptachaSolved(true);
            }
            else {
@@ -100,11 +103,11 @@ const LoggingForm = () => {
    }
 
    function handleClickShowPassword() {
-      setShowPassword(invertBool);
+      setShowPassword(invertBoolState);
    }
 
    function changeLoggingState() {
-      setIsLoggingIn(invertBool);
+      setIsLoggingIn(invertBoolState);
    }
 
    function handleFormReset(formik: FormikProps<ILoggingForm>) {
@@ -128,41 +131,26 @@ const LoggingForm = () => {
           email: '',
           password: '',
        }}
-       validationSchema={Yup.object({
-          email: Yup.string()
-            .email('Enter a valid email')
-            .required('Email is required')
-            .email('Email has incorrect format'),
-          password: Yup.string()
-            .min(6, 'Password should be of minimum 6 characters length')
-            .max(30, 'Password should be of maximum 30 characters length')
-            .required('Password is required'),
-       })}
+       validationSchema={
+          Yup.object({
+             email: Yup.string()
+               .email('Enter a valid email')
+               .required('Email is required')
+               .email('Email has incorrect format'),
+             password: Yup.string()
+               .min(6, 'Password should be of minimum 6 characters length')
+               .max(30, 'Password should be of maximum 30 characters length')
+               .required('Password is required'),
+          })}
        onSubmit={async (values: ILoggingForm, { setSubmitting }: FormikHelpers<ILoggingForm>) => {
-          console.log('isRecaptachaSolved', isRecaptachaSolved);
-          if (isRecaptachaSolved) {
-             setSubmitting(false);
-             await handleSubmit(values);
-             return;
-          }
-
-          try {
-             await recaptchaRef.current!.executeAsync();
-             setSubmitting(false);
-             await handleSubmit(values);
-          } catch (e) {
-             console.log('isRecaptachaError', e);
-          }
+          console.log('isRecaptachaSolved', isRecaptachaSolved, recaptchaRef.current);
+          recaptchaRef.current!.execute();
+          setSubmitting(false);
+          await handleSubmit(values);
        }}
      >
         {(formik) => (
           <Form>
-             <ReCAPTCHA
-               ref={recaptchaRef}
-               size="invisible"
-               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-               onChange={onReCAPTCHAChange}
-             />
              <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                    <motion.div
@@ -236,17 +224,21 @@ const LoggingForm = () => {
                          <Button color="warning" variant="outlined" onClick={() => handleFormReset(formik)}>
                             Reset Form
                          </Button>
+                         <ReCAPTCHA
+                           ref={recaptchaRef}
+                           size="compact"
+                           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                           onChange={onReCAPTCHAChange}
+                         />
                       </Stack>
 
                       <Stack alignItems="start" gap={2}>
-                         <Button disabled={!formik.isValid}
-                                 variant="contained" type="submit">
+                         <Button disabled={!formik.isValid} variant="contained" type="submit">
                             {isLoggingIn ? 'Log In' : 'Sign Up'}
                          </Button>
 
                          <Box>
-                            <Typography variant="subtitle2">{isLoggingIn ? 'Don\'t' : 'Already'} have an
-                                                                                                 account? </Typography>
+                            <Typography variant="subtitle2">{isLoggingIn ? 'Don\'t' : 'Already'} have an account? </Typography>
                             <a onClick={changeLoggingState} tabIndex={0}>
                                <Typography color="violet" variant="subtitle1">
                                   {isLoggingIn ? 'Sign up' : 'Log in'}.
@@ -254,7 +246,8 @@ const LoggingForm = () => {
                             </a>
                          </Box>
                       </Stack>
-                   </Grid></motion.div>
+                   </Grid>
+                </motion.div>
 
                 <Grid justifyContent="center" container item>
                    <Grid

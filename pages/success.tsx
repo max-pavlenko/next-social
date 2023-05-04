@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Container, Stack, Typography } from "@mui/material";
-import LinkWithoutScroll from "../components/utils/LinkWithoutScroll";
-import ReactConfetti from "react-confetti";
-import MetaTags from "../components/utils/MetaTags";
-import AnimatePage from "../components/utils/AnimatePage";
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Container, Stack, Typography } from '@mui/material';
+import ReactConfetti from 'react-confetti';
+import MetaTags from '../src/shared/components/utils/MetaTags';
+import AnimatePage from '../src/shared/components/utils/AnimatePage';
+import LinkWithoutScroll from '../src/shared/components/ui/LinkWithoutScroll';
 
 const SuccessDonationPage = () => {
-   const [ showConfetti, setShowConfetti ] = useState(false);
+   const [showConfetti, setShowConfetti] = useState(false);
    const width = useRef(0);
    const height = useRef(0);
 
    useEffect(() => {
-     setTimeout(()=>setShowConfetti(true), 500)
-   width.current = window.innerWidth;
-   height.current = window.innerHeight;
+      setTimeout(() => setShowConfetti(true), 500);
+      width.current = window.innerWidth;
+      height.current = window.innerHeight;
    }, []);
 
    return (

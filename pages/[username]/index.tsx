@@ -1,18 +1,16 @@
-import UserProfile from '../../components/layout/PageLayout/UserProfile';
-import PostFeed from '../../components/layout/Posts/PostFeed';
 import { getUserWithUsername } from '../../utils/helpers';
 import { convertToJSON } from '../../libs/firebase';
-import MetaTags from '../../components/utils/MetaTags';
 import { Typography } from '@mui/material';
-import QuotesBlock from '../../components/layout/PageLayout/QuotesBlock';
-import Loader from '../../components/layout/Loader';
 import { IPost } from '../../models/Post';
 import { FirebaseUser } from '../../models/User';
 import { observer } from 'mobx-react-lite';
-import AnimatePage from '../../components/utils/AnimatePage';
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import Breadcrumbs from "../../components/utils/Breadcrumbs";
+import { GetServerSideProps } from 'next';
+import MetaTags from '../../src/shared/components/utils/MetaTags';
+import AnimatePage from '../../src/shared/components/utils/AnimatePage';
+import UserProfile from '../../src/features/user/components/UserProfile';
+import QuotesBlock from '../../src/shared/components/widgets/QuotesBlock';
+import Loader from '../../src/shared/components/ui/Loader';
+import PostFeed from '../../src/features/posts/components/PostFeed';
 
 export interface UpdatePasswordForm {
    newPassword: string,
@@ -20,10 +18,10 @@ export interface UpdatePasswordForm {
 }
 
 const UserProfilePage = observer(({
-                                     user,
-                                     posts,
-                                     realtimePosts
-                                  }: { user: FirebaseUser, posts: IPost[], realtimePosts: IPost[] }) => {
+   user,
+   posts,
+   realtimePosts,
+}: { user: FirebaseUser, posts: IPost[], realtimePosts: IPost[] }) => {
   // console.log('----', user, posts, realtimePosts);
 
    const quoteIdExists = !!user?.favoriteQuoteData?._id;
@@ -54,8 +52,8 @@ const UserProfilePage = observer(({
    );
 });
 
-export async function getServerSideProps({query}: GetServerSideProps) {
-   const {username} = query;
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+   const username = query.username as string;
 
    const userDoc = await getUserWithUsername(username);
    let user = null, posts = null, realtimePosts = null;

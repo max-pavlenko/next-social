@@ -1,62 +1,66 @@
-import {useEffect, useRef, useState} from 'react';
-import AuthCheck from '../../components/utils/AuthCheck';
-import {useRouter} from 'next/router';
-import {auth, firestore, serverTimestamp} from '../../libs/firebase';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { auth, firestore, serverTimestamp } from '../../libs/firebase';
 import styles from '../../styles/Admin.module.scss';
-import {useDocumentDataOnce,} from 'react-firebase-hooks/firestore';
-import PostFormEdit, {AdditionalImageData} from '../../components/Forms/PostFormEdit';
-import {IPost} from '../../models/Post';
-import {Button, Typography} from '@mui/material';
-import {toastModal} from '../../utils/toastModal';
-import {invertBool} from '../../utils/helpers';
-import AnimatePage from '../../components/utils/AnimatePage';
-import {useLocale} from '../../translations/useLocale';
-import MetaTags from '../../components/utils/MetaTags';
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { IPost } from '../../models/Post';
+import { Button, Typography } from '@mui/material';
+import { toastModal } from '../../src/shared/components/ui/ToastModal';
+import { invertBoolState } from '../../utils/helpers';
+import { useLocale } from '../../translations/useLocale';
 import firebase from 'firebase/compat';
-import Loader from '../../components/layout/Loader';
-import {usePreventUserFromErasingContent} from '../../libs/hooks/usePreventUserFromErasingContent';
+import AnimatePage from '../../src/shared/components/utils/AnimatePage';
+import AuthCheck from '../../src/features/auth/components/AuthCheck';
+import PostFormEdit, { AdditionalImageData } from '../../src/features/posts/forms/PostFormEdit';
+import MetaTags from '../../src/shared/components/utils/MetaTags';
+import Loader from '../../src/shared/components/ui/Loader';
+import { usePreventUserFromLeavingUnsaved } from '../../libs/hooks/usePreventUserFromLeavingUnsaved';
 import DocumentData = firebase.firestore.DocumentData;
 
 
 const AdminPostEdit = () => {
 
    return (
-       <AnimatePage>
-          <AuthCheck>
-             <PostManager/>
-          </AuthCheck>
-       </AnimatePage>
+     <AnimatePage>
+        <AuthCheck>
+           <PostManager />
+        </AuthCheck>
+     </AnimatePage>
    );
 };
 
 function PostManager() {
-   const [ isPreview, setIsPreview ] = useState(false);
+   const [isPreview, setIsPreview] = useState(false);
    const router = useRouter();
-   const {slug} = router.query;
+   const { slug } = router.query;
    const postRef = firestore.collection('users').doc(auth.currentUser?.uid).collection('posts').doc(slug as string);
-   const [ postData ] = useDocumentDataOnce(postRef);
+   const [postData] = useDocumentDataOnce(postRef);
    const post = postData as IPost;
    const user = useRef<DocumentData | undefined>(undefined);
    const l = useLocale();
    const [areChangesSaved, setAreChangesSaved] = useState(false);
-   usePreventUserFromErasingContent(!areChangesSaved)
+   usePreventUserFromLeavingUnsaved(!areChangesSaved);
    console.log(post, postRef);
 
    useEffect(() => {
       post && firestore.doc(post.userPath).get().then(snap => {
          user.current = snap.data();
-      })
-   }, [ post ]);
+      });
+   }, [post]);
 
    function onLinkClick() {
-      toastModal('Did you save the post and wish to continue?', async () => {
-             await router.push(`/${user.current?.username}/${post.slug}`);
-          },
-      );
+      toastModal({
+         text: 'Did you save the post and wish to continue?',
+         onYesClicked: async () => {
+            await router.push(`/${user.current?.username}/${post.slug}`);
+         },
+      });
    }
 
    async function handleEditFormSubmit(title: string, content: string, isPublished: string, additionalImages: AdditionalImageData[]) {
-      const imagesWithoutFiles = additionalImages.map(({img, id}) => {return {img, id}});
+      const imagesWithoutFiles = additionalImages.map(({ img, id }) => {
+         return { img, id };
+      });
       console.log('add', imagesWithoutFiles, additionalImages);
 
       await postRef.update({
@@ -69,26 +73,25 @@ function PostManager() {
    }
 
    return (
-       <main className = {styles.container}>
-          <MetaTags title= {`${post && `Editing ${post.title}`}`} desc='' />
-          {!postRef && <Typography color = 'rebeccapurple'>{l.noPermission}.</Typography>}
-          {post ? (
-              <>
-                 <section>
-                    <PostFormEdit setChangesSaved={setAreChangesSaved} onSubmitEdit = {handleEditFormSubmit} defaultValuePost = {post}
-                                  isPreview = {isPreview}/>
-                 </section>
+     <main className={styles.container}>
+        <MetaTags title={`${post && `Editing ${post.title}`}`} desc="" />
+        {!postRef && <Typography color="rebeccapurple">{l.noPermission}.</Typography>}
+        {post ? (
+          <>
+             <section>
+                <PostFormEdit onSubmitEdit={handleEditFormSubmit} defaultValuePost={post} isPreview={isPreview} />
+             </section>
 
-                 <aside>
-                    <h3>{l.tools}</h3>
-                    <Button variant = 'contained' color = 'primary' onClick = {() => setIsPreview(invertBool)}>
-                       {isPreview ? 'Edit' : 'Preview'}
-                    </Button>
-                    <Button onClick = {onLinkClick} color = 'secondary' variant = 'outlined'>{l.liveView}</Button>
-                 </aside>
-              </>
-          ) : <Loader />}
-       </main>
+             <aside>
+                <h3>{l.tools}</h3>
+                <Button variant="contained" color="primary" onClick={() => setIsPreview(invertBoolState)}>
+                   {isPreview ? 'Edit' : 'Preview'}
+                </Button>
+                <Button onClick={onLinkClick} color="secondary" variant="outlined">{l.liveView}</Button>
+             </aside>
+          </>
+        ) : <Loader />}
+     </main>
    );
 }
 

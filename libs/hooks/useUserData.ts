@@ -1,14 +1,14 @@
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, firestore } from '../firebase';
 import { useEffect, useState } from 'react';
-import User from '../../store/User';
+import User from '../../src/features/user/store/User';
 
 export const useUserData = () => {
    const [ user ] = useAuthState(auth);
    const [ isAuthenticating, setIsAuthenticating ] = useState(true);
 
    useEffect(() => {
-      let unsubscribe;
+      let unsubscribe: any;
       if (user) {
          setIsAuthenticating(true);
          console.log('useUserdata', user);
@@ -21,7 +21,7 @@ export const useUserData = () => {
          });
       } else {
          setIsAuthenticating(localStorage.getItem('prolongedAuth') === 'true');
-         User.setUser({...User.user, data: null, username: null,});
+         User.setUser({ ...User.user, data: null, username: '' });
          User.setPhotoURL('');
       }
       return () => {

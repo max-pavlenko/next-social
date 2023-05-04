@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEventHandler, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, FC, FormEventHandler, useCallback, useEffect, useState } from 'react';
 import User from '../../../user/store/User';
 import { Button, Grid, Stack, TextField } from '@mui/material';
 import { firestore, signOut } from '../../../../../libs/firebase';
@@ -14,10 +14,10 @@ import { downloadFile } from '../../../../../utils/helpers';
 const debounce = require('lodash.debounce');
 
 type Props = { onSubmit?: () => void, mode?: UsernameFormModes };
-const UsernameForm = observer(({
+const UsernameForm: FC<Props> = observer(({
    onSubmit = () => {
    }, mode = UsernameFormModes.CREATE,
-}: Props) => {
+}) => {
    const [isLoading, setIsLoading] = useState(false);
    const [isValid, setIsValid] = useState(false);
    const displayName = User.user.data?.displayName;
